@@ -12,9 +12,9 @@ namespace Shipping {
 		typedef Fwk::Ptr<Location> Ptr;
 
 		enum Type {
-			customer_ = 1,
-			port_ = 2,
-			terminal_ = 3
+			customer_,
+			port_,
+			terminal_
 		};
 
 		Type customer(){ return customer_; } 

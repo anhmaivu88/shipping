@@ -1,8 +1,7 @@
-#ifndef MILE_H
-#define MILE_H
+#ifndef DOLLAR_H
+#define DOLLAR_H
 
 #include <string>
-#include <climits>
 
 #include "Ptr.h"
 #include "PtrInterface.h"
@@ -11,11 +10,11 @@
 #include "Nominal.h"
 
 namespace Shipping {
-	class Mile : public Ordinal<Mile, unsigned int> {
+	class Dollar : public Ordinal<Dollar, unsigned int> {
 	public:
 		static unsigned int max(){ return UINT_MAX; }
 
-		Mile(unsigned int num) : Ordinal<Mile, unsigned int>(num) {
+		Dollar(unsigned int num) : Ordinal<Dollar, unsigned int>(num) {
 
 		}
 	};
