@@ -13,6 +13,7 @@
 namespace Shipping {
   class Segment : public Entity<Segment> {
   public:
+    typedef Fwk::Ptr<Segment> Ptr;
     class Difficulty : public Ordinal<Difficulty, float> {
     public:
       Difficulty(float num) : Ordinal<Difficulty, float>(num) {
@@ -22,9 +23,9 @@ namespace Shipping {
       }
     };
 
-    void sourceIs(const Location &source);
+    void sourceIs(const Location::Ptr source);
     void lengthIs(Mile length) { length_ = length; }
-    void returnIs(const Segment &segment);
+    void returnIs(const Segment::Ptr segment);
     void difficultyIs(Difficulty difficulty) { difficulty_ = difficulty; }
     void expeditableIs(bool expeditable)  { expeditable_ = expeditable; }
 

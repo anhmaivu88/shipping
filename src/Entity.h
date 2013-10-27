@@ -12,9 +12,11 @@ namespace Shipping {
   class Entity: public Fwk::PtrInterface<T> {
   public: 
     virtual Shipping::EntityName name() { return name_; }
+    
 
+  protected:
+    Entity(EntityName name) name_(name) : {};
 
-  private:
     Shipping::EntityName name_;
   };
 }

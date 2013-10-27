@@ -22,12 +22,10 @@ namespace Shipping {
 
 		Type type(){ return type_; }
 
-		Shipping::EntityName name(){ return name; }
-		Segment segment(int index){ return segments_[index]; }
+    Segment::Ptr segment(int index){ return segments_[index]; }
 
 	protected:
-		std::vector<Segment> segments_;
-		EntityName name_;
+		std::vector<Segment::Ptr> segments_;
 		Type type_;
 
 		Location(EntityName name, Type type):name_(name), type_(Type::customer_){}
