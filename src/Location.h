@@ -28,7 +28,7 @@ namespace Shipping {
 		std::vector<Segment::Ptr> segments_;
 		Type type_;
 
-		Location(EntityName name, Type type):name_(name), type_(Type::customer_){}
+		Location(EntityName name, Type type): Entity(name), type_(customer_){}
 	};
 
 	class Customer : public Location {
@@ -36,7 +36,7 @@ namespace Shipping {
 		static Customer customerNew(EntityName name){ return Customer(name); }
 
 	protected:
-		Customer(EntityName name) : Location(name, Location::Type::customer_){}
+		Customer(EntityName name) : Location(name, Location::customer_){}
 	};
 
 
@@ -45,7 +45,7 @@ namespace Shipping {
 		static Port portNew(EntityName name){ return Port(name); }
 
 	protected:
-		Port(EntityName name) : Location(name, Location::Type::port_){}
+		Port(EntityName name) : Location(name, Location::port_){}
 	};
 
 
@@ -54,7 +54,7 @@ namespace Shipping {
 		static Terminal terminalNew(EntityName name){ return Terminal(name); }
 
 	protected:
-		Terminal(EntityName name) : Location(name, Location::Type::terminal_){}
+		Terminal(EntityName name) : Location(name, Location::terminal_){}
 	};
 
 }
