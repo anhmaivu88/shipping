@@ -24,6 +24,7 @@ namespace Shipping {
 		Type type(){ return type_; }
 
     SegmentPtr segment(int index){ return segments_[index]; }
+    virtual void segmentIs(SegmentPtr segment){ segments_.push_back(segment); }
 
 	protected:
 		std::vector<SegmentPtr> segments_;
@@ -53,6 +54,10 @@ namespace Shipping {
 	class Terminal : public Location {
 	public:
 		static Terminal terminalNew(EntityName name){ return Terminal(name); }
+		void segmentIs(SegmentPtr segment){ 
+			if(_segments.size() > 0 && segment->type() != _segments[0]->type()) return;
+			_segments.push_back(segment);
+		}
 
 	protected:
 		Terminal(EntityName name) : Location(name, Location::terminal_){}
