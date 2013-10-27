@@ -15,8 +15,8 @@
 #include "Error.h"
 
 namespace Shipping {
-  class Engine {
-    
+  class Engine : public Entity<Engine> {
+    typedef Fwk::Ptr<Engine> Ptr;
   };
 } /* end namespace */
 
