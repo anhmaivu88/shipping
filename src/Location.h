@@ -3,6 +3,7 @@
 
 #include "Engine.h"
 #include "Segment.h"
+#include "Typedef.h"
 #include <vector>
 
 namespace Shipping {
@@ -22,13 +23,13 @@ namespace Shipping {
 
 		Type type(){ return type_; }
 
-    Segment::Ptr segment(int index){ return segments_[index]; }
+    SegmentPtr segment(int index){ return segments_[index]; }
 
 	protected:
-		std::vector<Segment::Ptr> segments_;
+		std::vector<SegmentPtr> segments_;
 		Type type_;
 
-		Location(EntityName name, Type type):name_(name), type_(Type::customer_){}
+  Location(EntityName name, Type type):Entity<Location>(name), type_(Type::customer_){}
 	};
 
 	class Customer : public Location {
