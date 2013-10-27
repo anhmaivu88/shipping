@@ -15,7 +15,7 @@ namespace Shipping {
     
 
   protected:
-    Entity(EntityName &name) name_(name) : {};
+    Entity(EntityName &name) : name_(name) {};
 
     EntityName name_;
   };
