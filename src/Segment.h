@@ -24,21 +24,63 @@ namespace Shipping {
       }
     };
 
+    enum Type {
+      truck_,
+      boat_,
+      plane_
+    };
+
     void sourceIs(const LocationPtr source);
     void lengthIs(Mile length) { length_ = length; }
-    void returnIs(const Segment::Ptr segment);
+    void returnSegmentIs(const Segment::Ptr segment);
     void difficultyIs(Difficulty difficulty) { difficulty_ = difficulty; }
     void expeditableIs(bool expeditable)  { expeditable_ = expeditable; }
 
     LocationPtr source() { return source_; }
     Mile length() { return length_; }
+    Segment::Ptr returnSegment() { return returnSegment_; }
+    Difficulty difficulty() { return difficulty_; }
+    bool expeditable() { return expeditable_; }
+    Type type() { return type_; }
 
+  protected:
+    Segment::Ptr segmentNew(EntityName name, Type type) {
+      Ptr ptr = new Segment(name, 0, 1.0, false, type);
+      ptr->deleteRef();
+
+      return ptr;
+    }
     
-  private:
+    Segment(Shipping::EntityName name, 
+            Mile length, 
+            Difficulty difficulty, 
+            bool expeditable, 
+            Type type) : Entity(name), 
+                         length_(length), 
+                         difficulty_(difficulty), 
+                         expeditable_(expeditable),
+                         type_(type) {};
+
     Mile length_;
     Difficulty difficulty_;
     bool expeditable_;
     LocationPtr source_;
+    Segment::Ptr returnSegment_;
+    Type type_;
+  };
+
+  class TruckSegment : public Segment {
+    Segment::Ptr truckSegmentNew(EntityName name) {
+      return segmentNew(name, Segment::truck_);
+    }
+  };
+
+  class BoatSegment : public Segment {
+    return segmentNew(name, Segment::boat_);
+  };
+
+  class PlaneSegment : public Segment {
+    return segmentNew(name, Segment::plane_);
   };
 }
 
