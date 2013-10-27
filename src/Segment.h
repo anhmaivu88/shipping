@@ -29,8 +29,8 @@ namespace Shipping {
       expedited_
     };
 
-    Priority normal(){ return normal_; }
-    Priority expedited(){ return expedited_; }
+    static Priority normal(){ return normal_; }
+    static Priority expedited(){ return expedited_; }
 
     enum Type {
       truck_,
