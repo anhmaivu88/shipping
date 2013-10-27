@@ -44,7 +44,7 @@ namespace Shipping {
     Type type() { return type_; }
 
   protected:
-    Segment::Ptr segmentNew(EntityName name, Type type) {
+    static Segment::Ptr segmentNew(EntityName name, Type type) {
       Ptr ptr = new Segment(name, 0, 1.0, false, type);
       ptr->deleteRef();
 
@@ -70,19 +70,19 @@ namespace Shipping {
   };
 
   class TruckSegment : public Segment {
-    Segment::Ptr truckSegmentNew(EntityName name) {
+    static Segment::Ptr truckSegmentNew(EntityName name) {
       return segmentNew(name, Segment::truck_);
     }
   };
 
   class BoatSegment : public Segment {
-    Segment::Ptr boatSegmentNew(EntityName name) {
+    static Segment::Ptr boatSegmentNew(EntityName name) {
       return segmentNew(name, Segment::boat_);
     }
   };
 
   class PlaneSegment : public Segment {
-    Segment::Ptr planeSegmentNew(EntityName name) {
+    static Segment::Ptr planeSegmentNew(EntityName name) {
       return segmentNew(name, Segment::plane_);
     }
   };

@@ -24,38 +24,54 @@ namespace Shipping {
 		Type type(){ return type_; }
 
     SegmentPtr segment(int index){ return segments_[index]; }
+    virtual void segmentIs(SegmentPtr segment){ segments_.push_back(segment); }
 
 	protected:
 		std::vector<SegmentPtr> segments_;
 		Type type_;
 
-		Location(EntityName name, Type type): Entity(name), type_(customer_){}
+		static Location::Ptr locationNew(EntityName name, Type type){
+			Ptr ptr = new Location(name, type);
+      ptr->deleteRef();
+      return ptr;
+		}
+
+		Location(EntityName name, Type type): Entity(name), type_(type){}
 	};
 
 	class Customer : public Location {
 	public:
-		static Customer customerNew(EntityName name){ return Customer(name); }
+		static Location::Ptr customerNew(EntityName name){ return locationNew(name, customer_); }
 
 	protected:
-		Customer(EntityName name) : Location(name, Location::customer_){}
+		// Customer(EntityName name) : Location(name, Location::customer_){}
 	};
 
 
 	class Port : public Location {
 	public:
-		static Port portNew(EntityName name){ return Port(name); }
+		static Location::Ptr portNew(EntityName name){ return locationNew(name, port_); }
 
 	protected:
-		Port(EntityName name) : Location(name, Location::port_){}
+		// Port(EntityName name) : Location(name, Location::port_){}
 	};
 
 
 	class Terminal : public Location {
 	public:
-		static Terminal terminalNew(EntityName name){ return Terminal(name); }
+		static Location::Ptr terminalNew(EntityName name){
+			Ptr ptr = new Terminal(name);
+      ptr->deleteRef();
+      return ptr;
+		}
+
+		void segmentIs(SegmentPtr segment){ 
+			if(segments_.size() > 0 && segment->type() != segments_[0]->type()) return;
+			segments_.push_back(segment);
+		}
 
 	protected:
-		Terminal(EntityName name) : Location(name, Location::terminal_){}
+		Terminal(EntityName name) : Location(name, terminal_){}
 	};
 
 }
