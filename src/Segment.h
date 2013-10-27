@@ -76,11 +76,15 @@ namespace Shipping {
   };
 
   class BoatSegment : public Segment {
-    return segmentNew(name, Segment::boat_);
+    Segment::Ptr boatSegmentNew(EntityName name) {
+      return segmentNew(name, Segment::boat_);
+    }
   };
 
   class PlaneSegment : public Segment {
-    return segmentNew(name, Segment::plane_);
+    Segment::Ptr planeSegmentNew(EntityName name) {
+      return segmentNew(name, Segment::plane_);
+    }
   };
 }
 
