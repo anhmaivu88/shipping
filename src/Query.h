@@ -2,6 +2,6 @@
 #define QUERY_H
 
 class Query {
-}
+};
 
 #endif

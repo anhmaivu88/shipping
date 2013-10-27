@@ -13,6 +13,7 @@
 #include "Segment.h"
 #include "Fleet.h"
 #include "Error.h"
+#include "Query.h"
 #include <map>
 #include <vector>
 
