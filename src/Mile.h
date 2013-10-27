@@ -10,10 +10,10 @@
 #include "Nominal.h"
 
 namespace Shipping {
-class Mile : public Nominal<Mile, unsigned int> {
+class Mile : public Ordinal<Mile, unsigned int> {
 public:
 
-Mile(unsigned int num) : Nominal<Mile, unsigned int>(num) {
+Mile(unsigned int num) : Ordinal<Mile, unsigned int>(num) {
 
 }
 };

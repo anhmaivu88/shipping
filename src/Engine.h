@@ -12,9 +12,9 @@
 #include "Connectivity.h"
 #include "Segment.h"
 #include "Fleet.h"
+#include "Error.h"
 
 namespace Shipping {
-  typedef string EntityName;
   class Engine {
     
   };

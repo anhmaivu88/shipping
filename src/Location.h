@@ -2,10 +2,12 @@
 #define LOCATION_H
 
 #include "Engine.h"
+#include "Ptr.h"
 
 namespace Shipping {
-  class Location : Entity {
-    
+  class Location : public Entity<Location> {
+  public: 
+    typedef Fwk::Ptr<Location> Ptr;
   };
 }
 
