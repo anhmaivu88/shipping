@@ -7,6 +7,7 @@
 
 namespace Shipping {
   typedef string EntityName;
+  typedef uint EntityCount;
 
   template <class T>
   class Entity: public Fwk::PtrInterface<T> {
