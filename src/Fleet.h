@@ -6,7 +6,7 @@
 namespace Shipping {
   class Fleet {
     
-  }
+  };
 }
 
 #endif

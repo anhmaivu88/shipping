@@ -6,7 +6,7 @@
 namespace Shipping {
   class Connectivity {
     
-  }
+  };
 }
 
 #endif

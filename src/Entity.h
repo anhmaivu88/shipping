@@ -1,5 +1,5 @@
 namespace Shipping {
   class Entity {
     
-  }
+  };
 }

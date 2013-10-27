@@ -9,9 +9,9 @@
 #include "Engine.h"
 
 namespace Shipping {
-  class Segment : Entity {
-    
-  }
+class Segment : Entity {
+
+};
 }
 
 #endif

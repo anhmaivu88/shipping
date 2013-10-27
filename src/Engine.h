@@ -11,7 +11,7 @@
 namespace Shipping {
   class Engine {
     
-  }
+  };
 } /* end namespace */
 
 #endif
