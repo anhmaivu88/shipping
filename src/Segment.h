@@ -1,17 +1,17 @@
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef SEGMENT_H
+#define SEGMENT_H
 
 #include <string>
 
 #include "Ptr.h"
 #include "PtrInterface.h"
 #include "Instance.h"
-#include "Entity.h"
+#include "Engine.h"
 
 namespace Shipping {
-  class Engine {
+  class Segment : Entity {
     
   }
-} /* end namespace */
+}
 
 #endif
