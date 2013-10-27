@@ -14,6 +14,7 @@
 #include "Fleet.h"
 
 namespace Shipping {
+  typedef string EntityName;
   class Engine {
     
   };
