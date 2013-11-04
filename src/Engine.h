@@ -41,6 +41,12 @@ namespace Shipping {
 
     Query queryNew();
 
+    Engine::Ptr engineNew(EntityName name){
+        Ptr ptr = new Engine(name);
+        ptr->deleteRef();
+        return ptr;
+    }
+
     /* Notification stuff */
     class Notifiee : public Fwk::PtrInterface<Notifiee> {
     public:
@@ -63,6 +69,8 @@ namespace Shipping {
 
     Statistics::Ptr statistics_;
     std::vector<Notifiee::Ptr> notifiees_;
+
+    Engine(EntityName name): Entity<Engine>(name){}
   };
 } /* end namespace */
 
