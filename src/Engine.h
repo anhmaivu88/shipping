@@ -44,15 +44,19 @@ namespace Shipping {
         return ptr;
     }
 
-    /* Notification stuff */
+    /* Notification stuff. We don't support asynchronous semantics here:
+       these notifications are assumed to be correct and non-batched. */
     class Notifiee : public Fwk::PtrInterface<Notifiee> {
     public:
       typedef Fwk::Ptr<Notifiee> Ptr;
       virtual void onLocationNew(Location::Ptr location) {}
+      virtual void onLocationDel(Location::Ptr location) {}
       virtual void onSegmentNew(Segment::Ptr segment) {}
-      Notifiee(Engine *engine) : engine_(engine) {}
+      virtual void onSegmentDel(Segment::Ptr segment) {}
+
       
     protected:
+      Notifiee(Engine *engine) : engine_(engine) {}
       Engine *engine_;
     };
 

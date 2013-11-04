@@ -90,7 +90,6 @@ public:
     StatisticsRep(const string& name, ManagerImpl* manager, Statistics::Ptr statistics) :
         Instance(name), manager_(manager), statistics_(statistics)
     {
-        // Nothing else to do.
     }
 
     string attribute(const string& name){
