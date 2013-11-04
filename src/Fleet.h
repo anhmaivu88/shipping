@@ -27,7 +27,7 @@ namespace Shipping {
     }
 
   private:
-    Fleet(EntityName name) : Entity(name), speed_(0), cost_(0), capacity_(0) {};
+    Fleet(EntityName name) : Entity<Fleet>(name), speed_(0), cost_(0), capacity_(0) {};
     
     MilesPerHour speed_;
     DollarsPerMile cost_;
