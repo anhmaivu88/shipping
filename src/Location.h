@@ -5,6 +5,7 @@
 #include "Segment.h"
 #include "Typedef.h"
 #include <vector>
+#include "Error.h"
 
 namespace Shipping {
 	class Location : public Entity<Location> {
@@ -12,10 +13,10 @@ namespace Shipping {
 		typedef Fwk::Ptr<Location> Ptr;
 
 		enum Type {
-			customer_,
-			port_,
-			terminal_
-		};
+	  		customer_,
+	  		port_,
+	  		terminal_
+	  	};
 
 		static Type customer(){ return customer_; } 
 		static Type port(){ return port_; }
@@ -25,6 +26,12 @@ namespace Shipping {
 
     SegmentPtr segment(int index){ return segments_[index]; }
     virtual void segmentIs(SegmentPtr segment){ segments_.push_back(segment); }
+    void segmentDel(SegmentPtr segment){
+    	segments_.erase(std::find(segments_.begin(), segments_.end(), segment));
+    }
+    void segmentDel(int index){
+    	segments_.erase(segments_.begin() + index);
+    }
 
 	protected:
 		std::vector<SegmentPtr> segments_;

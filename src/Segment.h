@@ -61,7 +61,7 @@ namespace Shipping {
 
       return ptr;
     }
-    
+
   protected:
     
     

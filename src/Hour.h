@@ -15,7 +15,7 @@ namespace Shipping {
 		static double max(){ return DBL_MAX; }
 
 		Hour(double num) : Ordinal<Hour, double>(num) {
-
+			if(num < 0) throw new ValueOutOfBoundsException("expected nonnegative value");
 		}
 	};
 }

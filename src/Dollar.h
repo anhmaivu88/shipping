@@ -15,7 +15,7 @@ namespace Shipping {
 		static double max(){ return DBL_MAX; }
 
 		Dollar(double num) : Ordinal<Dollar, double>(num) {
-
+			if(num < 0) throw new ValueOutOfBoundsException("expected nonnegative value");
 		}
 	};
 }
