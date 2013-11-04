@@ -41,6 +41,7 @@ namespace Shipping {
 
     Query queryNew();
 
+    /* Notification stuff */
     class Notifiee : public Fwk::PtrInterface<Notifiee> {
     public:
       typedef Fwk::Ptr<Notifiee> Ptr;
