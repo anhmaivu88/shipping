@@ -11,7 +11,6 @@ namespace Shipping {
 
   	static Connectivity::Ptr connectivityNew(EntityName name, Engine::Ptr engine) {
       Ptr ptr = new Connectivity(name, engine);
-      ptr->deleteRef();
 
       return ptr;
     }

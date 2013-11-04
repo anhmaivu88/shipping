@@ -32,11 +32,10 @@ namespace Shipping {
 
 		static Location::Ptr locationNew(EntityName name, Type type){
 			Ptr ptr = new Location(name, type);
-		    ptr->deleteRef();
-		    return ptr;
+		  return ptr;
 		}
 
-		Location(EntityName name, Type type): Entity(name), type_(type){}
+  Location(EntityName name, Type type): Entity(name), type_(type){}
 	};
 
 	class Customer : public Location {
@@ -63,8 +62,7 @@ namespace Shipping {
 
 		static Ptr terminalNew(EntityName name, Segment::Type segmentType){
 			Ptr ptr = new Terminal(name, segmentType);
-      		ptr->deleteRef();
-      		return ptr;
+      return ptr;
 		}
 
 		void segmentIs(SegmentPtr segment){ 
@@ -81,7 +79,7 @@ namespace Shipping {
 	protected:
 		Segment::Type segmentType_;
 
-		Terminal(EntityName name, Segment::Type segmentType) : Location(name, terminal()), segmentType_(segmentType){}
+  Terminal(EntityName name, Segment::Type segmentType) : Location(name, terminal()), segmentType_(segmentType){}
 	};
 
 }

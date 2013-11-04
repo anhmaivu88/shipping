@@ -57,8 +57,6 @@ namespace Shipping {
 
     static Segment::Ptr segmentNew(EntityName name, Type type) {
       Ptr ptr = new Segment(name, 0, 1.0, normal(), type);
-      ptr->deleteRef();
-
       return ptr;
     }
     

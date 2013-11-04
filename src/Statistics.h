@@ -28,7 +28,6 @@ namespace Shipping {
 
     static Statistics::Ptr statisticsNew(EntityName name, Engine::Ptr engine) {
       Ptr ptr = new Statistics(name, engine);
-      ptr->deleteRef();
       
       return ptr;
     }
@@ -44,21 +43,20 @@ namespace Shipping {
       /* engineReactorNew adds the new EngineReactor to `engine` as a notifiee */
       static EngineReactor::Ptr engineReactorNew(Statistics *stats, Engine *engine) {
         Ptr reactor = new EngineReactor(stats, engine);
-        reactor->deleteRef();
         engine->notifieeAdd(reactor);
         return reactor;
       }
 
-      void onLocationNew(Location::Ptr location) {
-        stats()->locationTypeInc(location->type());
+      void onLocationNew(EntityName locationName) {
+        stats()->locationTypeInc(engine_->location(locationName)->type());
       }
-      void onLocationDel(Location::Ptr location) {
+      void onLocationDel(EntityName name, Location::Ptr location) {
         stats()->locationTypeDec(location->type());
       }
-      void onSegmentNew(Segment::Ptr segment) {
-        stats()->segmentTypeInc(segment->type());
+      void onSegmentNew(EntityName segmentName) {
+        stats()->segmentTypeInc(engine_->segment(segmentName)->type());
       }
-      void onSegmentDel(Segment::Ptr segment) {
+      void onSegmentDel(EntityName name, Segment::Ptr segment) {
         stats()->segmentTypeDec(segment->type());
       }
       

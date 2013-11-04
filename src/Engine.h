@@ -25,14 +25,14 @@ namespace Shipping {
     Segment::Ptr planeSegmentNew(EntityName name);
     Segment::Ptr boatSegmentNew(EntityName name);
     Segment::Ptr truckSegmentNew(EntityName name);
-    // Segment::Ptr segmentNew(EntityName name, Segment::Type type);
-    Segment::Ptr segment(EntityName name);
+    Segment::Ptr segmentNew(EntityName name, Segment::Type type);
+    Segment::Ptr segment(EntityName name) { return segments_[name]; }
 
     Location::Ptr customerLocationNew(EntityName name);
     Location::Ptr portLocationNew(EntityName name);
     Terminal::Ptr terminalLocationNew(EntityName name, Segment::Type type);
-    // Location::Ptr locationNew(EntityName name, Location::Type type);
-    Location::Ptr location(EntityName name);
+    Location::Ptr locationNew(EntityName name, Location::Type type);
+    Location::Ptr location(EntityName name) { return locations_[name]; }
 
     Fleet::Ptr fleetNew(EntityName name);
 
@@ -40,7 +40,6 @@ namespace Shipping {
 
     static Engine::Ptr engineNew(EntityName name){
         Ptr ptr = new Engine(name);
-        ptr->deleteRef();
         return ptr;
     }
 
@@ -49,10 +48,10 @@ namespace Shipping {
     class Notifiee : public Fwk::PtrInterface<Notifiee> {
     public:
       typedef Fwk::Ptr<Notifiee> Ptr;
-      virtual void onLocationNew(Location::Ptr location) {}
-      virtual void onLocationDel(Location::Ptr location) {}
-      virtual void onSegmentNew(Segment::Ptr segment) {}
-      virtual void onSegmentDel(Segment::Ptr segment) {}
+      virtual void onLocationNew(EntityName locationName) {}
+      virtual void onLocationDel(EntityName name, Location::Ptr location) {}
+      virtual void onSegmentNew(EntityName segmentName) {}
+      virtual void onSegmentDel(EntityName name, Segment::Ptr segment) {}
 
       
     protected:

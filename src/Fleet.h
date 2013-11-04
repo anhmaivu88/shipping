@@ -21,7 +21,6 @@ namespace Shipping {
     
     static Fleet::Ptr fleetNew(EntityName name) {
       Ptr ptr = new Fleet(name);
-      ptr->deleteRef();
 
       return ptr;
     }

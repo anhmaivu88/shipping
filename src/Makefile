@@ -7,6 +7,9 @@ default:	test1 example
 test1:	test1.o $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+test2: test2.o $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 example:	example.o $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
@@ -16,3 +19,4 @@ clean:
 Instance.o: Instance.cpp Instance.h PtrInterface.h Ptr.h Engine.h Segment.h Location.h Connectivity.h Fleet.h Entity.h Statistics.h Mile.h Error.h Typedef.h Query.h QueryResult.h Hour.h Dollar.h
 Engine.o: Engine.cpp Engine.h
 test1.o: test1.cpp Instance.h PtrInterface.h Ptr.h
+test2.o: test2.cpp
