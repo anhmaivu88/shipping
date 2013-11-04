@@ -10,11 +10,11 @@
 #include "Nominal.h"
 
 namespace Shipping {
-	class Dollar : public Ordinal<Dollar, unsigned int> {
+	class Dollar : public Ordinal<Dollar, double> {
 	public:
-		static unsigned int max(){ return UINT_MAX; }
+		static double max(){ return DBL_MAX; }
 
-		Dollar(unsigned int num) : Ordinal<Dollar, unsigned int>(num) {
+		Dollar(double num) : Ordinal<Dollar, double>(num) {
 
 		}
 	};

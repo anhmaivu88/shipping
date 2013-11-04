@@ -2,7 +2,7 @@
 #define MILE_H
 
 #include <string>
-#include <climits>
+#include <cfloat>
 
 #include "Ptr.h"
 #include "PtrInterface.h"
@@ -11,11 +11,11 @@
 #include "Nominal.h"
 
 namespace Shipping {
-	class Mile : public Ordinal<Mile, unsigned int> {
+	class Mile : public Ordinal<Mile, double> {
 	public:
-		static unsigned int max(){ return UINT_MAX; }
+		static double max(){ return DBL_MAX; }
 
-		Mile(unsigned int num) : Ordinal<Mile, unsigned int>(num) {
+		Mile(double num) : Ordinal<Mile, double>(num) {
 
 		}
 	};

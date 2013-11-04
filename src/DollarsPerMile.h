@@ -10,12 +10,12 @@
 #include "Nominal.h"
 
 namespace Shipping {
-class DollarsPerMile : public Ordinal<DollarsPerMile, unsigned int> {
-public:
+    class DollarsPerMile : public Ordinal<DollarsPerMile, double> {
+    public:
 
-DollarsPerMile(unsigned int num) : Ordinal<DollarsPerMile, unsigned int>(num) {
+        DollarsPerMile(double num) : Ordinal<DollarsPerMile, double>(num) {
 
-}
-};
+        }
+    };
 }
 #endif

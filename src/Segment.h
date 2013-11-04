@@ -15,9 +15,9 @@ namespace Shipping {
   class Segment : public Entity<Segment> {
   public:
     typedef Fwk::Ptr<Segment> Ptr;
-    class Difficulty : public Ordinal<Difficulty, float> {
+    class Difficulty : public Ordinal<Difficulty, double> {
     public:
-      Difficulty(float num) : Ordinal<Difficulty, float>(num) {
+      Difficulty(double num) : Ordinal<Difficulty, double>(num) {
         if(num < 1.0 || num > 5.0) {
           throw new ValueOutOfBoundsException("difficulty is not in 1-5 range");
         }
@@ -42,18 +42,18 @@ namespace Shipping {
     void lengthIs(Mile length) { length_ = length; }
     void returnSegmentIs(const Segment::Ptr segment);
     void difficultyIs(Difficulty difficulty) { difficulty_ = difficulty; }
-    void expeditableIs(bool expeditable)  { expeditable_ = expeditable; }
+    void priorityIs(Priority priority)  { priority_ = priority; }
 
     LocationPtr source() { return source_; }
     Mile length() { return length_; }
     Segment::Ptr returnSegment() { return returnSegment_; }
     Difficulty difficulty() { return difficulty_; }
-    bool expeditable() { return expeditable_; }
+    Priority priority() { return priority_; }
     Type type() { return type_; }
 
   protected:
     static Segment::Ptr segmentNew(EntityName name, Type type) {
-      Ptr ptr = new Segment(name, 0, 1.0, false, type);
+      Ptr ptr = new Segment(name, 0, 1.0, normal(), type);
       ptr->deleteRef();
 
       return ptr;
@@ -62,16 +62,16 @@ namespace Shipping {
     Segment(Shipping::EntityName name, 
             Mile length, 
             Difficulty difficulty, 
-            bool expeditable, 
+            Priority priority, 
             Type type) : Entity(name), 
                          length_(length), 
                          difficulty_(difficulty), 
-                         expeditable_(expeditable),
+                         priority_(priority),
                          type_(type) {};
 
     Mile length_;
     Difficulty difficulty_;
-    bool expeditable_;
+    Priority priority_;
     LocationPtr source_;
     Segment::Ptr returnSegment_;
     Type type_;

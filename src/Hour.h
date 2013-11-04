@@ -10,11 +10,11 @@
 #include "Nominal.h"
 
 namespace Shipping {
-	class Hour : public Ordinal<Hour, unsigned int> {
+	class Hour : public Ordinal<Hour, double> {
 	public:
-		static unsigned int max(){ return UINT_MAX; }
+		static double max(){ return DBL_MAX; }
 
-		Hour(unsigned int num) : Ordinal<Hour, unsigned int>(num) {
+		Hour(double num) : Ordinal<Hour, double>(num) {
 
 		}
 	};
