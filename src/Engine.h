@@ -52,6 +52,9 @@ namespace Shipping {
       Engine *engine_;
     };
 
+    void notifieeAdd(Notifiee::Ptr notifiee) { notifiees_.push_back(notifiee); }
+    void notifieeDel(Notifiee::Ptr notifiee) { notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); }
+
   private:
     map<EntityName, Segment::Ptr> segments_;
     map<EntityName, Location::Ptr> locations_;
