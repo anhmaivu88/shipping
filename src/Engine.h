@@ -26,13 +26,13 @@ namespace Shipping {
     Segment::Ptr planeSegmentNew(EntityName name);
     Segment::Ptr boatSegmentNew(EntityName name);
     Segment::Ptr truckSegmentNew(EntityName name);
-    Segment::Ptr segmentNew(EntityName name, Segment::Type type);
+    // Segment::Ptr segmentNew(EntityName name, Segment::Type type);
     Segment::Ptr segment(EntityName name);
 
     Location::Ptr customerLocationNew(EntityName name);
     Location::Ptr portLocationNew(EntityName name);
-    Location::Ptr terminalLocationNew(EntityName name);
-    Location::Ptr locationNew(EntityName name, Location::Type type);
+    Terminal::Ptr terminalLocationNew(EntityName name, Segment::Type type);
+    // Location::Ptr locationNew(EntityName name, Location::Type type);
     Location::Ptr location(EntityName name);
 
     Fleet::Ptr fleet(EntityName name);

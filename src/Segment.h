@@ -37,6 +37,10 @@ namespace Shipping {
       boat_,
       plane_
     };
+    
+    static Type truck(){ return truck_; } 
+    static Type boat(){ return boat_; }
+    static Type plane(){ return plane_; }
 
     void sourceIs(const LocationPtr source);
     void lengthIs(Mile length) { length_ = length; }
