@@ -9,7 +9,7 @@
 using namespace std;
 
 namespace Shipping {
-  class Statistics : Entity<Statistics> {
+  class Statistics : public Entity<Statistics> {
   public:
     typedef Fwk::Ptr<Statistics> Ptr;
     typedef float Percentage;
