@@ -17,9 +17,9 @@ namespace Shipping {
 			terminal_
 		};
 
-		Type customer(){ return customer_; } 
-		Type port(){ return port_; }
-		Type terminal(){ return terminal_; }
+		static Type customer(){ return customer_; } 
+		static Type port(){ return port_; }
+		static Type terminal(){ return terminal_; }
 
 		Type type(){ return type_; }
 
@@ -32,8 +32,8 @@ namespace Shipping {
 
 		static Location::Ptr locationNew(EntityName name, Type type){
 			Ptr ptr = new Location(name, type);
-      ptr->deleteRef();
-      return ptr;
+		    ptr->deleteRef();
+		    return ptr;
 		}
 
 		Location(EntityName name, Type type): Entity(name), type_(type){}
@@ -41,7 +41,7 @@ namespace Shipping {
 
 	class Customer : public Location {
 	public:
-		static Location::Ptr customerNew(EntityName name){ return locationNew(name, customer_); }
+		static Location::Ptr customerNew(EntityName name){ return locationNew(name, customer()); }
 
 	protected:
 		// Customer(EntityName name) : Location(name, Location::customer_){}
@@ -50,7 +50,7 @@ namespace Shipping {
 
 	class Port : public Location {
 	public:
-		static Location::Ptr portNew(EntityName name){ return locationNew(name, port_); }
+		static Location::Ptr portNew(EntityName name){ return locationNew(name, port()); }
 
 	protected:
 		// Port(EntityName name) : Location(name, Location::port_){}
@@ -59,19 +59,29 @@ namespace Shipping {
 
 	class Terminal : public Location {
 	public:
-		static Location::Ptr terminalNew(EntityName name){
-			Ptr ptr = new Terminal(name);
-      ptr->deleteRef();
-      return ptr;
+		typedef Fwk::Ptr<Terminal> Ptr;
+
+		static Ptr terminalNew(EntityName name, Segment::Type segmentType){
+			Ptr ptr = new Terminal(name, segmentType);
+      		ptr->deleteRef();
+      		return ptr;
 		}
 
 		void segmentIs(SegmentPtr segment){ 
-			if(segments_.size() > 0 && segment->type() != segments_[0]->type()) return;
+			if(segment->type() != segmentType_) return;
 			segments_.push_back(segment);
 		}
 
+		Segment::Type segmentType(){ return segmentType_; }
+		void segmentTypeIs(Segment::Type segmentType){
+			if(segments_.size() > 0) throw new ValueOutOfBoundsException("can't change type of terminal with attached segments");
+			segmentType_ = segmentType;
+		}
+
 	protected:
-		Terminal(EntityName name) : Location(name, terminal_){}
+		Segment::Type segmentType_;
+
+		Terminal(EntityName name, Segment::Type segmentType) : Location(name, terminal()), segmentType_(segmentType){}
 	};
 
 }

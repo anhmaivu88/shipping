@@ -4,6 +4,8 @@
 #include <vector>
 #include "Instance.h"
 #include "Engine.h"
+#include "Location.h"
+#include <sstream>
 
 namespace Shipping {
 
@@ -28,13 +30,14 @@ public:
 
 private:
     map<string,Ptr<Instance> > instance_;
+    Engine::Ptr engine_;
 };
 
 class LocationRep : public Instance {
 public:
 
-    LocationRep(const string& name, ManagerImpl* manager) :
-        Instance(name), manager_(manager)
+    LocationRep(const string& name, ManagerImpl* manager, Location::Ptr location) :
+        Instance(name), manager_(manager), location_(location)
     {
         // Nothing else to do.
     }
@@ -45,21 +48,25 @@ public:
     // Instance method
     void attributeIs(const string& name, const string& v);
 
-private:
+protected:
     Ptr<ManagerImpl> manager_;
+    Location::Ptr location_;
 
     int segmentNumber(const string& name);
 
 };
                                                                                                   
-class TruckTerminalRep : public LocationRep {
+class TerminalRep : public LocationRep {
 public:
 
-    TruckTerminalRep(const string& name, ManagerImpl *manager) :
-        LocationRep(name, manager)
+    TerminalRep(const string& name, ManagerImpl *manager, Terminal::Ptr location) :
+        LocationRep(name, manager, location), segmentType_(location->segmentType())
     {
         // Nothing else to do.
     }
+
+private:
+    Segment::Type segmentType_;
 
 };
 
@@ -69,7 +76,7 @@ ManagerImpl::ManagerImpl() {
 
 Ptr<Instance> ManagerImpl::instanceNew(const string& name, const string& type) {
     if (type == "Truck terminal") {
-        Ptr<TruckTerminalRep> t = new TruckTerminalRep(name, this);
+        Ptr<TerminalRep> t = new TerminalRep(name, this, engine_->terminalLocationNew(name, Segment::truck()));
         instance_[name] = t;
         return t;
     }
@@ -90,7 +97,7 @@ void ManagerImpl::instanceDel(const string& name) {
 string LocationRep::attribute(const string& name) {
     int i = segmentNumber(name);
     if (i != 0) {
-        cout << "Tried to read interface " << i;
+        return location_->segment(i)->name();
     }
     return "";
 }
