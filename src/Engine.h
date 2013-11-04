@@ -29,7 +29,7 @@ namespace Shipping {
     Segment::Ptr segmentNew(EntityName name, Segment::Type type);
     Segment::Ptr segment(EntityName name);
 
-    Location::Ptr customerLocationnew(EntityName name);
+    Location::Ptr customerLocationNew(EntityName name);
     Location::Ptr portLocationNew(EntityName name);
     Location::Ptr terminalLocationNew(EntityName name);
     Location::Ptr locationNew(EntityName name, Location::Type type);
@@ -41,12 +41,24 @@ namespace Shipping {
 
     Query queryNew();
 
+    class Notifiee : public Fwk::PtrInterface<Notifiee> {
+    public:
+      typedef Fwk::Ptr<Notifiee> Ptr;
+      virtual void onLocationNew(Location::Ptr location) {}
+      virtual void onSegmentNew(Segment::Ptr segment) {}
+      Notifiee(Engine *engine) : engine_(engine) {}
+      
+    protected:
+      Engine *engine_;
+    };
+
   private:
     map<EntityName, Segment::Ptr> segments_;
     map<EntityName, Location::Ptr> locations_;
     map<EntityName, Fleet::Ptr> fleets_;
 
     Statistics::Ptr statistics_;
+    std::vector<Notifiee::Ptr> notifiees_;
   };
 } /* end namespace */
 
