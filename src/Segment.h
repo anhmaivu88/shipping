@@ -17,7 +17,7 @@ namespace Shipping {
     typedef Fwk::Ptr<Segment> Ptr;
     class Difficulty : public Ordinal<Difficulty, double> {
     public:
-    Difficulty(double num) : Ordinal<Difficulty, double>(num) {
+      Difficulty(double num) : Ordinal<Difficulty, double>(num) {
         if(num < 1.0 || num > 5.0) {
           throw new ValueOutOfBoundsException("difficulty is not in 1-5 range");
         }
@@ -44,7 +44,7 @@ namespace Shipping {
 
     void sourceIs(const LocationPtr source);
     void lengthIs(Mile length) { length_ = length; }
-    void returnSegmentIs(const Segment::Ptr segment);
+    void returnSegmentIs(Segment::Ptr segment);
     void difficultyIs(Difficulty difficulty) { difficulty_ = difficulty; }
     void priorityIs(Priority priority)  { priority_ = priority; }
 
@@ -59,19 +59,27 @@ namespace Shipping {
       Ptr ptr = new Segment(name, 0, 1.0, normal(), type);
       return ptr;
     }
+
+    class Notifiee : public Fwk::PtrInterface<Notifiee> {
+    public:
+      typedef Fwk::Ptr<Notifiee> Ptr;
+      virtual void onPriority(Priority priority) {}
+    protected:
+      Notifiee(Segment *segment) : segment_(segment) {}
+      Segment *segment() { return segment_; }
+      Segment *segment_;
+    };
     
   protected:
-    
-    
-  Segment(Shipping::EntityName name, 
-          Mile length, 
-          Difficulty difficulty, 
-          Priority priority, 
-          Type type) : Entity(name), 
-      length_(length), 
-      difficulty_(difficulty), 
-      priority_(priority),
-      type_(type) {};
+    Segment(Shipping::EntityName name, 
+            Mile length, 
+            Difficulty difficulty, 
+            Priority priority, 
+            Type type) : Entity(name), 
+                         length_(length), 
+                         difficulty_(difficulty), 
+                         priority_(priority),
+                         type_(type) {};
 
     Mile length_;
     Difficulty difficulty_;
@@ -81,23 +89,23 @@ namespace Shipping {
     Type type_;
   };
 
-    class TruckSegment : public Segment {
-      static Segment::Ptr truckSegmentNew(EntityName name) {
-        return segmentNew(name, Segment::truck_);
-      }
-    };
+  class TruckSegment : public Segment {
+    static Segment::Ptr truckSegmentNew(EntityName name) {
+      return segmentNew(name, Segment::truck_);
+    }
+  };
 
-    class BoatSegment : public Segment {
-      static Segment::Ptr boatSegmentNew(EntityName name) {
-        return segmentNew(name, Segment::boat_);
-      }
-    };
+  class BoatSegment : public Segment {
+    static Segment::Ptr boatSegmentNew(EntityName name) {
+      return segmentNew(name, Segment::boat_);
+    }
+  };
 
-    class PlaneSegment : public Segment {
-      static Segment::Ptr planeSegmentNew(EntityName name) {
-        return segmentNew(name, Segment::plane_);
-      }
-    };
+  class PlaneSegment : public Segment {
+    static Segment::Ptr planeSegmentNew(EntityName name) {
+      return segmentNew(name, Segment::plane_);
+    }
+  };
 }
 
 #endif

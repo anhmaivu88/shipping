@@ -52,7 +52,7 @@ namespace Shipping {
       virtual void onLocationDel(EntityName name, Location::Ptr location) {}
       virtual void onSegmentNew(EntityName segmentName) {}
       virtual void onSegmentDel(EntityName name, Segment::Ptr segment) {}
-
+      virtual void onSegmentPriority(EntityName segment, Segment::Priority priority) {}
       
     protected:
       Notifiee(Engine *engine) : engine_(engine) {}
@@ -68,6 +68,17 @@ namespace Shipping {
     std::map<EntityName, Fleet::Ptr> fleets_;
 
     std::vector<Notifiee::Ptr> notifiees_;
+
+  private:
+    void proxyOnPriority(Segment::Ptr segment, Segment::Priority priority) {
+      
+    }
+
+    class SegmentReactor : public Segment::Notifiee {
+      void onPriority(Segment::Priority priority) {
+        
+      }
+    };
 
     Engine(EntityName name): Entity<Engine>(name){}
   };

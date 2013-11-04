@@ -2,18 +2,20 @@
 
 namespace Shipping {
   Segment::Ptr Engine::planeSegmentNew(EntityName name){
-  	Segment::Ptr segment = Segment::segmentNew(name, Segment::plane());
-  	return segment;
+  	return segmentNew(name, Segment::plane());
   }
 
   Segment::Ptr Engine::boatSegmentNew(EntityName name){
-  	Segment::Ptr segment = Segment::segmentNew(name, Segment::boat());
-  	return segment;
+  	return segmentNew(name, Segment::boat());
   }
 
   Segment::Ptr Engine::truckSegmentNew(EntityName name){
-  	Segment::Ptr segment = Segment::segmentNew(name, Segment::truck());
-  	return segment;
+  	return segmentNew(name, Segment::truck());
+  }
+
+  Segment::Ptr Engine::segmentNew(EntityName name, Segment::Type type) {
+    Segment::Ptr segment = Segment::segmentNew(name, type);
+    return segment;
   }
 
   Location::Ptr Engine::customerLocationNew(EntityName name){
