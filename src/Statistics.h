@@ -19,11 +19,20 @@ namespace Shipping {
 
     Percentage expeditedShippingPercentage();
 
+    static Statistics::Ptr statisticsNew(EntityName name, Engine::Ptr engine) {
+      Ptr ptr = new Statistics(name, engine);
+      ptr->deleteRef();
+
+      return ptr;
+    }
+
   private:
-    Statistics(EntityName name) : Entity(name) {}
+    Engine::Ptr engine_;
 
     map<Location::Type, int> locationStats_;
     map<Segment::Type, int> segmentStats_;
+
+    Statistics(EntityName name, Engine::Ptr engine) : Entity(name), engine_(engine) {}
   };
 }
 

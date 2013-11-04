@@ -55,13 +55,15 @@ namespace Shipping {
     Priority priority() { return priority_; }
     Type type() { return type_; }
 
-  protected:
     static Segment::Ptr segmentNew(EntityName name, Type type) {
       Ptr ptr = new Segment(name, 0, 1.0, normal(), type);
       ptr->deleteRef();
 
       return ptr;
     }
+    
+  protected:
+    
     
   Segment(Shipping::EntityName name, 
           Mile length, 

@@ -8,7 +8,6 @@
 #include "Instance.h"
 #include "Entity.h"
 #include "Location.h"
-#include "Statistics.h"
 #include "Segment.h"
 #include "Fleet.h"
 #include "Error.h"
@@ -35,13 +34,11 @@ namespace Shipping {
     // Location::Ptr locationNew(EntityName name, Location::Type type);
     Location::Ptr location(EntityName name);
 
-    Fleet::Ptr fleet(EntityName name);
-
-    Statistics::Ptr statistics();
+    Fleet::Ptr fleetNew(EntityName name);
 
     Query queryNew();
 
-    Engine::Ptr engineNew(EntityName name){
+    static Engine::Ptr engineNew(EntityName name){
         Ptr ptr = new Engine(name);
         ptr->deleteRef();
         return ptr;
@@ -63,11 +60,10 @@ namespace Shipping {
     void notifieeDel(Notifiee::Ptr notifiee) { notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); }
 
   private:
-    map<EntityName, Segment::Ptr> segments_;
-    map<EntityName, Location::Ptr> locations_;
-    map<EntityName, Fleet::Ptr> fleets_;
+    std::map<EntityName, Segment::Ptr> segments_;
+    std::map<EntityName, Location::Ptr> locations_;
+    std::map<EntityName, Fleet::Ptr> fleets_;
 
-    Statistics::Ptr statistics_;
     std::vector<Notifiee::Ptr> notifiees_;
 
     Engine(EntityName name): Entity<Engine>(name){}

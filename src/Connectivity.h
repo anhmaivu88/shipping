@@ -4,7 +4,6 @@
 #include "Engine.h"
 
 namespace Shipping {
-
   class Connectivity : public Entity<Connectivity> {
   public:
   	typedef Fwk::Ptr<Connectivity> Ptr;

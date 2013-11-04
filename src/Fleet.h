@@ -19,7 +19,7 @@ namespace Shipping {
     DollarsPerMile cost() { return cost_; }
     MilesPerHour speed() { return speed_; }
     
-    Fleet::Ptr fleetNew(EntityName name) {
+    static Fleet::Ptr fleetNew(EntityName name) {
       Ptr ptr = new Fleet(name);
       ptr->deleteRef();
 

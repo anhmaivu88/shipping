@@ -14,10 +14,12 @@ namespace Shipping {
   public:
     
     enum Type {
-      explore,
-      connect
+      null_,
+      explore_,
+      connect_
     };
 
+    Query(): type_(null_), distance_(Mile::max()), cost_(Dollar::max()), time_(Hour::max()), priority_(Segment::normal()){}
   	Query(Type type): type_(type), distance_(Mile::max()), cost_(Dollar::max()), time_(Hour::max()), priority_(Segment::normal()){}
 
     // void typeIs(Type type){ type_ = type; }
