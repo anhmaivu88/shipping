@@ -1,9 +1,9 @@
 #ifndef LOCATION_H
 #define LOCATION_H
 
-#include "Engine.h"
 #include "Segment.h"
 #include "Typedef.h"
+#include "Entity.h"
 #include <vector>
 
 namespace Shipping {
@@ -11,20 +11,22 @@ namespace Shipping {
 	public:
 		typedef Fwk::Ptr<Location> Ptr;
 
-		enum Type {
-			customer_,
-			port_,
-			terminal_
+		enum class Type {
+			CUSTOMER,
+      PORT,
+			TERMINAL
 		};
 
-		static Type customer(){ return customer_; } 
-		static Type port(){ return port_; }
-		static Type terminal(){ return terminal_; }
+		static Type customer(){ return Type::CUSTOMER; } 
+		static Type port(){ return Type::PORT; }
+		static Type terminal(){ return Type::TERMINAL; }
 
 		Type type(){ return type_; }
 
     SegmentPtr segment(int index){ return segments_[index]; }
-    virtual void segmentIs(SegmentPtr segment){ segments_.push_back(segment); }
+    virtual void segmentIs(int index, SegmentPtr segment){ segments_[index] = segment; }
+    virtual void segmentAdd(SegmentPtr segment) { segments_.push_back(segment); }
+    virtual void segmentDel(SegmentPtr segment) { segments_.erase(find(segments_.begin(), segments_.end(), segment)); }
 
 	protected:
 		std::vector<SegmentPtr> segments_;
@@ -54,34 +56,6 @@ namespace Shipping {
 	protected:
 		// Port(EntityName name) : Location(name, Location::port_){}
 	};
-
-
-	class Terminal : public Location {
-	public:
-		typedef Fwk::Ptr<Terminal> Ptr;
-
-		static Ptr terminalNew(EntityName name, Segment::Type segmentType){
-			Ptr ptr = new Terminal(name, segmentType);
-      return ptr;
-		}
-
-		void segmentIs(SegmentPtr segment){ 
-			if(segment->type() != segmentType_) return;
-			segments_.push_back(segment);
-		}
-
-		Segment::Type segmentType(){ return segmentType_; }
-		void segmentTypeIs(Segment::Type segmentType){
-			if(segments_.size() > 0) throw new ValueOutOfBoundsException("can't change type of terminal with attached segments");
-			segmentType_ = segmentType;
-		}
-
-	protected:
-		Segment::Type segmentType_;
-
-  Terminal(EntityName name, Segment::Type segmentType) : Location(name, terminal()), segmentType_(segmentType){}
-	};
-
 }
 
 #endif

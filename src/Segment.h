@@ -5,10 +5,10 @@
 #include "Ptr.h"
 #include "PtrInterface.h"
 #include "Instance.h"
-#include "Engine.h"
 #include "Mile.h"
 #include "Error.h"
 #include "Typedef.h"
+#include "Entity.h"
 #include "Location.h"
 
 namespace Shipping {
@@ -22,33 +22,35 @@ namespace Shipping {
           throw new ValueOutOfBoundsException("difficulty is not in 1-5 range");
         }
       }
+      
+      operator std::string() const { return std::to_string(value()); }
     };
 
-    enum Priority {
-      normal_,
-      expedited_
+    enum class Priority {
+      NORMAL,
+      EXPEDITED
     };
 
-    static Priority normal(){ return normal_; }
-    static Priority expedited(){ return expedited_; }
+    static Priority normal(){ return Priority::NORMAL; }
+    static Priority expedited(){ return Priority::EXPEDITED; }
 
-    enum Type {
-      truck_,
-      boat_,
-      plane_
+    enum class Type {
+      TRUCK,
+      BOAT,
+      PLANE
     };
     
-    static Type truck(){ return truck_; } 
-    static Type boat(){ return boat_; }
-    static Type plane(){ return plane_; }
+    static Type truck(){ return Type::TRUCK; } 
+    static Type boat(){ return Type::BOAT; }
+    static Type plane(){ return Type::PLANE; }
 
-    void sourceIs(const LocationPtr source);
+    void sourceIs(const Fwk::Ptr<Location> source);
     void lengthIs(Mile length) { length_ = length; }
     void returnSegmentIs(Segment::Ptr segment);
     void difficultyIs(Difficulty difficulty) { difficulty_ = difficulty; }
-    void priorityIs(Priority priority)  { priority_ = priority; }
+    void priorityIs(Priority priority);
 
-    LocationPtr source() { return source_; }
+    Fwk::Ptr<Location> source() { return source_; }
     Mile length() { return length_; }
     Segment::Ptr returnSegment() { return returnSegment_; }
     Difficulty difficulty() { return difficulty_; }
@@ -69,6 +71,9 @@ namespace Shipping {
       Segment *segment() { return segment_; }
       Segment *segment_;
     };
+
+    void notifieeAdd(Notifiee::Ptr notifiee) { notifiees_.push_back(notifiee); }
+    void notifieeDel(Notifiee::Ptr notifiee) { notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); }
     
   protected:
     Segment(Shipping::EntityName name, 
@@ -84,26 +89,27 @@ namespace Shipping {
     Mile length_;
     Difficulty difficulty_;
     Priority priority_;
-    LocationPtr source_;
+    Fwk::Ptr<Location> source_;
     Segment::Ptr returnSegment_;
     Type type_;
+    std::vector<Notifiee::Ptr> notifiees_;
   };
 
   class TruckSegment : public Segment {
     static Segment::Ptr truckSegmentNew(EntityName name) {
-      return segmentNew(name, Segment::truck_);
+      return segmentNew(name, Segment::Type::TRUCK);
     }
   };
 
   class BoatSegment : public Segment {
     static Segment::Ptr boatSegmentNew(EntityName name) {
-      return segmentNew(name, Segment::boat_);
+      return segmentNew(name, Segment::Type::BOAT);
     }
   };
 
   class PlaneSegment : public Segment {
     static Segment::Ptr planeSegmentNew(EntityName name) {
-      return segmentNew(name, Segment::plane_);
+      return segmentNew(name, Segment::Type::PLANE);
     }
   };
 }

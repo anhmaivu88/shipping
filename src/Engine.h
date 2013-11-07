@@ -12,6 +12,7 @@
 #include "Fleet.h"
 #include "Error.h"
 #include "Query.h"
+#include "Terminal.h"
 #include <map>
 #include <vector>
 
@@ -39,8 +40,8 @@ namespace Shipping {
     Query queryNew();
 
     static Engine::Ptr engineNew(EntityName name){
-        Ptr ptr = new Engine(name);
-        return ptr;
+      Ptr ptr = new Engine(name);
+      return ptr;
     }
 
     /* Notification stuff. We don't support asynchronous semantics here:
@@ -63,21 +64,37 @@ namespace Shipping {
     void notifieeDel(Notifiee::Ptr notifiee) { notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); }
 
   private:
+    void segmentIs(EntityName name, Segment::Ptr segment);
+    void locationIs(EntityName name, Location::Ptr segment);
+    
     std::map<EntityName, Segment::Ptr> segments_;
     std::map<EntityName, Location::Ptr> locations_;
     std::map<EntityName, Fleet::Ptr> fleets_;
-
+    
     std::vector<Notifiee::Ptr> notifiees_;
 
   private:
-    void proxyOnPriority(Segment::Ptr segment, Segment::Priority priority) {
-      
+    void proxyOnPriority(EntityName segmentName, Segment::Priority priority) {
+      for (auto notifiee : notifiees_) {
+        notifiee->onSegmentPriority(segmentName, priority);
+      }
     }
 
     class SegmentReactor : public Segment::Notifiee {
-      void onPriority(Segment::Priority priority) {
-        
+    public:
+      static SegmentReactor::Ptr segmentReactorNew(Engine *engine, Segment *segment) {
+        Ptr reactor = new SegmentReactor(engine, segment);
+        segment->notifieeAdd(reactor);
+        return reactor;
       }
+
+      void onPriority(Segment::Priority priority) {
+        engine_->proxyOnPriority(segment()->name(), priority);
+      }
+      
+      Engine *engine_;
+    private:
+      SegmentReactor(Engine *engine, Segment *segment) : Notifiee(segment), engine_(engine) {}
     };
 
     Engine(EntityName name): Entity<Engine>(name){}

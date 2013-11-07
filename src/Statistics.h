@@ -5,6 +5,7 @@
 #include <map>
 #include "Segment.h"
 #include "Location.h"
+#include "Percentage.h"
 
 using namespace std;
 
@@ -12,7 +13,6 @@ namespace Shipping {
   class Statistics : public Entity<Statistics> {
   public:
     typedef Fwk::Ptr<Statistics> Ptr;
-    typedef float Percentage;
 
     EntityCount locationType(Location::Type type) { return locationStats_[type]; }
     void locationTypeIs(Location::Type type, EntityCount count) { locationStats_[type] = count; }
@@ -40,6 +40,7 @@ namespace Shipping {
     /* FIXME: should zero out engine reference when engine dies */
     class EngineReactor : public Engine::Notifiee {
     public:
+      typedef Fwk::Ptr<EngineReactor> Ptr;
       /* engineReactorNew adds the new EngineReactor to `engine` as a notifiee */
       static EngineReactor::Ptr engineReactorNew(Statistics *stats, Engine *engine) {
         Ptr reactor = new EngineReactor(stats, engine);
@@ -59,7 +60,10 @@ namespace Shipping {
       void onSegmentDel(EntityName name, Segment::Ptr segment) {
         stats()->segmentTypeDec(segment->type());
       }
-      
+      void onSegmentPriority(EntityName name, Segment::Priority priority) {
+        
+      }
+
     private:
       EngineReactor(Statistics *stats, Engine *engine) : Engine::Notifiee(engine), stats_(stats) {}
       Statistics *stats() { return stats_; }

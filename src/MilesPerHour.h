@@ -14,7 +14,7 @@ namespace Shipping {
 	public:
 
 		MilesPerHour(double num) : Ordinal<MilesPerHour, double>(num) {
-
+      if (num < 0) { throw new ValueOutOfBoundsException("Miles per hour must be positive."); }
 		}
 	};
 }
