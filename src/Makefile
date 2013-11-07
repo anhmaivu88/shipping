@@ -21,3 +21,4 @@ Engine.o: Engine.cpp Engine.h
 Segment.o: Segment.cpp Segment.h
 test1.o: test1.cpp Instance.h PtrInterface.h Ptr.h
 test2.o: test2.cpp
+Statistics.o: Statistics.cpp Statistics.h

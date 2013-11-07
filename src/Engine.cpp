@@ -33,7 +33,18 @@ namespace Shipping {
   }
 
   Terminal::Ptr Engine::terminalLocationNew(EntityName name, Segment::Type type) {
-    Terminal::Ptr terminal = Terminal::terminalNew(name, type);
+    Terminal::Ptr terminal;
+    switch(type) {
+    case Segment::Type::BOAT:
+      terminal = BoatTerminal::boatTerminalNew(name);
+      break;
+    case Segment::Type::PLANE:
+      terminal = PlaneTerminal::planeTerminalNew(name);
+      break;
+    case Segment::Type::TRUCK:
+      terminal = TruckTerminal::truckTerminalNew(name);
+      break;
+    }
     locationIs(name, terminal);
     return terminal;
   }

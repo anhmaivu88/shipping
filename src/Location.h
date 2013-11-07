@@ -14,12 +14,16 @@ namespace Shipping {
 		enum class Type {
 			CUSTOMER,
       PORT,
-			TERMINAL
+      BOAT_TERMINAL,
+      TRUCK_TERMINAL,
+      PLANE_TERMINAL
 		};
 
 		static Type customer(){ return Type::CUSTOMER; } 
 		static Type port(){ return Type::PORT; }
-		static Type terminal(){ return Type::TERMINAL; }
+		static Type boatTerminal(){ return Type::BOAT_TERMINAL; }
+    static Type planeTerminal(){ return Type::PLANE_TERMINAL; }
+    static Type truckTerminal(){ return Type::TRUCK_TERMINAL; }
 
 		Type type(){ return type_; }
 

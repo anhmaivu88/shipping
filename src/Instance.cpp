@@ -171,11 +171,11 @@ namespace Shipping {
       } else if (name == "Port") {
         return std::to_string(statistics()->locationType(Location::port()));
       } else if (name == "Boat terminal") {
-        /* FIXME implement */
+        return std::to_string(statistics()->locationType(Location::Type::BOAT_TERMINAL));
       } else if (name == "Truck terminal") {
-        /* FIXME implement */
+        return std::to_string(statistics()->locationType(Location::Type::TRUCK_TERMINAL));
       } else if (name == "Plane terminal") {
-        /* FIXME implement */
+        return std::to_string(statistics()->locationType(Location::Type::PLANE_TERMINAL));
       } else if (name == "Truck segment") {
         return std::to_string(statistics()->segmentType(Segment::truck()));
       } else if (name == "Boat segment") {

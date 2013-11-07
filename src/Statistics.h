@@ -24,7 +24,13 @@ namespace Shipping {
     void segmentTypeInc(Segment::Type type) { segmentStats_[type] += 1; }
     void segmentTypeDec(Segment::Type type) { segmentStats_[type] -= 1; }
 
-    Percentage expeditedShippingPercentage();
+    void expeditedSegmentsInc() { expeditedSegments_++; }
+    void expeditedSegmentsDec() { expeditedSegments_--; }
+    EntityCount expeditedSegments() { return expeditedSegments_; }
+
+    EntityCount segmentCount() { return segmentType(Segment::Type::BOAT) + segmentType(Segment::Type::PLANE) + segmentType(Segment::Type::TRUCK); }
+
+    Percentage expeditedShippingPercentage() { return (float) expeditedSegments() / (float) segmentCount(); }
 
     static Statistics::Ptr statisticsNew(EntityName name, Engine::Ptr engine) {
       Ptr ptr = new Statistics(name, engine);
@@ -61,7 +67,11 @@ namespace Shipping {
         stats()->segmentTypeDec(segment->type());
       }
       void onSegmentPriority(EntityName name, Segment::Priority priority) {
-        
+        if (priority == Segment::Priority::EXPEDITED) {
+          stats()->expeditedSegmentsInc();
+        } else {
+          stats()->expeditedSegmentsDec();
+        }
       }
 
     private:
@@ -75,6 +85,8 @@ namespace Shipping {
 
     map<Location::Type, int> locationStats_;
     map<Segment::Type, int> segmentStats_;
+
+    EntityCount expeditedSegments_;
   };
 }
 
