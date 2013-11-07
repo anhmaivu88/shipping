@@ -16,6 +16,8 @@ public:
 Capacity(unsigned int num) : Ordinal<Capacity, unsigned int>(num) {
 
 }
+
+operator std::string() const { return std::to_string(value()); }
 };
 }
 #endif

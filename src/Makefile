@@ -1,6 +1,6 @@
 CXXFLAGS = -Wall -g -std=c++11
 
-OBJECTS = Segment.o Instance.o Engine.o
+OBJECTS = Segment.o Instance.o Engine.o Statistics.o
 
 default:	test1 example
 

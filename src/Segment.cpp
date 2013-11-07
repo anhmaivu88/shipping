@@ -1,4 +1,5 @@
 #include "Segment.h"
+#include "Error.h"
 
 namespace Shipping {
   void Segment::priorityIs(Priority priority) {
@@ -10,7 +11,20 @@ namespace Shipping {
 
   void Segment::returnSegmentIs(Segment::Ptr returnSegment) {
     if (returnSegment_ != returnSegment) {
+      if (returnSegment == NULL) {
+        returnSegment_ = NULL;
+        return;
+      }
+
+      if (returnSegment->type() != type())
+        throw new ValueOutOfBoundsException("Attempted to set mismatched return segment.");
+      
+      if (returnSegment_)
+        returnSegment_->returnSegmentIs(NULL);
+
       returnSegment_ = returnSegment;
+      // Will not infinite loop because of idempotency.
+      returnSegment->returnSegmentIs(this);
     }
   }
 

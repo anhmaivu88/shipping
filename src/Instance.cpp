@@ -223,23 +223,64 @@ namespace Shipping {
 
   class FleetRep : public Instance {
   public:
-    FleetRep(const string& name, ManagerImpl* manager, Fleet::Ptr fleet) :
-      Instance(name), manager_(manager), fleet_(fleet)
+    FleetRep(const string& name, ManagerImpl* manager) :
+      Instance(name), manager_(manager)
     {
-      // Nothing else to do.
+      fleets_["Boat fleet"] = manager->engine()->fleetNew("Boat fleet");
+      fleets_["Truck fleet"] = manager->engine()->fleetNew("Truck fleet");
+      fleets_["Plane fleet"] = manager->engine()->fleetNew("Plane fleet");
     }
 
-    string attribute(const string& name){
-      // TODO parser
+    string attribute(const string& name) {
+      string fleetName = name.substr(0, name.find(","));
+      int delimiterIndex = name.find(", ");
+      string attrName = string(delimiterIndex + 2, name.length() - 1 - 2 - delimiterIndex);
+      Fleet::Ptr fleet = this->fleet(fleetName);
+
+      if (fleet == NULL) {
+        std::cerr << "Invalid fleet name " << fleetName << "." << std::endl;
+        return "";
+      }
+
+      if (attrName == "speed") {
+        return fleet->speed();
+      } else if (attrName == "cost") {
+        return fleet->cost();
+      } else if (attrName == "capacity") {
+        return fleet->capacity();
+      } else { 
+        std::cerr << "Invalid attribute name " << attrName << std::endl;
+        return "";
+      }
     }
 
     void attributeIs(const string& name, const string& v){
-      // TODO parser
+      string fleetName = name.substr(0, name.find(","));
+      int delimiterIndex = name.find(", ");
+      string attrName = string(delimiterIndex + 2, name.length() - 1 - 2 - delimiterIndex);
+      Fleet::Ptr fleet = this->fleet(fleetName);
+
+      if (fleet == NULL) {
+        std::cerr << "Invalid fleet name " << fleetName << "." << std::endl;
+        return;
+      }
+
+      if (attrName == "speed") {
+        fleet->speedIs(std::atof(v.c_str()));
+      } else if (attrName == "cost") {
+        fleet->costIs(std::atof(v.c_str()));
+      } else if (attrName == "capacity") {
+        fleet->capacityIs(std::atof(v.c_str()));
+      } else { 
+        std::cerr << "Invalid attribute name " << attrName << std::endl;
+      }
     }
 
   protected:
+    Fleet::Ptr fleet(EntityName name) { return fleets_[name]; }
+    
     Ptr<ManagerImpl> manager_;
-    Fleet::Ptr fleet_;
+    std::map<EntityName, Fleet::Ptr> fleets_;
   };
 
   Ptr<Instance> ManagerImpl::instanceNew(const string& name, const string& type) {
@@ -267,7 +308,7 @@ namespace Shipping {
       t = new SegmentRep(name, this, engine_->planeSegmentNew(name));
     } else if(type == "Fleet"){
       if(fleetRep_) return fleetRep_;
-      fleetRep_ = new FleetRep(name, this, engine_->fleetNew(name));
+      fleetRep_ = new FleetRep(name, this);
       t = fleetRep_;
     } else if(type == "Stats"){
       if(statisticsRep_) return statisticsRep_;

@@ -1,4 +1,5 @@
 #include "Location.h"
+#include "Error.h"
 
 #ifndef TERMINAL_H
 #define TERMINAL_H
@@ -9,14 +10,12 @@ namespace Shipping {
 
     
     void segmentIs(int index, SegmentPtr segment){ 
-      /* FIXME: handle this error. */
-      if (segment->type() != segmentType()) return;
+      if (segment->type() != segmentType()) throw new ValueOutOfBoundsException("Attempted to connect segment to incompatible terminal.");
       segments_[index] = segment;
     }
 
     void segmentAdd(SegmentPtr segment) {
-      /* FIXME: handle this error. */
-      if (segment->type() != segmentType()) return;
+      if (segment->type() != segmentType()) throw new ValueOutOfBoundsException("Attempted to connect segment to incompatible terminal.");
       segments_.push_back(segment);
     }
 

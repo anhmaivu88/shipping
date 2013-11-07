@@ -16,6 +16,8 @@ namespace Shipping {
         DollarsPerMile(double num) : Ordinal<DollarsPerMile, double>(num) {
 
         }
+
+      operator std::string() const { return std::to_string(value()); }
     };
 }
 #endif

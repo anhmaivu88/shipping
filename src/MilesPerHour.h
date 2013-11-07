@@ -16,6 +16,8 @@ namespace Shipping {
 		MilesPerHour(double num) : Ordinal<MilesPerHour, double>(num) {
       if (num < 0) { throw new ValueOutOfBoundsException("Miles per hour must be positive."); }
 		}
+    
+    operator std::string() const { return std::to_string(value()); } 
 	};
 }
 #endif

@@ -65,6 +65,10 @@ namespace Shipping {
       }
       void onSegmentDel(EntityName name, Segment::Ptr segment) {
         stats()->segmentTypeDec(segment->type());
+
+        if (segment->priority() == Segment::Priority::EXPEDITED) {
+          stats()->expeditedSegmentsDec();
+        }
       }
       void onSegmentPriority(EntityName name, Segment::Priority priority) {
         if (priority == Segment::Priority::EXPEDITED) {
