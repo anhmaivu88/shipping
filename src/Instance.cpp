@@ -148,7 +148,7 @@ namespace Shipping {
           std::cerr << "Unknown attribute " << name << " for segment." << std::endl;
         }
       } catch (...) {
-        std::cerr << "Invalid value " << v << " for attribute name." << std::endl;
+        std::cerr << "Invalid value [" << v << "] for attribute: [" << name << "]" << std::endl;
       }
     }
 

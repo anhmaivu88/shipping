@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
 
   Ptr<Instance> b = manager->instanceNew("seg1", "Truck segment");
   Ptr<Instance> c = manager->instanceNew("seg2", "Truck segment");
+  Ptr<Instance> d = manager->instanceNew("seg3", "Plane segment");
 
   if (b == NULL || c == NULL) {
     badTruckSegment();
@@ -36,6 +37,7 @@ int main(int argc, char *argv[]) {
 
   b->attributeIs("source", "terminal1");
   c->attributeIs("source", "terminal1");
+  d->attributeIs("source", "terminal1");
 
   cout << a->attribute("segment1") << endl;
   cout << a->attribute("segment2") << endl;
