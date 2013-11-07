@@ -5,6 +5,7 @@
 #include "Typedef.h"
 #include "Entity.h"
 #include <vector>
+#include <iostream>
 
 namespace Shipping {
 	class Location : public Entity<Location> {

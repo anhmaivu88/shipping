@@ -1,5 +1,6 @@
 #include "Segment.h"
 #include "Error.h"
+#include <iostream>
 
 namespace Shipping {
   void Segment::priorityIs(Priority priority) {

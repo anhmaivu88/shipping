@@ -65,7 +65,7 @@ namespace Shipping {
     string attribute(const string& name) {
       int i = segmentNumber(name);
       if (i != 0) {
-        return location_->segment(i)->name();
+        return location_->segment(i - 1)->name();
       }
       return "";
     }
