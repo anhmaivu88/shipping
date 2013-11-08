@@ -25,6 +25,10 @@ namespace Shipping {
       return ptr;
     }
 
+    static std::string boat(){ return "Boat"; }
+    static std::string truck(){ return "Truck"; }
+    static std::string plane(){ return "Plane"; }
+
   private:
     Fleet(EntityName name) : Entity<Fleet>(name), speed_(0), cost_(0), capacity_(0) {};
     
