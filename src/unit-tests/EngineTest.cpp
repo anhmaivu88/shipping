@@ -72,5 +72,18 @@ TEST_F(EngineTest, StatisticsShouldCountThings) {
 }
 
 TEST_F(EngineTest, StatisticsShouldTrackExpeditedPercentage) {
+  Segment::Ptr truckSegment = engine->truckSegmentNew("Truck segment");
+  Segment::Ptr truckSegment2 = engine->truckSegmentNew("Truck segment2");
   
+  ASSERT_EQ(statistics->expeditedShippingPercentage(), 0.0);
+  truckSegment->priorityIs(Segment::Priority::EXPEDITED);
+  ASSERT_EQ(statistics->expeditedShippingPercentage(), 0.5);
+  truckSegment2->priorityIs(Segment::Priority::EXPEDITED);
+  /* Make sure we don't double count. */
+  truckSegment2->priorityIs(Segment::Priority::EXPEDITED);
+  ASSERT_EQ(statistics->expeditedShippingPercentage(), 1.0);
+  truckSegment2->priorityIs(Segment::Priority::NORMAL);
+  ASSERT_EQ(statistics->expeditedShippingPercentage(), 0.5);
+  engine->segmentDel(truckSegment2->name());
+  ASSERT_EQ(statistics->expeditedShippingPercentage(), 1.0);
 }

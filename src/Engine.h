@@ -17,8 +17,6 @@
 #include <vector>
 
 namespace Shipping {
-
-
   class Engine : public Entity<Engine> {
   public:
     typedef Fwk::Ptr<Engine> Ptr;

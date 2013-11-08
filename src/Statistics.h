@@ -39,8 +39,17 @@ namespace Shipping {
     }
 
   private:
-    Statistics(EntityName name, Engine::Ptr engine) : Entity(name), engine_(engine) {
+    Statistics(EntityName name, Engine::Ptr engine) : Entity(name), engine_(engine), expeditedSegments_(0){
       engineReactor_ = EngineReactor::engineReactorNew(this, engine.ptr());
+      segmentStats_[Segment::Type::BOAT] = 0;
+      segmentStats_[Segment::Type::TRUCK] = 0;
+      segmentStats_[Segment::Type::PLANE] = 0;
+
+      locationStats_[Location::Type::CUSTOMER] = 0;
+      locationStats_[Location::Type::PORT] = 0;
+      locationStats_[Location::Type::BOAT_TERMINAL] = 0;
+      locationStats_[Location::Type::TRUCK_TERMINAL] = 0;
+      locationStats_[Location::Type::PLANE_TERMINAL] = 0;
     }
 
     /* FIXME: should zero out engine reference when engine dies */
