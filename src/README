@@ -1,0 +1,57 @@
+user: lmartel
+user: andymo
+
+As required by the assignment description we split our code into two parts: the rep layer and 
+the engine layer. 
+
+The rep layer expands only slightly on the heirarchy that was present in 
+the starter code: we force every Rep to descend from InstanceImpl in order to give us the 
+ability to add a little bit of housekeeping information in. For each class of entity
+there is a corresponding Rep class. LocationRep, SegmentRep, etc. Each of these maintains
+a reference to the InstanceManager that created it. The reps all access the engine through
+the reference thta the InstanceManager holds.
+
+The Engine layer is more complicated. We have two "classes" of class in our engine layer.
+There are "Entitys" which are as described in the class. Entity objects inherit from 
+PtrInterface and are required to have a name. There are also "Ordinal" types which 
+inherit from the given Ordinal class. These types are unnamed and are never used with
+pointers. Each ordinal type implements a "string" operator that is appropriate to its type
+and also has a constructor which limits them to valid values.
+
+There are several kinds of entities. In our system we have:
+
+* fleet
+* location
+** terminal
+*** boat terminal
+*** plane terminal
+*** truck terminal
+** customer
+** port
+* segment
+* statistics
+
+Each of these types of entities has its own class. 
+
+Over all of these entities there is an Engine object. The engine is responsible for holding
+references (indexed by name) to each of the entities in the simulation. It also holds all 
+of the factory methods for creating entities and provides a Notifiee interface that allows
+Statistics objects to listen to it.
+
+
+Design decisions:
+==========
+
+We decided to store non-existent return segments and sources as "NULL" values in the corresponding
+attributes. This leads to a few issues with null checking, and also makes it slightly
+difficult to distinguish between an invalid name and an uninitialized property at the engine layer.
+We deal with this by checking at the rep layer that all names that are used to assign "source"
+and "return segment" are valid.
+
+Error handling:
+
+We decided to handle errors by throwing exceptions at the engine layer. These exceptions bubble 
+to the rep layer where they are caught by catch statements in #attribute and #attributeIs in 
+the appropriate rep classes. At this point an error message is logged. The exception types
+are generic but include specific messages as members. We did not choose to display 
+the more detailed error messages although this is certainly a possibility.
