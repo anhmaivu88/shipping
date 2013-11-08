@@ -67,7 +67,13 @@ namespace Shipping {
     string attribute(const string& name) {
       int i = segmentNumber(name);
       if (i != 0) {
-        return location_->segment(i - 1)->name();
+        Ptr<Segment> segment = location_->segment(i - 1);
+        if (segment) {
+          return segment->name();
+        } else {
+          std::cerr << "Segment [" << i << "] was not found for location [" << location()->name() << "]" << std::endl;
+          return "";
+        }
       }
       return "";
     }
@@ -80,6 +86,8 @@ namespace Shipping {
   protected:
     Ptr<ManagerImpl> manager_;
     Location::Ptr location_;
+
+    Location::Ptr location() { return location_; }
 
     int segmentNumber(const string& name);
 
