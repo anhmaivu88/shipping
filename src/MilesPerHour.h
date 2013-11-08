@@ -20,8 +20,6 @@ namespace Shipping {
             if (scalar < 0) { throw new ValueOutOfBoundsException("Miles per hour must be positive."); }
             value_ *= scalar;
         }
-
-        operator std::string() const { return std::to_string(value()); } 
     };
 }
 #endif

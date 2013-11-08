@@ -22,8 +22,6 @@ namespace Shipping {
           throw new ValueOutOfBoundsException("difficulty is not in 1-5 range");
         }
       }
-      
-      operator std::string() const { return std::to_string(value()); }
     };
 
     enum class Priority {

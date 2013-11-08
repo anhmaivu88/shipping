@@ -1,3 +1,7 @@
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
 #ifndef __NOMINAL_H__
 #define __NOMINAL_H__
 
@@ -19,6 +23,13 @@ public:
 	
 	RepType value() const
 	{ return value_; }
+
+  virtual operator std::string() const { 
+    std::stringstream stringRep;
+    stringRep << std::setprecision(2);
+    stringRep << value();
+    return stringRep.str();
+  }
 	
 protected:
 	RepType value_;
