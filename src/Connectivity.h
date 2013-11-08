@@ -48,10 +48,13 @@ namespace Shipping {
         cost_(0), 
         time_(0), 
         priority_(priority) 
-      {};
+      {}
 
+      size_t size(){ return path_.size(); }
       bool push_back(Segment::Ptr segment);
-      string toString(Query::Type type);
+      Segment::Ptr peek_back(){ return path_.size() > 0 ? path_[path_.size() - 1] : NULL; }
+
+      string stringify(Query::Type type);
 
       Mile distance(){ return distance_; }
       Dollar cost(){ return cost_; }

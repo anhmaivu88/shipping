@@ -43,7 +43,7 @@ namespace Shipping {
     Hour time(){ return time_; }
     Segment::Priority priority(){ return priority_; }
 
-    bool operator==(Query & other){
+    bool operator==(Query & other) {
       return type_ == other.type_ &&
         start_ == other.start_ &&
         end_ == other.end_ &&
