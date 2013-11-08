@@ -55,15 +55,16 @@ namespace Shipping {
       }
 
       void onLocationNew(EntityName locationName) {
-        stats()->locationTypeInc(engine_->location(locationName)->type());
+        stats()->locationTypeInc(engine()->location(locationName)->type());
       }
-      void onLocationDel(EntityName name, Location::Ptr location) {
-        stats()->locationTypeDec(location->type());
+      void onLocationDel(EntityName name) {
+        stats()->locationTypeDec(engine()->location(name)->type());
       }
       void onSegmentNew(EntityName segmentName) {
-        stats()->segmentTypeInc(engine_->segment(segmentName)->type());
+        stats()->segmentTypeInc(engine()->segment(segmentName)->type());
       }
-      void onSegmentDel(EntityName name, Segment::Ptr segment) {
+      void onSegmentDel(EntityName name) {
+        Segment::Ptr segment = engine()->segment(name);
         stats()->segmentTypeDec(segment->type());
 
         if (segment->priority() == Segment::Priority::EXPEDITED) {

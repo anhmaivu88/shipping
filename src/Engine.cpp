@@ -20,6 +20,20 @@ namespace Shipping {
     return segment;
   }
 
+  void Engine::segmentDel(EntityName name) {
+    Segment::Ptr targetSegment = segment(name);
+    if (targetSegment != NULL) {
+      if (targetSegment->returnSegment())
+        targetSegment->returnSegment()->returnSegmentIs(NULL);
+
+      for (auto notifiee : notifiees_) {
+        notifiee->onSegmentDel(name);
+      }
+
+      segments_.erase(name);
+    }
+  }
+
   Location::Ptr Engine::customerLocationNew(EntityName name){
   	Location::Ptr customer = Customer::customerNew(name);
     locationIs(name, customer);
@@ -104,5 +118,22 @@ namespace Shipping {
         notifiee->onLocationNew(name);
       } catch (...) { }
     }
+  }
+
+  void Engine::locationDel(EntityName name) {
+    Location::Ptr targetLocation = location(name);
+    if (targetLocation != NULL) {
+      for (int i = 0; i < targetLocation->segmentCount(); i++) {
+        Segment::Ptr segment = targetLocation->segment(i);
+        segment->sourceIs(NULL);
+      }
+
+      for (auto notifiee : notifiees_) {
+        notifiee->onLocationDel(name);
+      }
+
+      locations_.erase(name);
+    }
+
   }
 }

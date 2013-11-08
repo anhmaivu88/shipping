@@ -32,6 +32,7 @@ namespace Shipping {
     virtual void segmentIs(int index, SegmentPtr segment){ segments_[index] = segment; }
     virtual void segmentAdd(SegmentPtr segment) { segments_.push_back(segment); }
     virtual void segmentDel(SegmentPtr segment) { segments_.erase(find(segments_.begin(), segments_.end(), segment)); }
+    EntityCount segmentCount() { return segments_.size(); }
 
 	protected:
 		std::vector<SegmentPtr> segments_;

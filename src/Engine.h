@@ -27,12 +27,13 @@ namespace Shipping {
     Segment::Ptr boatSegmentNew(EntityName name);
     Segment::Ptr truckSegmentNew(EntityName name);
     Segment::Ptr segmentNew(EntityName name, Segment::Type type);
+    void segmentDel(EntityName name);
     Segment::Ptr segment(EntityName name);
 
     Location::Ptr customerLocationNew(EntityName name);
     Location::Ptr portLocationNew(EntityName name);
     Terminal::Ptr terminalLocationNew(EntityName name, Segment::Type type);
-    Location::Ptr locationNew(EntityName name, Location::Type type);
+    void locationDel(EntityName name);
     Location::Ptr location(EntityName name);
 
     Fleet::Ptr fleet(EntityName name);
@@ -54,13 +55,14 @@ namespace Shipping {
       virtual void onFleetNew(EntityName locationName) {}
       virtual void onFleetDel(EntityName name, Fleet::Ptr fleet) {}
       virtual void onLocationNew(EntityName locationName) {}
-      virtual void onLocationDel(EntityName name, Location::Ptr location) {}
+      virtual void onLocationDel(EntityName name) {}
       virtual void onSegmentNew(EntityName segmentName) {}
-      virtual void onSegmentDel(EntityName name, Segment::Ptr segment) {}
+      virtual void onSegmentDel(EntityName name) {}
       virtual void onSegmentPriority(EntityName segment, Segment::Priority priority) {}
       
     protected:
       Notifiee(Engine *engine) : engine_(engine) {}
+      Engine *engine() { return engine_; }
       Engine *engine_;
     };
 

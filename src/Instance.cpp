@@ -53,18 +53,38 @@ namespace Shipping {
     Ptr<ConnectivityRep> connectivityRep_;
   };
 
+  class InstanceImpl : public Instance {
+  public:
+    enum class Status {
+      DELETED,
+      ACTIVE
+    };
 
+    Status status() { return status_; }
+    void statusIs(Status status) { 
+      if (status_ != Status::DELETED) { status_ = status; } 
+      if (status_ == Status::DELETED) { deleteSelf(); } 
+    }
+    
+  protected: 
+    virtual void deleteSelf() = 0;
+    InstanceImpl(const string &name) : Instance(name), status_(Status::ACTIVE) {}
+    Status status_;
 
-  class LocationRep : public Instance {
+    static void printDeletedError() { std::cerr << "Attempted to access attribute of deleted instance." << std::endl; }
+  };
+
+  class LocationRep : public InstanceImpl {
   public:
 
     LocationRep(const string& name, ManagerImpl* manager, Location::Ptr location) :
-      Instance(name), manager_(manager), location_(location)
+      InstanceImpl(name), manager_(manager), location_(location)
     {
       // Nothing else to do.
     }
 
     string attribute(const string& name) {
+      if (status() == Status::DELETED) { printDeletedError(); return ""; }
       int i = segmentNumber(name);
       if (i != 0) {
         Ptr<Segment> segment = location_->segment(i - 1);
@@ -86,11 +106,14 @@ namespace Shipping {
   protected:
     Ptr<ManagerImpl> manager_;
     Location::Ptr location_;
-
     Location::Ptr location() { return location_; }
 
     int segmentNumber(const string& name);
 
+    virtual void deleteSelf() { 
+      manager_->engine()->locationDel(location_->name());
+      location_ = NULL;
+    }
   };
                                                                                                   
   class TerminalRep : public LocationRep {
@@ -107,21 +130,29 @@ namespace Shipping {
 
   };
 
-  class SegmentRep : public Instance {
+  class SegmentRep : public InstanceImpl {
   public:
     SegmentRep(const string& name, ManagerImpl* manager, Segment::Ptr segment) :
-      Instance(name), manager_(manager), segment_(segment)
+      InstanceImpl(name), manager_(manager), segment_(segment)
     {
       // Nothing else to do.
     }
 
     string attribute(const string& name){
+      if (status() == Status::DELETED) { printDeletedError(); return ""; }
+
       if (name == "source") {
-        return segment()->source()->name();
+        if (segment()->source())
+          return segment()->source()->name();
+        else
+          return "";
       } else if (name == "length") {
         return segment()->length();
       } else if (name == "return segment") {
-        return segment()->returnSegment()->name();
+        if (segment()->returnSegment())
+          return segment()->returnSegment()->name();
+        else
+          return "";
       } else if (name == "difficulty") {
         return segment()->difficulty();
       } else if (name == "expedite support") {
@@ -137,6 +168,8 @@ namespace Shipping {
     }
 
     void attributeIs(const string& name, const string& v){
+      if (status() == Status::DELETED) { printDeletedError(); return; }
+
       try {
         if (name == "source") {
           Ptr<Location> sourceLocation = manager_->engine()->location(v);
@@ -170,16 +203,23 @@ namespace Shipping {
     Segment::Ptr segment() { return segment_; }
     Ptr<ManagerImpl> manager_;
     Segment::Ptr segment_;
+
+    void deleteSelf() { 
+      manager_->engine()->segmentDel(segment_->name());
+      segment_ = NULL;
+    }
   };
 
-  class StatisticsRep : public Instance {
+  class StatisticsRep : public InstanceImpl {
   public:
     StatisticsRep(const string& name, ManagerImpl* manager, Statistics::Ptr statistics) :
-      Instance(name), manager_(manager), statistics_(statistics)
+      InstanceImpl(name), manager_(manager), statistics_(statistics)
     {
     }
 
     string attribute(const string& name){
+      if (status() == Status::DELETED) { printDeletedError(); return ""; }
+
       if (name == "Customer") {
         return to_string(statistics()->locationType(Location::customer()));
       } else if (name == "Port") {
@@ -212,17 +252,21 @@ namespace Shipping {
     Ptr<ManagerImpl> manager_;
     Statistics::Ptr statistics() { return statistics_; }
     Statistics::Ptr statistics_;
+
+    void deleteSelf() { }
   };
 
-  class ConnectivityRep : public Instance {
+  class ConnectivityRep : public InstanceImpl {
   public:
     ConnectivityRep(const string& name, ManagerImpl* manager, Connectivity::Ptr connectivity) :
-      Instance(name), manager_(manager), connectivity_(connectivity)
+      InstanceImpl(name), manager_(manager), connectivity_(connectivity)
     {
       // Nothing else to do.
     }
 
     string attribute(const string& name){
+      if (status() == Status::DELETED) { printDeletedError(); return ""; }
+
       Engine::Ptr eng = manager_->engine();
       stringstream ss(name);
       string token;
@@ -295,12 +339,14 @@ namespace Shipping {
   protected:
     Ptr<ManagerImpl> manager_;
     Connectivity::Ptr connectivity_;
+
+    void deleteSelf() { }
   };
 
-  class FleetRep : public Instance {
+  class FleetRep : public InstanceImpl {
   public:
     FleetRep(const string& name, ManagerImpl* manager) :
-      Instance(name), manager_(manager)
+      InstanceImpl(name), manager_(manager)
     {
       manager->engine()->fleetNew("Boat");
       manager->engine()->fleetNew("Truck");
@@ -308,6 +354,8 @@ namespace Shipping {
     }
 
     string attribute(const string& name) {
+      if (status() == Status::DELETED) { printDeletedError(); return ""; }
+
       int delimiterIndex = name.find(", ");
       string fleetName = name.substr(0, delimiterIndex);
       string attrName = name.substr(delimiterIndex + 2);
@@ -331,6 +379,8 @@ namespace Shipping {
     }
 
     void attributeIs(const string& name, const string& v){
+      if (status() == Status::DELETED) { printDeletedError(); return; }
+
       int delimiterIndex = name.find(", ");
       string fleetName = name.substr(0, delimiterIndex);
       string attrName = name.substr(delimiterIndex + 2);
@@ -354,8 +404,9 @@ namespace Shipping {
 
   protected:
     Fleet::Ptr fleet(EntityName name) { return manager_->engine()->fleet(name); }
-    
     Ptr<ManagerImpl> manager_;
+
+    void deleteSelf() { }
   };
 
   Ptr<Instance> ManagerImpl::instanceNew(const string& name, const string& type) {
@@ -382,15 +433,15 @@ namespace Shipping {
     } else if(type == "Plane segment"){
       t = new SegmentRep(name, this, engine_->planeSegmentNew(name));
     } else if(type == "Fleet"){
-      if(fleetRep_) return fleetRep_;
+      if(fleetRep_) { fleetRep_->statusIs(InstanceImpl::Status::ACTIVE); return fleetRep_; }
       fleetRep_ = new FleetRep(name, this);
       t = fleetRep_;
     } else if(type == "Stats"){
-      if(statisticsRep_) return statisticsRep_;
+      if(statisticsRep_) { statisticsRep_->statusIs(InstanceImpl::Status::ACTIVE); return statisticsRep_; }
       statisticsRep_ = new StatisticsRep(name, this, statistics_);
       t = statisticsRep_;
     } else if(type == "Conn"){
-      if(connectivityRep_) return connectivityRep_;
+      if(connectivityRep_) { connectivityRep_->statusIs(InstanceImpl::Status::ACTIVE); return connectivityRep_; }
       connectivityRep_ = new ConnectivityRep(name, this, Connectivity::connectivityNew(name, engine_));
       t = connectivityRep_;
     } else {
@@ -409,6 +460,16 @@ namespace Shipping {
   }
 
   void ManagerImpl::instanceDel(const string& name) {
+    Ptr<Instance> targetInstance = instance(name);
+    if (targetInstance == NULL) {
+      std::cerr << "Attempted to delete non-existent instance [" << name << "]." << std::endl;
+      return;
+    }
+
+    /* This is safe. The only way that we can be deleting a named instance in this method
+       is if it was initially constructed through instanceNew -- which will be creating an InstanceImpl. */
+    Ptr<InstanceImpl> instanceImpl = Fwk::ptr_cast<InstanceImpl, Instance>(targetInstance);
+    instanceImpl->statusIs(InstanceImpl::Status::DELETED);
   }
 
   static const string segmentStr = "segment";
@@ -421,8 +482,6 @@ namespace Shipping {
     }
     return 0;
   }
-
-
 }
 
 /*
@@ -435,3 +494,4 @@ namespace Shipping {
 Ptr<Instance::Manager> shippingInstanceManager() {
   return new Shipping::ManagerImpl();
 }
+
