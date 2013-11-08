@@ -13,11 +13,11 @@ namespace Shipping {
     public:
 
         DollarsPerMile(double num) : Ordinal<DollarsPerMile, double>(num) {
-
+        
         }
 
         void operator*=(double scalar){
-            if (scalar < 0) { throw new ValueOutOfBoundsException("Miles per hour must be positive."); }
+            if (scalar < 0) { throw new ValueOutOfBoundsException("Dollars per mile must be positive."); }
             value_ *= scalar;
         }
 
