@@ -19,7 +19,7 @@ namespace Shipping {
 
     virtual operator std::string() const { 
     std::stringstream stringRep;
-    stringRep << std::setprecision(2);
+    stringRep << std::setprecision(2) << std::fixed;
     stringRep << value() * 100;
     return stringRep.str();
   }
