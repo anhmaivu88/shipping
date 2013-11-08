@@ -30,7 +30,6 @@ namespace Shipping {
     static std::string plane(){ return "Plane"; }
 
   private:
-    // TODO: speed and cost are correctly defaulted to 1. I guessed about capacity...
     Fleet(EntityName name) : Entity<Fleet>(name), speed_(1), cost_(1), capacity_(1) {};
     
     MilesPerHour speed_;

@@ -10,7 +10,6 @@ namespace Shipping {
 	using namespace std;
 
 	void Connectivity::queryIs(Query query){
-		if(query_ == query) return;
 		query_ = query;
 		vector<Connectivity::Path> paths;
 		if(query_.type() == Query::Type::explore_){
@@ -35,6 +34,7 @@ namespace Shipping {
 	}
 
 	void Connectivity::generateExplorePaths(vector<Connectivity::Path> & paths, Location::Ptr loc, Path curPath){
+		if(!loc) return;
 		for(int i = 0; /***/; i++){
 			Segment::Ptr seg = loc->segment(i);
 			if(seg == NULL) break;
@@ -46,16 +46,21 @@ namespace Shipping {
 				 newPath.time() <= query_.time()
 			) {
 				paths.push_back(newPath);
-				generateExplorePaths(paths, seg->returnSegment()->source(), newPath);
+				if(seg->returnSegment()->source()->type() != Location::Type::CUSTOMER){
+					generateExplorePaths(paths, seg->returnSegment()->source(), newPath);
+				}
 			}
 		}
 	}
 
 	void Connectivity::generateConnectPaths(vector<Connectivity::Path> & paths, Location::Ptr loc, Path curPath){
-		if(curPath.size() > 0 && curPath.peek_back()->returnSegment()->source() == query_.end()){
+		Location::Ptr lastLoc = NULL;
+		if(curPath.size() > 0) lastLoc = curPath.peek_back()->returnSegment()->source();
+		if(lastLoc == query_.end()){
 			paths.push_back(curPath);
 			return;
 		}
+		if(!loc || (lastLoc && lastLoc->type() == Location::Type::CUSTOMER)) return;
 		for(int i = 0; /***/; i++){
 			Segment::Ptr seg = loc->segment(i);
 			if(seg == NULL) break;
@@ -79,8 +84,8 @@ namespace Shipping {
     }
 
     Fleet::Ptr fleet = connectivity_->engine_->fleet(segment->type());
-    MilesPerHour speed = fleet->speed();
-    DollarsPerMile cost = fleet->cost();
+    MilesPerHour speed = fleet ? fleet->speed() : MilesPerHour(1);
+    DollarsPerMile cost = fleet ? fleet->cost() : DollarsPerMile(1);
     if(priority_ == Segment::Priority::EXPEDITED){
       if(segment->priority() == Segment::Priority::EXPEDITED){
         speed *= 1.3;

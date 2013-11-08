@@ -17,7 +17,7 @@ GUNIT_BASE += gtest-1.6.0
 GUNIT_PATH += $(GUNIT_BASE)/include
 
 # The main source file names you will need to test.
-MAIN_FILES += Engine
+MAIN_FILES += Engine Connectivity
 
 # The objects corresponding to the tested files.
 MAIN_OBJ_PATH = $(addsuffix .o, $(addprefix $(SRC_PATH), $(MAIN_FILES)))
@@ -35,13 +35,13 @@ COMPILER_FLAGS += -g -Wall -std=c++11
 
 # This is a list of tests. You would add the name of any new tests you add here
 # and define it below.
-FILES += EngineTest InstanceTest
+FILES += EngineTest InstanceTest ConnectivityTest
 
 # This is a list of object files.
 OBJS = $(addsuffix .o, $(FILES))
 
 # libs
-LIBS = $(SRC_PATH)/Segment.o $(SRC_PATH)/Instance.o $(SRC_PATH)/Statistics.o $(SRC_PATH)/Connectivity.o
+LIBS = $(SRC_PATH)/Segment.o $(SRC_PATH)/Instance.o $(SRC_PATH)/Statistics.o
 
 # ##################
 # Targets for each file you are testing.
@@ -51,6 +51,10 @@ EngineTest: EngineTest.cpp $(SRC_PATH)/Engine.cpp $(SRC_PATH)/Engine.h $(SRC_PAT
 
 InstanceTest: InstanceTest.cpp $(SRC_PATH)/Instance.cpp $(SRC_PATH)/Instance.h $(SRC_PATH)/Instance.o $(LIBS)
 	$(CXX) $(PREPROCESSOR_FLAGS) $(COMPILER_FLAGS) -c InstanceTest.cpp
+
+ConnectivityTest: ConnectivityTest.cpp $(SRC_PATH)/Connectivity.cpp $(SRC_PATH)/Connectivity.h $(SRC_PATH)/Connectivity.o $(LIBS)
+	$(CXX) $(PREPROCESSOR_FLAGS) $(COMPILER_FLAGS) -c ConnectivityTest.cpp
+
 
 # ##################
 # Main Suite
