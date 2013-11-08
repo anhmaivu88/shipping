@@ -276,32 +276,28 @@ namespace Shipping {
         if(token == "connect"){
           q = Query(Query::Type::connect_);
 
-          ss >> token;
-          Location::Ptr loc1 = eng->location(token);
-
-          ss >> token;
-          if(token != ":") throw new InvalidAttributeException("Query syntax not valid.");
-
-          ss >> token;
-          Location::Ptr loc2 = eng->location(token);
+          string rest = ss.str().substr(string("connect ").length());
+          int delimiterIndex = rest.find(" : ");
+          if(delimiterIndex == string::npos) throw new InvalidAttributeException("Query syntax not valid.");
+          Location::Ptr loc1 = eng->location(rest.substr(0, delimiterIndex));
+          Location::Ptr loc2 = eng->location(rest.substr(delimiterIndex + 3));
           if(loc1 == NULL || loc2 == NULL) throw new MissingInstanceException("Location not found.");
-
-          ss >> token;
-          if(!ss.fail()) throw new InvalidAttributeException("Query syntax not valid.");
 
           q.startIs(loc1);
           q.endIs(loc2);
         } else if(token == "explore"){
           q = Query(Query::Type::explore_);
 
-          ss >> token;
-          Location::Ptr loc = eng->location(token);
+          string rest = ss.str().substr(string("explore ").length());
+          int delimiterIndex = rest.find(" : ");
+          if(delimiterIndex == string::npos) throw new InvalidAttributeException("Query syntax not valid.");
+          Location::Ptr loc = eng->location(rest.substr(0, delimiterIndex));
           if(loc == NULL) throw new MissingInstanceException("Location not found.");
 
-          ss >> token;
-          if(token != ":") throw new InvalidAttributeException("Query syntax not valid.");
-
           q.startIs(loc);
+
+          rest = rest.substr(delimiterIndex + 3);
+          ss = stringstream(rest);
           while(true){
             string attr;
             double val;

@@ -32,8 +32,8 @@ int main(int argc, char *argv[]) {
   southboundCaltrain2->attributeIs("return segment", "Northbound Caltrain2");
   southboundCaltrain1->attributeIs("return segment", "Northbound Caltrain1");
 
-  southboundCaltrain1->attributeIs("source", "Redwood City");
-  southboundCaltrain2->attributeIs("source", "Palo Alto");
+  northboundCaltrain1->attributeIs("source", "Redwood City");
+  northboundCaltrain2->attributeIs("source", "Palo Alto");
 
   Ptr<Instance> northPlane = manager->instanceNew("North plane", "Plane segment");
   Ptr<Instance> southPlane = manager->instanceNew("South plane", "Plane segment");
@@ -57,4 +57,14 @@ int main(int argc, char *argv[]) {
   cout << "Total plane segments: " << statistics->attribute("Plane segment") << endl;
   cout << "Total truck segments: " << statistics->attribute("Truck segment") << endl;
   cout << "Percentage expedited shipping: " << statistics->attribute("expedite percentage") << endl;
+
+  Ptr<Instance> conn = manager->instanceNew("Connection", "Conn");
+  std::string query = "connect Seattle : Redwood City";
+  cout << query << endl << conn->attribute(query) << endl;
+
+  query = "explore Palo Alto : ";
+  cout << query << endl << conn->attribute(query) << endl;
+
+  query = "explore Palo Alto : distance 100";
+  cout << query << endl << conn->attribute(query) << endl;
 }

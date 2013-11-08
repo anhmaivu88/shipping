@@ -75,7 +75,7 @@ namespace Shipping {
 
 	bool Connectivity::Path::push_back(Segment::Ptr segment){
     Segment::Ptr comp = segment->returnSegment();
-    if(comp == NULL) return false;
+    if(segment->source() == NULL || comp == NULL || comp->source() == NULL) return false;
     Location::Ptr dest = comp->source();
     for(Segment::Ptr pathSeg : path_){
 

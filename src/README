@@ -68,7 +68,7 @@ the more detailed error messages although this is certainly a possibility.
 Semantics:
 ========
 
-We have implemented our collections according to Cheritan's semantics. In general they return "NULL"
+We have implemented our collections according to Cheriton's semantics. In general they return "NULL"
 for missing elements, and they never throw exceptions.
 
 Our mutators are all exception-free (except for when invalid values are set.)
