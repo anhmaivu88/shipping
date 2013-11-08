@@ -9,6 +9,11 @@ namespace Shipping {
   public:
     ValueOutOfBoundsException(const string &message): std::runtime_error(message) {};
   };
+
+  class MissingInstanceException : public std::runtime_error {
+  public:
+    MissingInstanceException(const string &message): std::runtime_error(message) {};
+  };
 }
 
 #endif

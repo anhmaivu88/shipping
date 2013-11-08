@@ -9,6 +9,7 @@
 #include "Location.h"
 #include "Statistics.h"
 #include "Connectivity.h"
+#include "Error.h"
 
 
 namespace Shipping {
@@ -129,11 +130,15 @@ namespace Shipping {
     void attributeIs(const string& name, const string& v){
       try {
         if (name == "source") {
-          return segment()->sourceIs(manager_->engine()->location(v));
+          Ptr<Location> sourceLocation = manager_->engine()->location(v);
+          if (sourceLocation == NULL) throw new MissingInstanceException("Location not found.");
+          return segment()->sourceIs(sourceLocation);
         } else if (name == "length") {
           return segment()->lengthIs(std::atof(v.c_str()));
         } else if (name == "return segment") {
-          return segment()->returnSegmentIs(manager_->engine()->segment(v));
+          Ptr<Segment> returnSegment = manager_->engine()->segment(v);
+          if (returnSegment == NULL) throw new MissingInstanceException("Segment not found.");
+          return segment()->returnSegmentIs(returnSegment);
         } else if (name == "difficulty") {
           return segment()->difficultyIs(std::atof(v.c_str()));
         } else if (name == "expedite support") {
