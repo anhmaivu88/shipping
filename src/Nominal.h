@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <cmath>
 
 #ifndef __NOMINAL_H__
 #define __NOMINAL_H__
@@ -26,7 +27,7 @@ public:
 
   virtual operator std::string() const { 
     std::stringstream stringRep;
-    stringRep << std::setprecision(2);
+    stringRep << std::setprecision(2) << std::fixed;
     stringRep << value();
     return stringRep.str();
   }
