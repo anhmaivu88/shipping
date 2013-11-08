@@ -13,7 +13,7 @@ namespace Shipping {
   public:
 
   Capacity(int num) : Ordinal<Capacity, int>(num) {
-    if (capacity < 0) { throw new ValueOutOfBoundsException("Capacity must be a positive integer."); }
+    if (num < 0) { throw new ValueOutOfBoundsException("Capacity must be a positive integer."); }
   }
   };
 }
