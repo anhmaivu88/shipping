@@ -63,8 +63,8 @@ namespace Shipping {
   Fleet::Ptr Engine::fleet(Segment::Type type){
     EntityName name;
     if(type == Segment::Type::BOAT) name = Fleet::boat();
-    if(type == Segment::Type::TRUCK) name = Fleet::truck();
-    if(type == Segment::Type::PLANE) name = Fleet::plane();
+    else if(type == Segment::Type::TRUCK) name = Fleet::truck();
+    else if(type == Segment::Type::PLANE) name = Fleet::plane();
     else return NULL;
     return fleet(name);
   }
