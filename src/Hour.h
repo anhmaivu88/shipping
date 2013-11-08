@@ -6,7 +6,6 @@
 #include "Ptr.h"
 #include "PtrInterface.h"
 #include "Instance.h"
-#include "Engine.h"
 #include "Nominal.h"
 
 namespace Shipping {
@@ -14,13 +13,11 @@ namespace Shipping {
 	public:
 		static double max(){ return DBL_MAX; }
 
-		Hour(double num) : Ordinal<Hour, double>(num) {
-
-		}
+  Hour(double num) : Ordinal<Hour, double>(num) {}
 
 		void operator+=(Hour other){
-            value_ += other.value();
-        }
+      value_ += other.value();
+    }
 	};
 }
 #endif

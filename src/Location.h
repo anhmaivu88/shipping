@@ -28,7 +28,7 @@ namespace Shipping {
 
 		Type type(){ return type_; }
 
-    SegmentPtr segment(int index){ return segments_[index]; }
+    SegmentPtr segment(int index){ if (index < segments_.size()) { return segments_[index]; } else { return NULL; } }
     virtual void segmentIs(int index, SegmentPtr segment){ segments_[index] = segment; }
     virtual void segmentAdd(SegmentPtr segment) { segments_.push_back(segment); }
     virtual void segmentDel(SegmentPtr segment) { segments_.erase(find(segments_.begin(), segments_.end(), segment)); }
