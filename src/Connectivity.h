@@ -33,12 +33,12 @@ namespace Shipping {
 
     class Path {
     public:
-      Path(Path & other) :
+      Path(const Path & other) :
         connectivity_(other.connectivity_),
+        path_(other.path_),
         distance_(other.distance_),
         cost_(other.cost_),
         time_(other.time_),
-        path_(other.path_),
         priority_(other.priority_)
       {}
 
@@ -52,6 +52,10 @@ namespace Shipping {
 
       bool push_back(Segment::Ptr segment);
       string toString(Query::Type type);
+
+      Mile distance(){ return distance_; }
+      Dollar cost(){ return cost_; }
+      Hour time(){ return time_; }
 
     private:
       Connectivity::Ptr connectivity_;
