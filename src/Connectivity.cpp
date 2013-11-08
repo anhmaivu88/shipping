@@ -10,6 +10,8 @@ namespace Shipping {
 	using namespace std;
 
 	void Connectivity::queryIs(Query query){
+		if(query_ == query) return;
+		query_ = query;
 		stringstream output;
 		vector<Connectivity::Path> paths;
 		Connectivity::Path empty(this, query.priority());
@@ -17,7 +19,19 @@ namespace Shipping {
 	}
 
 	void Connectivity::generateExplorePaths(vector<Connectivity::Path> & paths, Location::Ptr loc, Path curPath){
-		//curPath.push_back()
+		for(int i = 0; /***/; i++){
+			Segment::Ptr seg = loc->segment(i);
+			if(seg == NULL) break;
+			Connectivity::Path newPath(curPath);
+			if(newPath.push_back(seg) && 
+				 newPath.cost() <= query_.cost() &&
+				 newPath.distance() <= query_.distance() &&
+				 newPath.time() <= query_.time()
+			) {
+				paths.push_back(newPath);
+				generateExplorePaths(paths, seg->returnSegment()->source(), newPath);
+			}
+		}
 	}
 
 	bool Connectivity::Path::push_back(Segment::Ptr segment){
