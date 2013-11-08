@@ -294,15 +294,15 @@ namespace Shipping {
     FleetRep(const string& name, ManagerImpl* manager) :
       Instance(name), manager_(manager)
     {
-      manager->engine()->fleetNew("Boat fleet");
-      manager->engine()->fleetNew("Truck fleet");
-      manager->engine()->fleetNew("Plane fleet");
+      manager->engine()->fleetNew("Boat");
+      manager->engine()->fleetNew("Truck");
+      manager->engine()->fleetNew("Plane");
     }
 
     string attribute(const string& name) {
-      string fleetName = name.substr(0, name.find(","));
       int delimiterIndex = name.find(", ");
-      string attrName = string(delimiterIndex + 2, name.length() - 1 - 2 - delimiterIndex);
+      string fleetName = name.substr(0, delimiterIndex);
+      string attrName = name.substr(delimiterIndex + 2);
       Fleet::Ptr fleet = this->fleet(fleetName);
 
       if (fleet == NULL) {
@@ -323,9 +323,9 @@ namespace Shipping {
     }
 
     void attributeIs(const string& name, const string& v){
-      string fleetName = name.substr(0, name.find(","));
       int delimiterIndex = name.find(", ");
-      string attrName = string(delimiterIndex + 2, name.length() - 1 - 2 - delimiterIndex);
+      string fleetName = name.substr(0, delimiterIndex);
+      string attrName = name.substr(delimiterIndex + 2);
       Fleet::Ptr fleet = this->fleet(fleetName);
 
       if (fleet == NULL) {

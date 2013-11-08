@@ -12,10 +12,22 @@ namespace Shipping {
 	void Connectivity::queryIs(Query query){
 		if(query_ == query) return;
 		query_ = query;
-		stringstream output;
 		vector<Connectivity::Path> paths;
 		Connectivity::Path empty(this, query.priority());
-		generateExplorePaths(paths, query.start(), empty);
+		if(query.type() == Query::Type::explore_){
+			generateExplorePaths(paths, query.start(), empty);
+		} else if(query.type() == Query::Type::connect_) {
+			generateConnectPaths(paths, query.start(), empty);
+		} else {
+			result_ = "";
+			return;
+		}
+
+		stringstream output;
+		for(Connectivity::Path & p : paths){
+			output << p.toString(query.type()) << endl;
+		}
+		result_ = output.str();
 	}
 
 	void Connectivity::generateExplorePaths(vector<Connectivity::Path> & paths, Location::Ptr loc, Path curPath){
@@ -33,6 +45,11 @@ namespace Shipping {
 			}
 		}
 	}
+
+	void Connectivity::generateConnectPaths(vector<Connectivity::Path> & paths, Location::Ptr loc, Path curPath){
+	}
+
+
 
 	bool Connectivity::Path::push_back(Segment::Ptr segment){
     Segment::Ptr comp = segment->returnSegment();
