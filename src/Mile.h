@@ -34,8 +34,6 @@ namespace Shipping {
         void operator+=(Mile other){
             value_ += other.value();
         }
-
-    operator std::string() const { return std::to_string(value()); }
     };
 }
 #endif

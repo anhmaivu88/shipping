@@ -14,12 +14,12 @@ namespace Shipping {
 		static double max(){ return DBL_MAX; }
 
 		Dollar(double num) : Ordinal<Dollar, double>(num) {
-
+      if (num < 0) { throw new ValueOutOfBoundsException("Dollar must be a positive integer."); }
 		}
 
 		void operator+=(Dollar other){
-            value_ += other.value();
-        }
+      value_ += other.value();
+    }
 	};
 }
 #endif

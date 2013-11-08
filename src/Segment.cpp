@@ -6,7 +6,7 @@ namespace Shipping {
   void Segment::priorityIs(Priority priority) {
     if (priority != priority_) {
       priority_ = priority; 
-      for (auto notifiee : notifiees_) { notifiee->onPriority(priority); }
+      for (auto notifiee : notifiees_) { try { notifiee->onPriority(priority); } catch (...) { } }
     }
   }
 

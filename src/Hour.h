@@ -13,7 +13,9 @@ namespace Shipping {
 	public:
 		static double max(){ return DBL_MAX; }
 
-  Hour(double num) : Ordinal<Hour, double>(num) {}
+    Hour(double num) : Ordinal<Hour, double>(num) {
+      if (num < 0) { throw new ValueOutOfBoundsException("Hour must be a positive number."); }
+    }
 
 		void operator+=(Hour other){
       value_ += other.value();

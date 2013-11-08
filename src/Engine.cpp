@@ -72,7 +72,9 @@ namespace Shipping {
   void Engine::fleetIs(EntityName name, Fleet::Ptr fleet){
     fleets_[name] = fleet;
     for (auto notifiee : notifiees_) {
-      notifiee->onFleetNew(name);
+      try {
+        notifiee->onFleetNew(name);
+      } catch (...) { }
     }
   }
 
@@ -84,7 +86,9 @@ namespace Shipping {
   void Engine::segmentIs(EntityName name, Segment::Ptr segment) {
     segments_[name] = segment;
     for (auto notifiee : notifiees_) {
-      notifiee->onSegmentNew(name);
+      try {
+        notifiee->onSegmentNew(name);
+      } catch (...) { }
     }
   }
 
@@ -96,7 +100,9 @@ namespace Shipping {
   void Engine::locationIs(EntityName name, Location::Ptr location) {
     locations_[name] = location;
     for (auto notifiee : notifiees_) {
-      notifiee->onLocationNew(name);
+      try {
+        notifiee->onLocationNew(name);
+      } catch (...) { }
     }
   }
 }
