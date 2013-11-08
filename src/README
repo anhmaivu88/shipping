@@ -3,6 +3,8 @@ user: andymo
 
 There is a full unit test suite provided in unit-tests.
 
+Our example program is UnitedStatesCities
+
 As required by the assignment description we split our code into two parts: the rep layer and 
 the engine layer. 
 
