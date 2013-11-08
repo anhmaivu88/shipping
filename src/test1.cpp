@@ -36,8 +36,10 @@ int main(int argc, char *argv[]) {
   }
 
   b->attributeIs("source", "terminal1");
-  c->attributeIs("source", "terminal1");
+  c->attributeIs("source", "terminal2");
   d->attributeIs("source", "terminal1");
+  
+  cout << "Set all attributes." << endl;
 
   cout << a->attribute("segment1") << endl;
   cout << a->attribute("segment2") << endl;
