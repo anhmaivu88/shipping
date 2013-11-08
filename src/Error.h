@@ -14,6 +14,11 @@ namespace Shipping {
   public:
     MissingInstanceException(const string &message): std::runtime_error(message) {};
   };
+
+  class InvalidAttributeException : public std::runtime_error {
+  public:
+    InvalidAttributeException(const string &message): std::runtime_error(message) {};
+  };
 }
 
 #endif

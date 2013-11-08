@@ -10,6 +10,7 @@
 #include "Statistics.h"
 #include "Connectivity.h"
 #include "Error.h"
+#include "Query.h"
 
 
 namespace Shipping {
@@ -122,7 +123,7 @@ namespace Shipping {
           return "no";
         }
       } else {
-        std::cerr << "Invalid attribute " << name << " for segment." << std::endl;
+        cerr << "Invalid attribute " << name << " for segment." << endl;
         return "";
       }
     }
@@ -134,26 +135,26 @@ namespace Shipping {
           if (sourceLocation == NULL) throw new MissingInstanceException("Location not found.");
           return segment()->sourceIs(sourceLocation);
         } else if (name == "length") {
-          return segment()->lengthIs(std::atof(v.c_str()));
+          return segment()->lengthIs(atof(v.c_str()));
         } else if (name == "return segment") {
           Ptr<Segment> returnSegment = manager_->engine()->segment(v);
           if (returnSegment == NULL) throw new MissingInstanceException("Segment not found.");
           return segment()->returnSegmentIs(returnSegment);
         } else if (name == "difficulty") {
-          return segment()->difficultyIs(std::atof(v.c_str()));
+          return segment()->difficultyIs(atof(v.c_str()));
         } else if (name == "expedite support") {
           if (v == "yes") {
             segment()->priorityIs(Segment::Priority::EXPEDITED);
           } else if (v == "no") {
             segment()->priorityIs(Segment::Priority::NORMAL);
           } else {
-            std::cerr << "Expedited support must be `yes` or `no` for segment. Got " << v << std::endl;
+            cerr << "Expedited support must be `yes` or `no` for segment. Got " << v << endl;
           }
         } else {
-          std::cerr << "Unknown attribute " << name << " for segment." << std::endl;
+          cerr << "Unknown attribute " << name << " for segment." << endl;
         }
       } catch (...) {
-        std::cerr << "Invalid value [" << v << "] for attribute: [" << name << "]" << std::endl;
+        cerr << "Invalid value [" << v << "] for attribute: [" << name << "]" << endl;
       }
     }
 
@@ -172,31 +173,31 @@ namespace Shipping {
 
     string attribute(const string& name){
       if (name == "Customer") {
-        return std::to_string(statistics()->locationType(Location::customer()));
+        return to_string(statistics()->locationType(Location::customer()));
       } else if (name == "Port") {
-        return std::to_string(statistics()->locationType(Location::port()));
+        return to_string(statistics()->locationType(Location::port()));
       } else if (name == "Boat terminal") {
-        return std::to_string(statistics()->locationType(Location::Type::BOAT_TERMINAL));
+        return to_string(statistics()->locationType(Location::Type::BOAT_TERMINAL));
       } else if (name == "Truck terminal") {
-        return std::to_string(statistics()->locationType(Location::Type::TRUCK_TERMINAL));
+        return to_string(statistics()->locationType(Location::Type::TRUCK_TERMINAL));
       } else if (name == "Plane terminal") {
-        return std::to_string(statistics()->locationType(Location::Type::PLANE_TERMINAL));
+        return to_string(statistics()->locationType(Location::Type::PLANE_TERMINAL));
       } else if (name == "Truck segment") {
-        return std::to_string(statistics()->segmentType(Segment::truck()));
+        return to_string(statistics()->segmentType(Segment::truck()));
       } else if (name == "Boat segment") {
-        return std::to_string(statistics()->segmentType(Segment::boat()));
+        return to_string(statistics()->segmentType(Segment::boat()));
       } else if (name == "Plane segment") {
-        return std::to_string(statistics()->segmentType(Segment::plane()));
+        return to_string(statistics()->segmentType(Segment::plane()));
       } else if (name == "expedite percentage") {
         return statistics()->expeditedShippingPercentage();
       } else {
-        std::cerr << "Invalid attribute name " << name << " for statistics." << std::endl;
+        cerr << "Invalid attribute name " << name << " for statistics." << endl;
       }
       return "";
     }
 
     void attributeIs(const string& name, const string& v){
-      std::cerr << "Statistics is write only." << std::endl;
+      cerr << "Statistics is write only." << endl;
     }
 
   protected:
@@ -214,11 +215,73 @@ namespace Shipping {
     }
 
     string attribute(const string& name){
-      // TODO parser
+      Engine::Ptr eng = manager_->engine();
+      stringstream ss(name);
+      string token;
+      ss >> token;
+      Query q;
+      try {
+        if(token == "connect"){
+          q = Query(Query::Type::connect_);
+
+          ss >> token;
+          Location::Ptr loc1 = eng->location(token);
+
+          ss >> token;
+          if(token != ":") throw new InvalidAttributeException("Query syntax not valid.");
+
+          ss >> token;
+          Location::Ptr loc2 = eng->location(token);
+          if(loc1 == NULL || loc2 == NULL) throw new MissingInstanceException("Location not found.");
+
+          ss >> token;
+          if(!ss.fail()) throw new InvalidAttributeException("Query syntax not valid.");
+
+          q.startIs(loc1);
+          q.endIs(loc2);
+        } else if(token == "explore"){
+          q = Query(Query::Type::explore_);
+
+          ss >> token;
+          Location::Ptr loc = eng->location(token);
+          if(loc == NULL) throw new MissingInstanceException("Location not found.");
+
+          ss >> token;
+          if(token != ":") throw new InvalidAttributeException("Query syntax not valid.");
+
+          q.startIs(loc);
+          while(true){
+            string attr;
+            double val;
+            ss >> attr;
+            if(ss.fail()) break;
+            if(attr == "expedited"){
+              q.expeditedIs(Segment::Priority::EXPEDITED);
+              continue;
+            }
+
+            ss >> val;
+            if(ss.fail()) throw new InvalidAttributeException("Explore attribute has no value.");
+            
+            if(attr == "distance"){
+              q.distanceIs(Mile(val));
+            } else if(attr == "cost"){
+              q.costIs(Dollar(val));
+            } else if(attr == "time"){
+              q.timeIs(Hour(val));
+            } else throw new InvalidAttributeException("Invalid explore attribute.");    
+          }
+        } else throw new InvalidAttributeException("Invalid query type."); 
+      } catch(...){
+        cerr << "Invalid connectivity query " << name << endl;
+      }
+
+      connectivity_->queryIs(q);
+      return connectivity_->result();
     }
 
     void attributeIs(const string& name, const string& v){
-      // TODO parser
+      // Connectivity has no mutators
     }
 
   protected:
@@ -231,9 +294,9 @@ namespace Shipping {
     FleetRep(const string& name, ManagerImpl* manager) :
       Instance(name), manager_(manager)
     {
-      fleets_["Boat fleet"] = manager->engine()->fleetNew("Boat fleet");
-      fleets_["Truck fleet"] = manager->engine()->fleetNew("Truck fleet");
-      fleets_["Plane fleet"] = manager->engine()->fleetNew("Plane fleet");
+      manager->engine()->fleetNew("Boat fleet");
+      manager->engine()->fleetNew("Truck fleet");
+      manager->engine()->fleetNew("Plane fleet");
     }
 
     string attribute(const string& name) {
@@ -243,7 +306,7 @@ namespace Shipping {
       Fleet::Ptr fleet = this->fleet(fleetName);
 
       if (fleet == NULL) {
-        std::cerr << "Invalid fleet name " << fleetName << "." << std::endl;
+        cerr << "Invalid fleet name " << fleetName << "." << endl;
         return "";
       }
 
@@ -254,7 +317,7 @@ namespace Shipping {
       } else if (attrName == "capacity") {
         return fleet->capacity();
       } else { 
-        std::cerr << "Invalid attribute name " << attrName << std::endl;
+        cerr << "Invalid attribute name " << attrName << endl;
         return "";
       }
     }
@@ -266,26 +329,25 @@ namespace Shipping {
       Fleet::Ptr fleet = this->fleet(fleetName);
 
       if (fleet == NULL) {
-        std::cerr << "Invalid fleet name " << fleetName << "." << std::endl;
+        cerr << "Invalid fleet name " << fleetName << "." << endl;
         return;
       }
 
       if (attrName == "speed") {
-        fleet->speedIs(std::atof(v.c_str()));
+        fleet->speedIs(atof(v.c_str()));
       } else if (attrName == "cost") {
-        fleet->costIs(std::atof(v.c_str()));
+        fleet->costIs(atof(v.c_str()));
       } else if (attrName == "capacity") {
-        fleet->capacityIs(std::atof(v.c_str()));
+        fleet->capacityIs(atof(v.c_str()));
       } else { 
-        std::cerr << "Invalid attribute name " << attrName << std::endl;
+        cerr << "Invalid attribute name " << attrName << endl;
       }
     }
 
   protected:
-    Fleet::Ptr fleet(EntityName name) { return fleets_[name]; }
+    Fleet::Ptr fleet(EntityName name) { return manager_->engine()->fleet(name); }
     
     Ptr<ManagerImpl> manager_;
-    std::map<EntityName, Fleet::Ptr> fleets_;
   };
 
   Ptr<Instance> ManagerImpl::instanceNew(const string& name, const string& type) {

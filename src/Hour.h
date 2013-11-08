@@ -17,6 +17,10 @@ namespace Shipping {
 		Hour(double num) : Ordinal<Hour, double>(num) {
 
 		}
+
+		void operator+=(Hour other){
+            value_ += other.value();
+        }
 	};
 }
 #endif

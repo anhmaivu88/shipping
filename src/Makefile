@@ -1,6 +1,6 @@
 CXXFLAGS = -Wall -g -std=c++11
 
-OBJECTS = Segment.o Instance.o Engine.o Statistics.o
+OBJECTS = Segment.o Instance.o Engine.o Statistics.o Connectivity.o
 
 default:	test1 example
 
@@ -22,3 +22,4 @@ Segment.o: Segment.cpp Segment.h
 test1.o: test1.cpp Instance.h PtrInterface.h Ptr.h
 test2.o: test2.cpp
 Statistics.o: Statistics.cpp Statistics.h
+Connectivity.o: Connectivity.cpp Connectivity.h

@@ -17,6 +17,10 @@ namespace Shipping {
 		Dollar(double num) : Ordinal<Dollar, double>(num) {
 
 		}
+
+		void operator+=(Dollar other){
+            value_ += other.value();
+        }
 	};
 }
 #endif

@@ -27,14 +27,16 @@ namespace Shipping {
     Segment::Ptr boatSegmentNew(EntityName name);
     Segment::Ptr truckSegmentNew(EntityName name);
     Segment::Ptr segmentNew(EntityName name, Segment::Type type);
-    Segment::Ptr segment(EntityName name) { return segments_[name]; }
+    Segment::Ptr segment(EntityName name);
 
     Location::Ptr customerLocationNew(EntityName name);
     Location::Ptr portLocationNew(EntityName name);
     Terminal::Ptr terminalLocationNew(EntityName name, Segment::Type type);
     Location::Ptr locationNew(EntityName name, Location::Type type);
-    Location::Ptr location(EntityName name) { return locations_[name]; }
+    Location::Ptr location(EntityName name);
 
+    Fleet::Ptr fleet(EntityName name);
+    Fleet::Ptr fleet(Segment::Type type);
     Fleet::Ptr fleetNew(EntityName name);
 
     Query queryNew();
@@ -49,6 +51,8 @@ namespace Shipping {
     class Notifiee : public Fwk::PtrInterface<Notifiee> {
     public:
       typedef Fwk::Ptr<Notifiee> Ptr;
+      virtual void onFleetNew(EntityName locationName) {}
+      virtual void onFleetDel(EntityName name, Fleet::Ptr fleet) {}
       virtual void onLocationNew(EntityName locationName) {}
       virtual void onLocationDel(EntityName name, Location::Ptr location) {}
       virtual void onSegmentNew(EntityName segmentName) {}
@@ -65,7 +69,8 @@ namespace Shipping {
 
   private:
     void segmentIs(EntityName name, Segment::Ptr segment);
-    void locationIs(EntityName name, Location::Ptr segment);
+    void locationIs(EntityName name, Location::Ptr location);
+    void fleetIs(EntityName name, Fleet::Ptr fleet);
     
     std::map<EntityName, Segment::Ptr> segments_;
     std::map<EntityName, Location::Ptr> locations_;
