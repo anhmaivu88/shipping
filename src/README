@@ -1,6 +1,8 @@
 user: lmartel
 user: andymo
 
+There is a full unit test suite provided in unit-tests.
+
 As required by the assignment description we split our code into two parts: the rep layer and 
 the engine layer. 
 
@@ -30,6 +32,7 @@ There are several kinds of entities. In our system we have:
 ** port
 * segment
 * statistics
+* connectivity
 
 Each of these types of entities has its own class. 
 
@@ -48,6 +51,9 @@ difficult to distinguish between an invalid name and an uninitialized property a
 We deal with this by checking at the rep layer that all names that are used to assign "source"
 and "return segment" are valid.
 
+We also implemented the bookkeeping associated with returnSegments and deleting sources without
+notifications. We felt that it was simpler for our use case.
+
 Error handling:
 
 We decided to handle errors by throwing exceptions at the engine layer. These exceptions bubble 
@@ -55,3 +61,17 @@ to the rep layer where they are caught by catch statements in #attribute and #at
 the appropriate rep classes. At this point an error message is logged. The exception types
 are generic but include specific messages as members. We did not choose to display 
 the more detailed error messages although this is certainly a possibility.
+
+
+Semantics:
+========
+
+We have implemented our collections according to Cheritan's semantics. In general they return "NULL"
+for missing elements, and they never throw exceptions.
+
+Our mutators are all exception-free (except for when invalid values are set.)
+Our getters are all nilpotent.
+
+Our notifications all implement synchronous processing as opposed to asynchronous processing.
+There are a few instances where this assumption matters (mostly for statistics) but this would
+be fixable.
