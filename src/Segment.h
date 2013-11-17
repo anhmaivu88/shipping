@@ -2,6 +2,7 @@
 #define SEGMENT_H
 
 #include <string>
+#include <algorithm>
 #include "Ptr.h"
 #include "PtrInterface.h"
 #include "Instance.h"
@@ -71,7 +72,7 @@ namespace Shipping {
     };
 
     void notifieeAdd(Notifiee::Ptr notifiee) { notifiees_.push_back(notifiee); }
-    void notifieeDel(Notifiee::Ptr notifiee) { notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); }
+    void notifieeDel(Notifiee::Ptr notifiee) { notifiees_.erase(std::find(notifiees_.begin(), notifiees_.end(), notifiee)); }
     
   protected:
     Segment(Shipping::EntityName name, 

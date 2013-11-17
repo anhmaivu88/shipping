@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 namespace Shipping {
 	class Location : public Entity<Location> {
@@ -31,7 +32,7 @@ namespace Shipping {
     SegmentPtr segment(int index){ if (index < segments_.size()) { return segments_[index]; } else { return NULL; } }
     virtual void segmentIs(int index, SegmentPtr segment){ segments_[index] = segment; }
     virtual void segmentAdd(SegmentPtr segment) { segments_.push_back(segment); }
-    virtual void segmentDel(SegmentPtr segment) { segments_.erase(find(segments_.begin(), segments_.end(), segment)); }
+    virtual void segmentDel(SegmentPtr segment) { segments_.erase(std::find(segments_.begin(), segments_.end(), segment)); }
     EntityCount segmentCount() { return segments_.size(); }
 
 	protected:

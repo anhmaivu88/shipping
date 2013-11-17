@@ -27,7 +27,7 @@ MAIN_OBJ_PATH = $(addsuffix .o, $(addprefix $(SRC_PATH), $(MAIN_FILES)))
 # ##################
 
 PREPROCESSOR_FLAGS += -I$(GUNIT_PATH) -I$(SRC_PATH)
-COMPILER_FLAGS += -g -Wall -std=c++11
+COMPILER_FLAGS += -g -Wall -std=c++0x
 
 # ##################
 # Testing parameters.

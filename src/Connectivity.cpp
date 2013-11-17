@@ -30,7 +30,7 @@ namespace Shipping {
 			output << p.stringify(query.type()) << endl;
 		}
 		result_ = output.str();
-		if(paths.size() > 0) result_.pop_back(); // remove last endl
+		if(paths.size() > 0) result_.erase(result_.size() - 1); // remove last endl
 	}
 
 	void Connectivity::generateExplorePaths(vector<Connectivity::Path> & paths, Location::Ptr loc, Path curPath){
