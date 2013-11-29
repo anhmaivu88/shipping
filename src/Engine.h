@@ -13,6 +13,7 @@
 #include "Error.h"
 #include "Query.h"
 #include "Terminal.h"
+#include "Shipment.h"
 #include <map>
 #include <vector>
 
