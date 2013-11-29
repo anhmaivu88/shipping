@@ -466,6 +466,7 @@ namespace Shipping {
        is if it was initially constructed through instanceNew -- which will be creating an InstanceImpl. */
     Ptr<InstanceImpl> instanceImpl = Fwk::ptr_cast<InstanceImpl, Instance>(targetInstance);
     instanceImpl->statusIs(InstanceImpl::Status::DELETED);
+    instance_.erase(name);
   }
 
   static const string segmentStr = "segment";
