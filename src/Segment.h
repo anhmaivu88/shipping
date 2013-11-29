@@ -11,6 +11,7 @@
 #include "Typedef.h"
 #include "Entity.h"
 #include "Location.h"
+#include "ShipmentCount.h"
 
 namespace Shipping {
   class Segment : public Entity<Segment> {
@@ -48,6 +49,7 @@ namespace Shipping {
     void returnSegmentIs(Segment::Ptr segment);
     void difficultyIs(Difficulty difficulty) { difficulty_ = difficulty; }
     void priorityIs(Priority priority);
+    void capacityIs(ShipmentCount capacity) { shipmentCapacity_ = capacity; }
 
     Fwk::Ptr<Location> source() { return source_; }
     Mile length() { return length_; }
@@ -55,6 +57,10 @@ namespace Shipping {
     Difficulty difficulty() { return difficulty_; }
     Priority priority() { return priority_; }
     Type type() { return type_; }
+    ShipmentCount capacity() { return shipmentCapacity_; }
+
+    ShipmentCount shipmentsReceived() { return shipmentsReceived_; }
+    ShipmentCount shipmentsRefused() { return shipmentsRefused_; }
 
     static Segment::Ptr segmentNew(EntityName name, Type type) {
       Ptr ptr = new Segment(name, 0, 1.0, normal(), type);
@@ -83,7 +89,10 @@ namespace Shipping {
                          length_(length), 
                          difficulty_(difficulty), 
                          priority_(priority),
-                         type_(type) {};
+                         type_(type),
+                         shipmentCapacity_(10),
+                         shipmentsReceived_(0),
+                         shipmentsRefused_(0) {};
 
     Mile length_;
     Difficulty difficulty_;
@@ -92,6 +101,10 @@ namespace Shipping {
     Segment::Ptr returnSegment_;
     Type type_;
     std::vector<Notifiee::Ptr> notifiees_;
+    ShipmentCount shipmentCapacity_;
+
+    ShipmentCount shipmentsReceived_;
+    ShipmentCount shipmentsRefused_;
   };
 
   class TruckSegment : public Segment {

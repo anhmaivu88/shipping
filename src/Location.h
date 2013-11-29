@@ -7,6 +7,9 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include "TransferRate.h"
+#include "ShipmentCount.h"
+#include "PackageCount.h"
 
 namespace Shipping {
 	class Location : public Entity<Location> {
@@ -35,33 +38,43 @@ namespace Shipping {
     virtual void segmentDel(SegmentPtr segment) { segments_.erase(std::find(segments_.begin(), segments_.end(), segment)); }
     EntityCount segmentCount() { return segments_.size(); }
 
+    ShipmentCount shipmentsReceived() { return shipmentsReceived_; }
+    Hour averageLatency() { return averageLatency_; }
+    Dollar totalCost() { return totalCost_; }
+
 	protected:
 		std::vector<SegmentPtr> segments_;
 		Type type_;
+
+    ShipmentCount shipmentsReceived_;
+    Hour averageLatency_;
+    Dollar totalCost_;
 
 		static Location::Ptr locationNew(EntityName name, Type type){
 			Ptr ptr = new Location(name, type);
 		  return ptr;
 		}
 
-  Location(EntityName name, Type type): Entity(name), type_(type){}
+    Location(EntityName name, Type type): Entity(name), type_(type), shipmentsReceived_(0), averageLatency_(0), totalCost_(0) {}
 	};
 
 	class Customer : public Location {
 	public:
 		static Location::Ptr customerNew(EntityName name){ return locationNew(name, customer()); }
+    void transferRateIs(TransferRate transferRate) { transferRate_ = transferRate; }
+    void shipmentSizeIs(PackageCount shipmentSize) { shipmentSize_ = shipmentSize; }
+    void destinationis(Location::Ptr);
 
-	protected:
-		// Customer(EntityName name) : Location(name, Location::customer_){}
+  private:
+    TransferRate transferRate_;
+    PackageCount shipmentSize_;
+    Location::Ptr destination_;
 	};
 
 
 	class Port : public Location {
 	public:
 		static Location::Ptr portNew(EntityName name){ return locationNew(name, port()); }
-
-	protected:
-		// Port(EntityName name) : Location(name, Location::port_){}
 	};
 }
 

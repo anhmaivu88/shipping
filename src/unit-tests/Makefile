@@ -64,8 +64,8 @@ ConnectivityTest: ConnectivityTest.cpp $(SRC_PATH)/Connectivity.cpp $(SRC_PATH)/
 # above. It links the main google test library which has a main function that
 # pulls in our tests and runs them.
 main: $(FILES)
-	$(CXX) $(PREPROCESSOR_FLAGS) $(COMPILER_FLAGS) $(MAIN_OBJ_PATH) $(GUNIT_BASE)/make/gtest_main.a -pthread $(OBJS) $(LIBS) -o UnitTest
-	echo $(PREPROCESSOR_FLAGS) $(COMPILER_FLAGS) $(MAIN_OBJ_PATH) $(GUNIT_BASE)/make/gtest_main.a -pthread $(OBJS) $(LIBS) -o UnitTest
+	$(CXX) $(PREPROCESSOR_FLAGS) $(COMPILER_FLAGS) $(MAIN_OBJ_PATH) $(GUNIT_BASE)/make/gtest_main.a -lpthread $(OBJS) $(LIBS) -o UnitTest
+	echo $(PREPROCESSOR_FLAGS) $(COMPILER_FLAGS) $(MAIN_OBJ_PATH) $(GUNIT_BASE)/make/gtest_main.a -lpthread $(OBJS) $(LIBS) -o UnitTest
 
 all: main
 

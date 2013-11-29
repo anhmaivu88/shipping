@@ -54,6 +54,10 @@ int main(int argc, char *argv[]) {
   northPlane->attributeIs("length", "1000");
   southPlane->attributeIs("length", "1000");
 
+  Ptr<Instance> truckFleet = manager->instanceNew("truck fleet", "Fleet");
+  truckFleet->attributeIs("Truck, speed", "5");
+  cout << "DUN DUN DUN DUNH: " << truckFleet->attribute("Boat, speed") << endl;
+
   cout << "Total plane segments: " << statistics->attribute("Plane segment") << endl;
   cout << "Total truck segments: " << statistics->attribute("Truck segment") << endl;
   cout << "Percentage expedited shipping: " << statistics->attribute("expedite percentage") << endl;
