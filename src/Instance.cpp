@@ -172,6 +172,7 @@ namespace Shipping {
 
       try {
         if (name == "source") {
+          if (v == "") { return segment()->sourceIs(NULL); }
           Ptr<Location> sourceLocation = manager_->engine()->location(v);
           if (sourceLocation == NULL) throw new MissingInstanceException("Location not found.");
           return segment()->sourceIs(sourceLocation);
