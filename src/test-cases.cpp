@@ -357,6 +357,7 @@ void testConn1() {
 
     Ptr<Instance> conn = m->instanceNew("conn", "Conn");  
     set<string> t = tokenize(conn->attribute("connect a : d"));
+
     ASSERT(contains(t, "60.00 2.00 no; a(1:1.00:1r) b(3:1.00:3r) d"));
     ASSERT(contains(t, "2400.00 20.00 no; a(2:10.00:2r) c(4:10.00:4r) d"));
     // REMOVED because spec was unclear
@@ -947,27 +948,27 @@ void sigsegv(int signal) {
 int main(int argc, char *argv[]) {
     signal(SIGSEGV, sigsegv);
 
-    // TEST(testLocationAttributes, 1);
-    // TEST(testSegmentAttributes, 1);
-    // TEST(testStatsAttributes, 1);
-    // TEST(testStatsAttributes2, 1);
-    // TEST(testFleetAttributes, 1);
+    TEST(testLocationAttributes, 1);
+    TEST(testSegmentAttributes, 1);
+    TEST(testStatsAttributes, 1);
+    TEST(testStatsAttributes2, 1);
+    TEST(testFleetAttributes, 1);
     TEST(testConn1, 2);
     TEST(testConn2, 2);
-    // TEST(testConn3, 1);
-    // TEST(testExplore1, 1);
-    // TEST(testExplore2, 2);
-    // TEST(testExplore3, 2);
-    // TEST(testExploreNoFleet, 1);
-    // TEST(testSegmentCompatibility, 1);
-    // TEST(testSingletons, 1);
-    // TEST(testSegmentSourceChange, 1);
-    // TEST(testDeleteLocation, 1);
-    // TEST(testDeleteSegment, 1);
-    // TEST(testErrorInvalidAttribute, 1);
-    // TEST(testErrorInvalidValues, 1);
-    // TEST(testErrorExistingInstance, 1); 
-    // TEST(testStressTest, 1);
+    TEST(testConn3, 1);
+    TEST(testExplore1, 1);
+    TEST(testExplore2, 2);
+    TEST(testExplore3, 2);
+    TEST(testExploreNoFleet, 1);
+    TEST(testSegmentCompatibility, 1);
+    TEST(testSingletons, 1);
+    TEST(testSegmentSourceChange, 1);
+    TEST(testDeleteLocation, 1);
+    TEST(testDeleteSegment, 1);
+    TEST(testErrorInvalidAttribute, 1);
+    TEST(testErrorInvalidValues, 1);
+    TEST(testErrorExistingInstance, 1); 
+    TEST(testStressTest, 1);
 
     return 0;
 }
