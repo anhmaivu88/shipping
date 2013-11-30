@@ -1,4 +1,4 @@
-CXXFLAGS = -Wall -g -std=c++11
+CXXFLAGS = -Wall -g -std=c++0x
 
 OBJECTS = Segment.o Instance.o Engine.o Statistics.o Connectivity.o
 
