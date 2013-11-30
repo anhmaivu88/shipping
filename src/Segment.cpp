@@ -31,7 +31,8 @@ namespace Shipping {
 
   void Segment::sourceIs(LocationPtr location) {
     if (location == (LocationPtr) NULL) {
-      source_ = location;
+      source_->segmentDel(Ptr(this));
+      source_ = (LocationPtr) NULL;
       returnSegmentIs((Segment::Ptr) NULL);
     }
 
