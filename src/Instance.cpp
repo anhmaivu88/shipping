@@ -429,16 +429,25 @@ namespace Shipping {
     } else if(type == "Plane segment"){
       t = new SegmentRep(name, this, engine_->planeSegmentNew(name));
     } else if(type == "Fleet"){
-      if(fleetRep_) { fleetRep_->statusIs(InstanceImpl::Status::ACTIVE); return fleetRep_; }
-      fleetRep_ = new FleetRep(name, this);
+      if(fleetRep_) { 
+        fleetRep_->statusIs(InstanceImpl::Status::ACTIVE);
+      } else {
+        fleetRep_ = new FleetRep(name, this);
+      }
       t = fleetRep_;
     } else if(type == "Stats"){
-      if(statisticsRep_) { statisticsRep_->statusIs(InstanceImpl::Status::ACTIVE); return statisticsRep_; }
-      statisticsRep_ = new StatisticsRep(name, this, statistics_);
+      if(statisticsRep_) { 
+        statisticsRep_->statusIs(InstanceImpl::Status::ACTIVE);
+      } else {
+        statisticsRep_ = new StatisticsRep(name, this, statistics_);
+      }
       t = statisticsRep_;
     } else if(type == "Conn"){
-      if(connectivityRep_) { connectivityRep_->statusIs(InstanceImpl::Status::ACTIVE); return connectivityRep_; }
-      connectivityRep_ = new ConnectivityRep(name, this, Connectivity::connectivityNew(name, engine_));
+      if(connectivityRep_) { 
+        connectivityRep_->statusIs(InstanceImpl::Status::ACTIVE); 
+      } else {
+        connectivityRep_ = new ConnectivityRep(name, this, Connectivity::connectivityNew(name, engine_));
+      }
       t = connectivityRep_;
     } else {
       cerr << "Invalid instance type." << endl;
