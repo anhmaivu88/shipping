@@ -86,6 +86,8 @@ namespace Shipping {
     Fleet::Ptr fleet = connectivity_->engine_->fleet(segment->type());
     MilesPerHour speed = fleet ? fleet->speed() : MilesPerHour(1);
     DollarsPerMile cost = fleet ? fleet->cost() : DollarsPerMile(1);
+    cost *= segment->difficulty().value();
+
     if(priority_ == Segment::Priority::EXPEDITED){
       if(segment->priority() == Segment::Priority::EXPEDITED){
         speed *= 1.3;

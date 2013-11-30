@@ -179,9 +179,13 @@ namespace Shipping {
         } else if (name == "length") {
           return segment()->lengthIs(atof(v.c_str()));
         } else if (name == "return segment") {
-          Ptr<Segment> returnSegment = manager_->engine()->segment(v);
-          if (returnSegment == NULL) throw new MissingInstanceException("Segment not found.");
-          return segment()->returnSegmentIs(returnSegment);
+          if(v == ""){
+            segment()->returnSegmentIs(NULL);
+          } else {
+            Ptr<Segment> returnSegment = manager_->engine()->segment(v);
+            if (returnSegment == NULL) throw new MissingInstanceException("Segment not found.");
+            return segment()->returnSegmentIs(returnSegment);
+          }
         } else if (name == "difficulty") {
           return segment()->difficultyIs(atof(v.c_str()));
         } else if (name == "expedite support") {
