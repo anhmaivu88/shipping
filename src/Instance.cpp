@@ -297,19 +297,19 @@ namespace Shipping {
           q.startIs(loc);
 
           rest = rest.substr(delimiterIndex + 3);
-          ss = stringstream(rest);
+          stringstream ssRest(rest);
           while(true){
             string attr;
             double val;
-            ss >> attr;
-            if(ss.fail()) break;
+            ssRest >> attr;
+            if(ssRest.fail()) break;
             if(attr == "expedited"){
               q.expeditedIs(Segment::Priority::EXPEDITED);
               continue;
             }
 
-            ss >> val;
-            if(ss.fail()) throw new InvalidAttributeException("Explore attribute has no value.");
+            ssRest >> val;
+            if(ssRest.fail()) throw new InvalidAttributeException("Explore attribute has no value.");
             
             if(attr == "distance"){
               q.distanceIs(Mile(val));
@@ -466,6 +466,7 @@ namespace Shipping {
        is if it was initially constructed through instanceNew -- which will be creating an InstanceImpl. */
     Ptr<InstanceImpl> instanceImpl = Fwk::ptr_cast<InstanceImpl, Instance>(targetInstance);
     instanceImpl->statusIs(InstanceImpl::Status::DELETED);
+    instance_.erase(name);
   }
 
   static const string segmentStr = "segment";

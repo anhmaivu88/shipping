@@ -137,3 +137,13 @@ TEST_F(EngineTest, DeletingSourceShouldPropogateToSegments) {
   engine->locationDel(port->name());
   ASSERT_EQ(truckSegment->source(), (Location::Ptr) NULL);
 }
+
+TEST_F(EngineTest, ShouldBeAllowedToReUseDeletedNamed) {
+  Segment::Ptr truckSegment = engine->truckSegmentNew("Truck segment");
+  Location::Ptr port = engine->portLocationNew("port");
+  truckSegment->sourceIs(port);
+
+  engine->locationDel(port->name());
+  ASSERT_NO_THROW(port = engine->portLocationNew("port"));
+  ASSERT_NO_THROW(truckSegment->sourceIs(port));
+}
