@@ -1,6 +1,6 @@
 CXXFLAGS = -Wall -g -std=c++0x
 
-OBJECTS = Segment.o Instance.o Engine.o Statistics.o Connectivity.o Location.o
+OBJECTS = Segment.o Instance.o Engine.o Statistics.o Connectivity.o Location.o Activity.o ActivityManager.o
 
 default:	test1 example UnitedStatesCities test-cases
 
@@ -36,3 +36,5 @@ test-cases.o: test-cases.cpp
 UnitedStatesCities.o: UnitedStatesCities.cpp
 Statistics.o: Statistics.cpp Statistics.h
 Connectivity.o: Connectivity.cpp Connectivity.h
+Activity.o: Activity.h Activity.cpp
+ActivityManager.o: ActivityManager.h ActivityManager.cpp
