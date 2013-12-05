@@ -136,7 +136,4 @@ namespace Shipping {
     }
 
   }
-
-  // TODO put this somewhere sensible
-  
 }

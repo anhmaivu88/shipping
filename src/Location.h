@@ -14,16 +14,17 @@
 #include "PathData.h"
 
 namespace Shipping {
+	class Connectivity;
 	class Location : public Entity<Location> {
 	public:
 		typedef Fwk::Ptr<Location> Ptr;
 
 		enum class Type {
 			CUSTOMER,
-      PORT,
-      BOAT_TERMINAL,
-      TRUCK_TERMINAL,
-      PLANE_TERMINAL
+		    PORT,
+		    BOAT_TERMINAL,
+		    TRUCK_TERMINAL,
+ 	        PLANE_TERMINAL
 		};
 
 		static Type customer(){ return Type::CUSTOMER; } 
@@ -40,6 +41,18 @@ namespace Shipping {
     virtual void segmentDel(SegmentPtr segment) { segments_.erase(std::find(segments_.begin(), segments_.end(), segment)); }
     EntityCount segmentCount() { return segments_.size(); }
 
+    void routeIs(EntityName dest, PathData route){
+    	std::vector<PathData> paths = routes_[dest];
+    	paths.push_back(route);
+    }
+
+    PathData route(EntityName dest){
+    	auto it = routes_.find(dest);
+    	if(it == routes_.end()) throw new InvalidAttributeException("No routes found");
+    	std::vector<PathData> paths = (*it).second;
+    	return paths[0]; // TODO: choose best path?
+    }
+
     ShipmentCount shipmentsReceived() { return shipmentsReceived_; }
     Hour averageLatency() { return averageLatency_; }
     Dollar totalCost() { return totalCost_; }
@@ -47,7 +60,7 @@ namespace Shipping {
 
 	protected:
 	std::vector<SegmentPtr> segments_;
-    std::map<Location, PathData> routes;
+    std::map<EntityName, std::vector<PathData>> routes_; // Name of destination
 	Type type_;
 
     ShipmentCount shipmentsReceived_;
@@ -56,7 +69,7 @@ namespace Shipping {
 
 		static Location::Ptr locationNew(EntityName name, Type type){
 			Ptr ptr = new Location(name, type);
-		  return ptr;
+		    return ptr;
 		}
 
     Location(EntityName name, Type type): Entity(name), type_(type), shipmentsReceived_(0), averageLatency_(0), totalCost_(0) {}

@@ -9,6 +9,9 @@ namespace Shipping {
   typedef Fwk::Ptr<Location> LocationPtr;
   class Segment;
   typedef Fwk::Ptr<Segment> SegmentPtr;
+
+  class Connectivity;
+  typedef Fwk::Ptr<Connectivity> ConnectivityPtr;
 }
 
 #endif

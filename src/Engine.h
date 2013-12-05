@@ -34,6 +34,7 @@ namespace Shipping {
     Terminal::Ptr terminalLocationNew(EntityName name, Segment::Type type);
     void locationDel(EntityName name);
     Location::Ptr location(EntityName name);
+    std::map<EntityName, Location::Ptr> locations(){ return locations_; }
 
     Fleet::Ptr fleet(EntityName name);
     Fleet::Ptr fleet(Segment::Type type);

@@ -27,6 +27,7 @@ namespace Shipping {
 
 		stringstream output;
 		for(Path & p : paths){
+			paths_.push_back(p.data());
 			output << p.summary(query.type()) << endl;
 		}
 		result_ = output.str();

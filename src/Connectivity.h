@@ -3,6 +3,7 @@
 
 #include "Engine.h"
 #include "Path.h"
+#include "PathData.h"
 
 namespace Shipping {
 
@@ -20,6 +21,7 @@ namespace Shipping {
     void queryIs(Query query); // IMPL: runs query on engine
     Query query(){ return query_; }
 
+    std::vector<PathData> paths(){ return paths_; }
     QueryResult result(){ return result_; }
 
   private:
@@ -27,6 +29,7 @@ namespace Shipping {
     Engine::Ptr engine_;
     Query query_;
     QueryResult result_;
+    std::vector<PathData> paths_;
 
     Connectivity(EntityName name, Engine::Ptr engine): Entity(name), engine_(engine){}
     

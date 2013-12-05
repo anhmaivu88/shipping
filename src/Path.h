@@ -27,7 +27,7 @@ namespace Shipping {
     bool segmentIs(Segment::Ptr segment);
     Segment::Ptr segment(size_t index){ return path_.size() > index ? path_[index] : NULL; }
 
-    PathData data(){ return PathData(path_, distance_, cost_, time_, priority_); }
+    PathData data(){ return PathData(path_, distance_, cost_, time_); }
 
     string summary(Query::Type type);
     size_t size(){ return path_.size(); }

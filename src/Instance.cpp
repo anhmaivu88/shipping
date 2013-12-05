@@ -30,6 +30,29 @@ namespace Shipping {
     ManagerImpl(){
       engine_ = Engine::engineNew(string("engine"));
       statistics_ = Statistics::statisticsNew("primary statistics recorder", engine_);
+      connectivity_ = Connectivity::connectivityNew("routing table generator", engine_);
+    }
+
+    // Assembles the routing table.
+    // TODO: put this code somewhere sensible
+    void ON_SIMULATION_START(){
+      auto locations = engine_->locations();
+      for(auto p1 : locations){
+        Location::Ptr me = p1.second;
+        for(auto p2 : locations){
+          Location::Ptr dest = p2.second;
+          if(me != dest){
+            Query query(Query::connect_);
+            query.startIs(me);
+            query.endIs(dest);
+            connectivity_->queryIs(query);
+            vector<PathData> routes = connectivity_->paths();
+            for(PathData route : routes){
+              me->routeIs(dest->name(), route);
+            }
+          }
+        }
+      }
     }
 
     // Manager method
@@ -47,6 +70,7 @@ namespace Shipping {
     map<string,Ptr<Instance> > instance_;
     Engine::Ptr engine_;
     Statistics::Ptr statistics_;
+    Connectivity::Ptr connectivity_;
 
     Ptr<FleetRep> fleetRep_;
     Ptr<StatisticsRep> statisticsRep_;
