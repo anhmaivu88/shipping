@@ -8,10 +8,13 @@
 #include <map>
 #include <iostream>
 #include <algorithm>
+#include "ActivityManager.h"
+#include "Activity.h"
 #include "TransferRate.h"
 #include "ShipmentCount.h"
 #include "PackageCount.h"
 #include "PathData.h"
+#include "Shipment.h"
 
 namespace Shipping {
 	class Connectivity;
@@ -24,8 +27,8 @@ namespace Shipping {
 		    PORT,
 		    BOAT_TERMINAL,
 		    TRUCK_TERMINAL,
- 	        PLANE_TERMINAL
-		};
+        PLANE_TERMINAL
+        };
 
 		static Type customer(){ return Type::CUSTOMER; } 
 		static Type port(){ return Type::PORT; }
@@ -40,6 +43,10 @@ namespace Shipping {
     virtual void segmentAdd(SegmentPtr segment) { segments_.push_back(segment); }
     virtual void segmentDel(SegmentPtr segment) { segments_.erase(std::find(segments_.begin(), segments_.end(), segment)); }
     EntityCount segmentCount() { return segments_.size(); }
+
+    void shipmentAdd(Shipment::Ptr shipment) { shipments_.push_back(shipment); scheduleForwardingActivity(shipment); }
+    void shipmentDel(Shipment::Ptr shipment) { shipments_.erase(find(shipments_.begin(), shipments_.end(), shipment)); }
+    EntityCount shipmentCount() { return shipments_.size(); }
 
     void routeIs(EntityName dest, PathData route){
     	std::vector<PathData> paths = routes_[dest];
@@ -59,18 +66,25 @@ namespace Shipping {
 
 
 	protected:
-	std::vector<SegmentPtr> segments_;
+    std::vector<SegmentPtr> segments_;
     std::map<EntityName, std::vector<PathData>> routes_; // Name of destination
-	Type type_;
+    Type type_;
 
     ShipmentCount shipmentsReceived_;
     Hour averageLatency_;
     Dollar totalCost_;
+    vector<Shipment::Ptr> shipments_;
 
 		static Location::Ptr locationNew(EntityName name, Type type){
 			Ptr ptr = new Location(name, type);
-		    return ptr;
+      return ptr;
 		}
+
+    #include "ForwardingActivityReactor.h"
+
+    void scheduleForwardingActivity(Shipment::Ptr shipment);
+    ActivityManager::Ptr activityManager() { return activityManager_; }
+    ActivityManager::Ptr activityManager_;
 
     Location(EntityName name, Type type): Entity(name), type_(type), shipmentsReceived_(0), averageLatency_(0), totalCost_(0) {}
 	};

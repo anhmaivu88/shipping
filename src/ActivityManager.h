@@ -7,12 +7,14 @@
 #include "Ptr.h"
 
 #include "ActivityTime.h"
+#include "Activity.h"
 #include "Notifiee.h"
 
+class Activity;
 
-class Activity::Manager : public Fwk::PtrInterface<Activity::Manager> {
+class ActivityManager : public Fwk::PtrInterface<ActivityManager> {
 public:
-    typedef Fwk::Ptr<Activity::Manager> Ptr;
+    typedef Fwk::Ptr<ActivityManager> Ptr;
 
     virtual Fwk::Ptr<Activity> activityNew(const string &name) = 0;
 
@@ -31,6 +33,6 @@ private:
 
 };
 
-extern Fwk::Ptr<Activity::Manager> activityManagerInstance();
+extern Fwk::Ptr<ActivityManager> activityManagerInstance();
 
 #endif

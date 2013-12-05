@@ -8,51 +8,50 @@
 
 #include "ActivityTime.h"
 #include "Notifiee.h"
+#include "Time.h"
 
 using std::string;
 
 /* Define the type 'Time' */
 
 class Activity : public Fwk::PtrInterface<Activity> {
- public:
-    typedef Fwk::Ptr<Activity> Ptr;
+public:
+  typedef Fwk::Ptr<Activity> Ptr;
     
-    /* Notifiee class for Activities */
- class Notifiee : public Fwk::BaseNotifiee<Activity> {
-    public:
-	typedef Fwk::Ptr<Notifiee> Ptr;
+  /* Notifiee class for Activities */
+  class Notifiee : public Fwk::BaseNotifiee<Activity> {
+  public:
+    typedef Fwk::Ptr<Notifiee> Ptr;
 
-        Notifiee(Activity* act) : Fwk::BaseNotifiee<Activity>(act) {}
+    Notifiee(Activity* act) : Fwk::BaseNotifiee<Activity>(act) {}
 
-        virtual void onNextTime() {}
-	virtual void onStatus() {}
-    };
+    virtual void onNextTime() {}
+    virtual void onStatus() {}
+  };
 
-    class Manager;
+  enum Status {
+    free, waiting, ready, executing, nextTimeScheduled, deleted
+  };
 
-    enum Status {
-        free, waiting, ready, executing, nextTimeScheduled, deleted
-    };
-
-    virtual Status status() const = 0;
-    virtual void statusIs(Status s)  = 0;
+  virtual Status status() const = 0;
+  virtual void statusIs(Status s)  = 0;
     
-    virtual Time nextTime() const = 0;
-    virtual void nextTimeIs(Time t) = 0;
+  virtual Time nextTime() const = 0;
+  virtual void nextTimeIs(Time t) = 0;
 
-    virtual Fwk::Ptr<Notifiee> notifiee() const = 0;
+  virtual Fwk::Ptr<Notifiee> notifiee(int index) const = 0;
+  virtual void notifieeAdd(Notifiee *notifiee) = 0;
+  virtual void notifieeDel(Notifiee *notifiee) = 0;
 
-    virtual void lastNotifieeIs(Notifiee* n) = 0;
-
-    virtual string name() const { return name_; }
+  virtual string name() const { return name_; }
 
 protected:
-    Activity(const string &name)
-        : name_(name)
-    {}
+  Activity(const string &name)
+    : name_(name)
+  {}
 
 private:
-    string name_;
+  string name_;
 
 };
 
