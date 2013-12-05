@@ -14,6 +14,7 @@
 #include "Query.h"
 #include "Terminal.h"
 #include "Shipment.h"
+#include "Notifiee.h"
 #include <map>
 #include <vector>
 
@@ -49,7 +50,7 @@ namespace Shipping {
 
     /* Notification stuff. We don't support asynchronous semantics here:
        these notifications are assumed to be correct and non-batched. */
-    class Notifiee : public Fwk::PtrInterface<Notifiee> {
+    class Notifiee : public Fwk::BaseNotifiee<Engine> {
     public:
       typedef Fwk::Ptr<Notifiee> Ptr;
       virtual void onFleetNew(EntityName locationName) {}
@@ -61,13 +62,13 @@ namespace Shipping {
       virtual void onSegmentPriority(EntityName segment, Segment::Priority priority) {}
       
     protected:
-      Notifiee(Engine *engine) : engine_(engine) {}
+      Notifiee(Engine *engine) : BaseNotifiee(engine), engine_(engine) {}
       Engine *engine() { return engine_; }
       Engine *engine_;
     };
 
-    void notifieeAdd(Notifiee::Ptr notifiee) { notifiees_.push_back(notifiee); }
-    void notifieeDel(Notifiee::Ptr notifiee) { notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); }
+    void notifieeAdd(Notifiee *notifiee) { notifiees_.push_back(notifiee); }
+    void notifieeDel(Notifiee *notifiee) { notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); }
 
   private:
     void segmentIs(EntityName name, Segment::Ptr segment);
@@ -78,7 +79,7 @@ namespace Shipping {
     std::map<EntityName, Location::Ptr> locations_;
     std::map<EntityName, Fleet::Ptr> fleets_;
     
-    std::vector<Notifiee::Ptr> notifiees_;
+    std::vector<Notifiee *> notifiees_;
 
   private:
     void proxyOnPriority(EntityName segmentName, Segment::Priority priority) {
@@ -91,7 +92,6 @@ namespace Shipping {
     public:
       static SegmentReactor::Ptr segmentReactorNew(Engine *engine, Segment *segment) {
         Ptr reactor = new SegmentReactor(engine, segment);
-        segment->notifieeAdd(reactor);
         return reactor;
       }
 

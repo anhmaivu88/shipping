@@ -6,6 +6,7 @@
 #include "Segment.h"
 #include "Location.h"
 #include "Percentage.h"
+#include <iostream>
 
 using namespace std;
 
@@ -59,7 +60,6 @@ namespace Shipping {
       /* engineReactorNew adds the new EngineReactor to `engine` as a notifiee */
       static EngineReactor::Ptr engineReactorNew(Statistics *stats, Engine *engine) {
         Ptr reactor = new EngineReactor(stats, engine);
-        engine->notifieeAdd(reactor);
         return reactor;
       }
 

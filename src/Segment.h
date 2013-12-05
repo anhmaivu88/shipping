@@ -12,6 +12,8 @@
 #include "Entity.h"
 #include "Location.h"
 #include "ShipmentCount.h"
+#include "Notifiee.h"
+#include <iostream>
 
 namespace Shipping {
   class Segment : public Entity<Segment> {
@@ -67,18 +69,22 @@ namespace Shipping {
       return ptr;
     }
 
-    class Notifiee : public Fwk::PtrInterface<Notifiee> {
+    class Notifiee : public Fwk::BaseNotifiee<Segment> {
     public:
       typedef Fwk::Ptr<Notifiee> Ptr;
       virtual void onPriority(Priority priority) {}
     protected:
-      Notifiee(Segment *segment) : segment_(segment) {}
+      Notifiee(Segment *segment) : BaseNotifiee(segment), segment_(segment) {}
       Segment *segment() { return segment_; }
       Segment *segment_;
+
+      /* Cannot be deleted until the segment is deleted, so we 
+         don't need to do any housekeeping. */
+      ~Notifiee() {}
     };
 
-    void notifieeAdd(Notifiee::Ptr notifiee) { notifiees_.push_back(notifiee); }
-    void notifieeDel(Notifiee::Ptr notifiee) { notifiees_.erase(std::find(notifiees_.begin(), notifiees_.end(), notifiee)); }
+    void notifieeAdd(Notifiee *notifiee) { notifiees_.push_back(notifiee); }
+    void notifieeDel(Notifiee *notifiee) { notifiees_.erase(std::find(notifiees_.begin(), notifiees_.end(), notifiee)); }
     
   protected:
     Segment(Shipping::EntityName name, 
@@ -100,6 +106,10 @@ namespace Shipping {
     Fwk::Ptr<Location> source_;
     Segment::Ptr returnSegment_;
     Type type_;
+    /* We intentionally maintain a strong reference to notifiees because
+       the engine is not interested in each of the individual segment 
+       reactors. Furthermore, the engine will never be deleted before
+       a segment. */
     std::vector<Notifiee::Ptr> notifiees_;
     ShipmentCount shipmentCapacity_;
 

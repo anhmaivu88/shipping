@@ -61,7 +61,7 @@ TEST_F(EngineTest, ShouldBeAbleToDeleteLocations) {
 TEST_F(EngineTest, StatisticsShouldCountThings) {
   Location::Ptr truckTerminal = engine->terminalLocationNew("Truck terminal", Segment::Type::TRUCK);
   Segment::Ptr truckSegment = engine->truckSegmentNew("Truck segment");
-
+  
   ASSERT_EQ(statistics->locationType(Location::Type::TRUCK_TERMINAL), 1);
   ASSERT_EQ(statistics->segmentType(Segment::Type::TRUCK), 1);
 

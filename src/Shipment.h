@@ -8,7 +8,7 @@ namespace Shipping {
   public:
     typedef Fwk::Ptr<Shipment> Ptr;
 
-    class Notifiee : public Fwk::PtrInterface<Notifiee> {
+    class Notifiee : public Fwk::BaseNotifiee<Shipment> {
       typedef Fwk::Ptr<Notifiee> Ptr;
       virtual void onArrive(Location::Ptr arrivalLocation) {}
     };

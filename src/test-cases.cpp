@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <sys/wait.h>
 #include <sys/signal.h>
-#include <boost/lexical_cast.hpp>
 #include "Instance.h"
 
 using namespace std;
@@ -568,12 +567,12 @@ void testExplore2() {
 
     /* Make a ring of segments that meets back around at the first port */
     for (int i = 0; i <= 3; i++) {
-        string id = boost::lexical_cast<string>(i+1);
+        string id = std::to_string(i+1);
         Ptr<Instance> loc = m->instanceNew(id, "Port"); 
     }
     for (int i = 0; i <= 3; i++) {
-        string from = boost::lexical_cast<string>(i + 1);
-        string to = boost::lexical_cast<string>(((i + 1) % 4) + 1);
+        string from = std::to_string(i + 1);
+        string to = std::to_string(((i + 1) % 4) + 1);
 
         string seg1name = "s" + from + to;
         string seg2name = "s" + to + from;

@@ -41,7 +41,7 @@ FILES += EngineTest InstanceTest ConnectivityTest
 OBJS = $(addsuffix .o, $(FILES))
 
 # libs
-LIBS = $(SRC_PATH)/Segment.o $(SRC_PATH)/Instance.o $(SRC_PATH)/Statistics.o
+LIBS = $(SRC_PATH)/Segment.o $(SRC_PATH)/Instance.o $(SRC_PATH)/Statistics.o $(SRC_PATH)/Path.o
 
 # ##################
 # Targets for each file you are testing.
