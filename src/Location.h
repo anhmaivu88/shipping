@@ -5,11 +5,13 @@
 #include "Typedef.h"
 #include "Entity.h"
 #include <vector>
+#include <map>
 #include <iostream>
 #include <algorithm>
 #include "TransferRate.h"
 #include "ShipmentCount.h"
 #include "PackageCount.h"
+#include "PathData.h"
 
 namespace Shipping {
 	class Location : public Entity<Location> {
@@ -42,9 +44,11 @@ namespace Shipping {
     Hour averageLatency() { return averageLatency_; }
     Dollar totalCost() { return totalCost_; }
 
+
 	protected:
-		std::vector<SegmentPtr> segments_;
-		Type type_;
+	std::vector<SegmentPtr> segments_;
+    std::map<Location, PathData> routes;
+	Type type_;
 
     ShipmentCount shipmentsReceived_;
     Hour averageLatency_;
