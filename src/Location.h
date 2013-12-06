@@ -121,7 +121,7 @@ namespace Shipping {
 
 	class Customer : public Location {
 	public:
-    typedef Fwk::Ptr<Notifiee> Ptr;
+    typedef Fwk::Ptr<Customer> Ptr;
 
     class Notifiee : public Location::Notifiee {
     public:
@@ -137,7 +137,7 @@ namespace Shipping {
         Customer *customer_;
     };
 
-    static Location::Ptr customerNew(EntityName name){ return locationNew(name, customer()); }
+    static Customer::Ptr customerNew(EntityName name){ return new Customer(name); }
 
     void transferRateIs(TransferRate transferRate) { 
       transferRate_ = transferRate; 
@@ -157,6 +157,7 @@ namespace Shipping {
     Location::Ptr destination() { return destination_; }
 
   private:
+    Customer(EntityName name): Location(name, Location::Type::CUSTOMER), transferRate_(0), shipmentSize_(0) {}
     TransferRate transferRate_;
     PackageCount shipmentSize_;
     Location::Ptr destination_;

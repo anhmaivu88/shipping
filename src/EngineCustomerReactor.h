@@ -30,18 +30,18 @@ private:
   bool isDestination_;
   bool isActivity_;
   InjectionActivityReactor::Ptr react_;
-  Activity::ptr injectionActivity_;
+  Activity::Ptr injectionActivity_;
 
   void checkActivity(){
     bool isNewActivity = isTranferRate_ && isShipmentSize_ && isDestination_;
     if(isNewActivity == isActivity_) return;
     if(isNewActivity){
       // Start activity
-      injectionActivity_ = engine_->activityManager()->activityNew(customer_->name() + "_INJECT");
-      InjectionActivityReactor::injectionActivityReactorNew(customer_, injectionActivity.ptr());
+      injectionActivity_ = engine_->activityManager()->activityNew(customer()->name() + "_INJECT");
+      InjectionActivityReactor::injectionActivityReactorNew(Fwk::Ptr<Customer>(customer()), injectionActivity_.ptr());
     } else {
       // Kill activity
-      injectionActivity->statusIs(Activity::Status::deleted);
+      injectionActivity_->statusIs(Activity::Status::deleted);
     }
     isActivity_ = isNewActivity;
   }

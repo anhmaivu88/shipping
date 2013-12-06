@@ -19,7 +19,7 @@ namespace Shipping {
       /* Inject new shipment */
       if (notifier()->status() == Activity::Status::executing) {
         PathData path = origin()->route(origin()->destination()->name());
-        origin()->shipmentAdd(Shipment::shipmentNew(origin(), origin()->destination(), origin()->packageCount(), path));
+        origin()->shipmentAdd(Shipment::shipmentNew(origin(), origin()->destination(), origin()->shipmentSize(), path));
 
         Activity::Ptr activity = notifier();
         activity->nextTimeIs(activity->nextTime() + Time(24.0 / origin()->transferRate().value()));
@@ -33,9 +33,9 @@ namespace Shipping {
 
     InjectionActivityReactor(Customer::Ptr start, Activity *activity) : Notifiee(activity), origin_(start) {}
 
-    Customer::Ptr origin() { return origin_; }
+    Fwk::Ptr<Customer> origin() { return origin_; }
       
-    Customer::Ptr origin_;
+    Fwk::Ptr<Customer> origin_;
   };
 }
 
