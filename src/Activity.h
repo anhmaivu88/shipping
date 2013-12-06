@@ -29,7 +29,7 @@ public:
     virtual void onStatus() {}
   };
 
-  enum Status {
+  enum class Status {
     free, waiting, ready, executing, nextTimeScheduled, deleted
   };
 

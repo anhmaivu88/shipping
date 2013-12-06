@@ -58,6 +58,7 @@ namespace Shipping {
       }
     }
 
+    Shipment::Ptr shipment(int i) { return shipments_[i]; }
     EntityCount shipmentCount() { return shipments_.size(); }
 
     void routeIs(EntityName dest, PathData route){

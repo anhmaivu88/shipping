@@ -18,6 +18,8 @@ namespace Shipping {
 			segments_(segments), distance_(distance), cost_(cost), time_(time)//, priority_(priority)
 		{}
 
+    SegmentPtr nextSegment(LocationPtr location);
+
 		std::vector<SegmentPtr> segments(){ return segments_; }
 	    Mile distance(){ return distance_; }
 	    Dollar cost(){ return cost_; }

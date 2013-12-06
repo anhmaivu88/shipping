@@ -6,6 +6,7 @@
 #include "Segment.h"
 #include "PackageCount.h"
 #include "Notifiee.h"
+#include "PathData.h"
 
 namespace Shipping {
   class Shipment : public Fwk::PtrInterface<Shipment> {
@@ -22,6 +23,7 @@ namespace Shipping {
 
     LocationPtr source() { return source_; }
     LocationPtr destination() { return destination_; }
+    PathData path() { return path_; }
     
     Hour transitTime() { return transitTime_; }
     Dollar shippingCost() { return shippingCost_; }
@@ -38,6 +40,7 @@ namespace Shipping {
     Dollar shippingCost_;
     PackageCount packageCount_;
     std::vector<Notifiee *> notifiees_;
+    PathData path_;
   };
 }
 
