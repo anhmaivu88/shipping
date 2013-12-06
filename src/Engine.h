@@ -15,6 +15,7 @@
 #include "Terminal.h"
 #include "Shipment.h"
 #include "Notifiee.h"
+#include "ActivityManager.h"
 #include "ForwardingActivityReactor.h"
 #include "TransferActivityReactor.h"
 #include <map>
@@ -42,6 +43,8 @@ namespace Shipping {
     Fleet::Ptr fleet(EntityName name);
     Fleet::Ptr fleet(Segment::Type type);
     Fleet::Ptr fleetNew(EntityName name);
+
+    ActivityManager::Ptr activityManager() { return activityManager_; }
 
     Query queryNew();
 
@@ -85,8 +88,8 @@ namespace Shipping {
     std::vector<Shipment::Ptr> shipments_;
     
     std::vector<Notifiee *> notifiees_;
+    ActivityManager::Ptr activityManager_;
 
-  private:
     void proxyOnPriority(EntityName segmentName, Segment::Priority priority) {
       for (auto notifiee : notifiees_) {
         notifiee->onSegmentPriority(segmentName, priority);
@@ -109,7 +112,7 @@ namespace Shipping {
       SegmentReactor(Engine *engine, Segment *segment) : Notifiee(segment), engine_(engine) {}
     };
 
-    Engine(EntityName name): Entity<Engine>(name){}
+    Engine(EntityName name): Entity<Engine>(name), activityManager_(activityManagerInstance()) {}
   };
 } /* end namespace */
 
