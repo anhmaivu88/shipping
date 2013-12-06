@@ -37,12 +37,13 @@ namespace Fwk {
     }
 	
     void notifierIs(Ptr<Notifier> n) {
+      Ptr<Notifier> tmpNotifier = notifier_;
 	    if (notifier_ != n) {
-        if (notifier_ != NULL) {
-          std::cout << "Nulling notifier" << std::endl;
-          notifier_->notifieeDel(static_cast<typename Notifier::Notifiee*>(this));
-        }
         notifier_ = n;
+        if (tmpNotifier != NULL) {
+          std::cout << "Nulling notifier" << std::endl;
+          tmpNotifier->notifieeDel(static_cast<typename Notifier::Notifiee*>(this));
+        }
         if (n != NULL) {
           std::cout << "Didn't null notifier." << std::endl;
           n->notifieeAdd(static_cast<typename Notifier::Notifiee*>(this));

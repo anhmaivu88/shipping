@@ -41,6 +41,7 @@ namespace Shipping {
         public:
             typedef Fwk::Ptr<ActivityManagerReactor> Ptr;
             static ActivityManagerReactor::Ptr activityManagerReactorNew(ActivityManagerImpl *manager, Activity* act){
+              std::cout << "I'm one of them." << std::endl;
                 Ptr ptr = new ActivityManagerReactor(manager, act);
                 return ptr;
             }
