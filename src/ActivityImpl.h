@@ -11,7 +11,10 @@ namespace Shipping {
   class ActivityImpl : public Activity {
 
     void notifieeAdd(Notifiee *notifiee) { notifiees_.push_back(notifiee); }
-    void notifieeDel(Notifiee *notifiee) { notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); }
+    void notifieeDel(Notifiee *notifiee) { 
+      std::cout << "!!!Attempting to delete a notifier" << std::endl;
+      notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); 
+    }
 
     Activity::Status status() const { return status_; }
     void statusIs(Status status);
@@ -49,7 +52,12 @@ namespace Shipping {
       for (auto notifiee : notifiees_) { notifiee->onStatus(); } 
 
       if (s == Activity::Status::deleted) {
-        for (int i = 0; i < notifiees_.size(); i++) { notifiees_[i]->notifierIs(NULL); notifiees_[i] = NULL; }
+        for (int i = 0; i < notifiees_.size(); i++) { 
+          std::cout << "Nulling a notifier." << std::endl;
+          std::cout << "Value of i: " << i << std::endl;
+          std::cout << "Size: " << notifiees_.size() << std::endl;
+          // notifiees_[i]->notifierIs(NULL); // FIXME uncomment 
+        }
       }
     }
   }

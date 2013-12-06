@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
 
   Ptr<Instance> customer = manager->instanceNew("customer1", "Customer");
   Ptr<Instance> a = manager->instanceNew("terminal1", "Truck terminal");
+  Ptr<Instance> secondterminal = manager->instanceNew("terminal2", "Truck terminal");
 
   if (a == NULL) {
     badTruckTerminal();
@@ -29,6 +30,8 @@ int main(int argc, char *argv[]) {
 
   Ptr<Instance> b = manager->instanceNew("seg1", "Truck segment");
   Ptr<Instance> c = manager->instanceNew("seg2", "Truck segment");
+  Ptr<Instance> d = manager->instanceNew("seg3", "Truck segment");
+  Ptr<Instance> e = manager->instanceNew("seg4", "Truck segment");
 
   if (b == NULL || c == NULL) {
     badTruckSegment();
@@ -37,11 +40,14 @@ int main(int argc, char *argv[]) {
 
   b->attributeIs("source", "customer1");
   c->attributeIs("source", "terminal1");
+  d->attributeIs("source", "terminal1");
+  e->attributeIs("source", "terminal2");
+  d->attributeIs("return segment", "seg4");
   b->attributeIs("return segment", "seg2");
 
   customer->attributeIs("Transfer Rate", "10");
   customer->attributeIs("Shipment Size", "100");
-  customer->attributeIs("Destination", "terminal1");
+  customer->attributeIs("Destination", "terminal2");
 
   Ptr<Instance> activityManagerRep = manager->instanceNew("activity manager", "Activity Manager");
   activityManagerRep->attributeIs("time", "20");

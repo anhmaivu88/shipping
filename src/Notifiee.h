@@ -27,6 +27,7 @@ namespace Fwk {
 	
     ~BaseNotifiee() {
 	    if (notifier_ != NULL) {
+        std::cout << "Renulling notifier" << std::endl;
         notifier_->notifieeDel(static_cast<typename Notifier::Notifiee*>(this));
 	    }
     }
@@ -38,10 +39,12 @@ namespace Fwk {
     void notifierIs(Ptr<Notifier> n) {
 	    if (notifier_ != n) {
         if (notifier_ != NULL) {
+          std::cout << "Nulling notifier" << std::endl;
           notifier_->notifieeDel(static_cast<typename Notifier::Notifiee*>(this));
         }
         notifier_ = n;
         if (n != NULL) {
+          std::cout << "Didn't null notifier." << std::endl;
           n->notifieeAdd(static_cast<typename Notifier::Notifiee*>(this));
         }
 	    }

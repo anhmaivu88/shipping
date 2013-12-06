@@ -15,7 +15,11 @@ namespace Shipping {
       if (notifier()->status() == Activity::Status::executing) {
         notifier()->statusIs(Activity::Status::deleted);
         segment()->shipmentDel(shipment());
-        segment()->returnSegment()->source()->shipmentAdd(shipment());
+        if (segment()->returnSegment()->source() == shipment()->destination()) {
+          std::cout << "YAY IT ARRIVED!!!!" << std::endl;
+        } else {
+          segment()->returnSegment()->source()->shipmentAdd(shipment());
+        }
       }
     }
 

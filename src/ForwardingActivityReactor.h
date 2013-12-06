@@ -5,6 +5,7 @@
 #include "Shipment.h"
 #include "Activity.h"
 #include "Error.h"
+#include <iostream>
 
 /** Need to create a reactor on segments if we can't route anything. */
 
@@ -19,6 +20,7 @@ namespace Shipping {
       /* We attempt to forward a shipment if we are scheduled. We will forward at most 
          one per execution, although we will potentially check all of the shipments. */
       if (notifier()->status() == Activity::Status::executing) {
+        std::cout << "Attempting to route packages on " << location()->name() << std::endl;
         bool foundForwardablePackage = false;
         for (int i = 0; i < location()->shipmentCount(); i++) {
           Shipment::Ptr shipment = location()->shipment(i);

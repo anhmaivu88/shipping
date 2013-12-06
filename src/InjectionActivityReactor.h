@@ -21,6 +21,7 @@ namespace Shipping {
       /* Inject new shipment */
       if (notifier()->status() == Activity::Status::executing) {
         std::cout << "Injection a shipment at " << origin()->name() << std::endl;
+        std::cout << "Attempting to route to: " << origin()->destination()->name() << std::endl;
         PathData path = origin()->route(origin()->destination()->name());
         origin()->shipmentAdd(Shipment::shipmentNew(origin(), origin()->destination(), origin()->shipmentSize(), path));
 
