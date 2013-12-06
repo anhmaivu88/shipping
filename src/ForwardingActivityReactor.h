@@ -39,7 +39,7 @@ namespace Shipping {
           } else {
             /* If the segment we want to route on is full, then we create a reactor
                on the segment that will wake us up when it has free capacity. */
-            new SegmentCapacityReactor(notifier(), nextSegment.ptr());
+            std::cout << "capacity was full so we wait a bit." << std::endl;
           }
         }
 
@@ -47,7 +47,8 @@ namespace Shipping {
         if (location()->shipmentCount() > 0 && foundForwardablePackage) {
           this->notifier()->statusIs(Activity::Status::ready);
         } else {
-          this->notifier()->statusIs(Activity::Status::waiting);
+          notifier()->nextTimeIs(notifier()->nextTime() + Hour(100));
+          notifier()->statusIs(Activity::Status::ready);
         }
       }
     }
@@ -62,17 +63,18 @@ namespace Shipping {
     public:
       void onShipmentDel(Shipment::Ptr shipment) {
         forwardingActivity()->statusIs(Activity::Status::ready);
-        notifier()->notifieeDel(this);
+        notifierIs(NULL);
       }
 
       SegmentCapacityReactor(Activity::Ptr forwardingActivity, Segment *segment) : Notifiee(segment), forwardingActivity_(forwardingActivity) {
-        notifier()->notifieeAdd(this);
       }
 
     private:
       Activity::Ptr forwardingActivity() { return forwardingActivity_; }
       Activity::Ptr forwardingActivity_;
     };
+    
+    map<EntityName, SegmentCapacityReactor::Ptr> capacityReactors_;
   };
 }
 

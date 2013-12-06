@@ -33,10 +33,10 @@ int main(int argc, char *argv[]) {
   Ptr<Instance> d = manager->instanceNew("seg3", "Truck segment");
   Ptr<Instance> e = manager->instanceNew("seg4", "Truck segment");
 
-  b->attributeIs("length", "10");
-  c->attributeIs("length", "10");
-  d->attributeIs("length", "10");
-  e->attributeIs("length", "10");
+  b->attributeIs("length", "1");
+  c->attributeIs("length", "1");
+  d->attributeIs("length", "1");
+  e->attributeIs("length", "1");
 
   if (b == NULL || c == NULL) {
     badTruckSegment();
@@ -50,12 +50,12 @@ int main(int argc, char *argv[]) {
   d->attributeIs("return segment", "seg4");
   b->attributeIs("return segment", "seg2");
 
-  customer->attributeIs("Transfer Rate", "24");
+  customer->attributeIs("Transfer Rate", "1");
   customer->attributeIs("Shipment Size", "1000");
   customer->attributeIs("Destination", "terminal2");
 
   Ptr<Instance> activityManagerRep = manager->instanceNew("activity manager", "Activity Manager");
-  activityManagerRep->attributeIs("time", "3000000");
+  activityManagerRep->attributeIs("time", "10001");
   
   
   cout << "Set all attributes." << endl;

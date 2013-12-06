@@ -29,7 +29,7 @@ namespace Shipping {
                 if(lr && !rr) return true;
                 if(!lr && rr) return false;
 
-                return left->nextTime() < right->nextTime();
+                return left->nextTime() > right->nextTime();
             }
         };
         std::priority_queue<Activity::Ptr, std::vector<Activity::Ptr>, ActivityComparator> activities_;
@@ -47,7 +47,6 @@ namespace Shipping {
             }
 
             void onNextTime() {
-                manager_->executeActivities();
             }
 
             void onStatus() {

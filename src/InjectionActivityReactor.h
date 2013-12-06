@@ -26,6 +26,7 @@ namespace Shipping {
         origin()->shipmentAdd(Shipment::shipmentNew(origin(), origin()->destination(), origin()->shipmentSize(), path));
 
         Activity::Ptr activity = notifier();
+        std::cout << "Rescheduling injection activity for time: " << (activity->nextTime() + Time(24.0 / origin()->transferRate().value())).value() << std::endl;
         activity->nextTimeIs(activity->nextTime() + Time(24.0 / origin()->transferRate().value()));
         activity->statusIs(Activity::Status::ready);
       }
