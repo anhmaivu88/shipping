@@ -93,6 +93,12 @@ namespace Shipping {
     void notifieeAdd(Notifiee::Ptr notifiee) { notifiees_.push_back(notifiee); }
     void notifieeDel(Notifiee::Ptr notifiee) { notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); }
 
+    ~Location() {
+      for (auto notifiee : notifiees_) {
+        notifiee->notifierIs(NULL);
+      }
+    }
+
 	protected:
     std::vector<Notifiee::Ptr> notifiees_;
     std::vector<SegmentPtr> segments_;

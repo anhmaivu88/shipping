@@ -94,6 +94,12 @@ namespace Shipping {
 
     void notifieeAdd(Notifiee *notifiee) { notifiees_.push_back(notifiee); }
     void notifieeDel(Notifiee *notifiee) { notifiees_.erase(std::find(notifiees_.begin(), notifiees_.end(), notifiee)); }
+
+    ~Segment() {
+      for (auto notifiee : notifiees_) {
+        notifiee->notifierIs(NULL);
+      }
+    }
     
   protected:
     Segment(Shipping::EntityName name, 

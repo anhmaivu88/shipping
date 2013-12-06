@@ -34,6 +34,12 @@ namespace Shipping {
     Dollar shippingCost() { return shippingCost_; }
     PackageCount packageCount() { return packageCount_; }
 
+    ~Shipment() {
+      for (auto notifiee : notifiees_) {
+        notifiee->notifierIs(NULL);
+      }
+    }
+
   private:
     typedef Fwk::Ptr<Location> LocationPtr;
     typedef Fwk::Ptr<Segment> SegmentPtr;

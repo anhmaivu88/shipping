@@ -76,6 +76,12 @@ namespace Shipping {
     void notifieeAdd(Notifiee *notifiee) { notifiees_.push_back(notifiee); }
     void notifieeDel(Notifiee *notifiee) { notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); }
 
+    ~Engine() {
+      for (auto notifiee : notifiees_) {
+        notifiee->notifierIs(NULL);
+      }
+    }
+
   private:
     void segmentIs(EntityName name, Segment::Ptr segment);
     void locationIs(EntityName name, Location::Ptr location);
@@ -106,6 +112,13 @@ namespace Shipping {
 
       void onPriority(Segment::Priority priority) {
         engine_->proxyOnPriority(segment()->name(), priority);
+      }
+
+      void onShipmentAdd(Shipment::Ptr shipment) {
+        Activity::Ptr transferActivity = engine_->activityManager()->activityNew(segment()->name() + " transfer");
+        transferActivity->notifieeAdd(new TransferActivityReactor(segment(), shipment, transferActivity));
+        transferActivity->nextTimeIs(0);
+        transferActivity->statusIs(Activity::Status::ready);
       }
       
       Engine *engine_;
