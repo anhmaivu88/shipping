@@ -15,6 +15,10 @@ public:
     Time operator+(Shipping::Hour other) {
       return Time(value_ + other.value());
     }
+
+    Time operator-(Time other){
+        return Time(value_ - other.value());
+    }
 };
 
 #endif

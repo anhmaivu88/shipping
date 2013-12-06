@@ -1,6 +1,8 @@
 #include "ActivityManagerImpl.h"
 #include "ActivityImpl.h"
 #include <iostream>
+#include <time.h>
+#include <unistd.h>
 
 Fwk::Ptr<ActivityManager> activityManagerInstance(){
     static Fwk::Ptr<ActivityManager> theManager = new Shipping::ActivityManagerImpl();
@@ -17,12 +19,42 @@ namespace Shipping {
     }
 
     void ActivityManagerImpl::nowIs(Time t){
-
-        if(now_ < t){
+        if(now_ > t) throw new ValueOutOfBoundsException("Time moves only forward.");
+        if(now_ == t) return;
+        bool ran = false;
+        while(now_ < t && !activities_.empty()){
+            Activity::Ptr next = activities_.top();
+            if(next->status() != Activity::Status::ready) break;
+            now_ = min(max(now_, next->nextTime()), t);
+            executeActivities();
+            ran = true;
+        }
+        if(!ran){
             now_ = t;
             executeActivities();
-        } else if(now_ > t){
-            throw new ValueOutOfBoundsException("Time moves only forward.");
+        }
+    }
+
+    void RealtimeActivityManagerImpl::nowIs(Time t){
+            // usleep(step_.value() * 100000); // sleep 100ms per hour
+            // now_ = min(now_ + step_, t);
+        if(now_ > t) throw new ValueOutOfBoundsException("Time moves only forward.");
+        if(now_ == t) return;
+        while(now_ < t){
+            Time step = step_;
+            if(!activities_.empty()){
+                Activity::Ptr next = activities_.top();
+                if(next->status() == Activity::Status::ready){
+                    Time nextStep(0);
+                    if(next->nextTime() > now_) nextStep = next->nextTime() - now_;
+                    step = min(step, nextStep);
+                }
+            }
+            
+            Time now = min(now_ + step, t);
+            usleep((now - now_).value() * 100000);
+            now_ = now;
+            executeActivities();
         }
     }
 
@@ -38,5 +70,6 @@ namespace Shipping {
             std::cout << "Executing activity." << std::endl;
         }
     }
+
 
 }

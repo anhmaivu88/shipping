@@ -16,9 +16,9 @@ namespace Shipping {
 
         Fwk::Ptr<Activity> activityNew();
 
-        void nowIs(Time t);
+        virtual void nowIs(Time t);
         Time now() const { return now_; }
-    private:
+    protected:
         friend class ActivityManagerReactor;
 
         Time now_;
@@ -63,6 +63,16 @@ namespace Shipping {
             ActivityManagerReactor(ActivityManagerImpl *manager, Activity* act) : Notifiee(act), manager_(manager) {}
 
         };
+
+    };
+
+    class RealtimeActivityManagerImpl : public ActivityManagerImpl {
+    public:
+        RealtimeActivityManagerImpl(Time step) : ActivityManagerImpl(), step_(step) {}
+        void nowIs(Time t);
+    protected:
+        friend class ActivityManagerReactor;
+        Time step_;
 
     };
 }
