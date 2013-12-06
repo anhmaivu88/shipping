@@ -163,17 +163,10 @@ namespace Shipping {
         if(isNewActivity){
           // Start activity
           injectionActivity_ = engine_->activityManager()->activityNew(customer_->name() + "_INJECT");
-          react_ = InjectionActivityReactor::injectionActivityReactorNew(
-            customer_,
-            customer_->transferRate(),
-            customer_->shipmentSize(),
-            customer_->destination(),
-            injectionActivity.ptr()
-          );
+          InjectionActivityReactor::injectionActivityReactorNew(customer_, injectionActivity.ptr());
         } else {
           // Kill activity
           injectionActivity->statusIs(Activity::Status::deleted);
-          react_ = NULL;
         }
         isActivity_ = isNewActivity;
       }
