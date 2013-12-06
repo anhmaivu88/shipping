@@ -53,7 +53,6 @@ namespace Shipping {
       locationStats_[Location::Type::PLANE_TERMINAL] = 0;
     }
 
-    /* FIXME: should zero out engine reference when engine dies */
     class EngineReactor : public Engine::Notifiee {
     public:
       typedef Fwk::Ptr<EngineReactor> Ptr;
@@ -64,16 +63,16 @@ namespace Shipping {
       }
 
       void onLocationNew(EntityName locationName) {
-        stats()->locationTypeInc(engine()->location(locationName)->type());
+        stats()->locationTypeInc(notifier()->location(locationName)->type());
       }
       void onLocationDel(EntityName name) {
-        stats()->locationTypeDec(engine()->location(name)->type());
+        stats()->locationTypeDec(notifier()->location(name)->type());
       }
       void onSegmentNew(EntityName segmentName) {
-        stats()->segmentTypeInc(engine()->segment(segmentName)->type());
+        stats()->segmentTypeInc(notifier()->segment(segmentName)->type());
       }
       void onSegmentDel(EntityName name) {
-        Segment::Ptr segment = engine()->segment(name);
+        Segment::Ptr segment = notifier()->segment(name);
         stats()->segmentTypeDec(segment->type());
 
         if (segment->priority() == Segment::Priority::EXPEDITED) {
