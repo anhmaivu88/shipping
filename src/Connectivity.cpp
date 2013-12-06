@@ -11,6 +11,7 @@ namespace Shipping {
 
 	void Connectivity::queryIs(Query query){
 		cout << "Running connectivity query" << endl;
+		paths_.clear();
 		query_ = query;
 		vector<Path> paths;
 		if(query_.type() == Query::Type::explore_){
@@ -30,6 +31,7 @@ namespace Shipping {
 		for(Path & p : paths){
 			cout << "Found path!" << endl;
 			paths_.push_back(p.data());
+			cout << p.summary(query.type()) << endl;
 			output << p.summary(query.type()) << endl;
 		}
 		result_ = output.str();
