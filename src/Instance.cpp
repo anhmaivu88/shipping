@@ -409,6 +409,7 @@ namespace Shipping {
   };
 
   class ActivityManagerRep : public InstanceImpl {
+  public:
     ActivityManagerRep(const string &name, ManagerImpl *manager) : InstanceImpl(name), manager_(manager) {}
 
     string attribute(const string& name) {
@@ -545,6 +546,8 @@ namespace Shipping {
       t = new SegmentRep(name, this, engine_->boatSegmentNew(name));
     } else if(type == "Plane segment"){
       t = new SegmentRep(name, this, engine_->planeSegmentNew(name));
+    } else if(type == "Activity Manager") {
+      t = new ActivityManagerRep(name, this);
     } else if(type == "Fleet"){
       if(fleetRep_) { 
         fleetRep_->statusIs(InstanceImpl::Status::ACTIVE);

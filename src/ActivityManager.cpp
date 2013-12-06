@@ -1,5 +1,6 @@
 #include "ActivityManagerImpl.h"
 #include "ActivityImpl.h"
+#include <iostream>
 
 Fwk::Ptr<ActivityManager> activityManagerInstance(){
     static Fwk::Ptr<ActivityManager> theManager = new Shipping::ActivityManagerImpl();
@@ -24,12 +25,15 @@ namespace Shipping {
     }
 
     void ActivityManagerImpl::executeActivities(){
+      std::cout << "Attempting to execute activites." << std::endl;
         while(!activities_.empty()){
+          std::cout << "Found an activity." << std::endl;
             Activity::Ptr next = activities_.top();
             if(next->status() != Activity::Status::ready) break;
             if(next->nextTime() > now_) break;
-            next->statusIs(Activity::Status::executing);
             activities_.pop();
+            next->statusIs(Activity::Status::executing);
+            std::cout << "Executing activity." << std::endl;
         }
     }
 

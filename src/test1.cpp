@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  Ptr<Instance> customer = manager->instanceNew("customer1", "Customer");
   Ptr<Instance> a = manager->instanceNew("terminal1", "Truck terminal");
 
   if (a == NULL) {
@@ -28,22 +29,25 @@ int main(int argc, char *argv[]) {
 
   Ptr<Instance> b = manager->instanceNew("seg1", "Truck segment");
   Ptr<Instance> c = manager->instanceNew("seg2", "Truck segment");
-  Ptr<Instance> d = manager->instanceNew("seg3", "Plane segment");
 
   if (b == NULL || c == NULL) {
     badTruckSegment();
     return 1;
   }
 
-  b->attributeIs("source", "terminal1");
-  c->attributeIs("source", "terminal2");
-  d->attributeIs("source", "terminal1");
-  b->attributeIs("return segment", "Plane segment");
+  b->attributeIs("source", "customer1");
+  c->attributeIs("source", "terminal1");
+  b->attributeIs("return segment", "seg2");
+
+  customer->attributeIs("Transfer Rate", "10");
+  customer->attributeIs("Shipment Size", "100");
+  customer->attributeIs("Destination", "terminal1");
+
+  Ptr<Instance> activityManagerRep = manager->instanceNew("activity manager", "Activity Manager");
+  activityManagerRep->attributeIs("time", "20");
+  
   
   cout << "Set all attributes." << endl;
-
-  cout << a->attribute("segment1") << endl;
-  cout << a->attribute("segment2") << endl;
 
   cout << "Done!" << endl;
 

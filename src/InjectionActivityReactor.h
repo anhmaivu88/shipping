@@ -4,6 +4,7 @@
 #include "Activity.h"
 #include "Segment.h"
 #include "Shipment.h"
+#include <iostream>
 
 namespace Shipping {
   class InjectionActivityReactor : public Activity::Notifiee {
@@ -12,12 +13,14 @@ namespace Shipping {
 
     static InjectionActivityReactor::Ptr injectionActivityReactorNew(Customer::Ptr start, Activity *activity){
       Ptr ptr = new InjectionActivityReactor(start, activity);
+      std::cout << "Injector created." << std::endl;
       return ptr;
     }
 
     void onStatus() {
       /* Inject new shipment */
       if (notifier()->status() == Activity::Status::executing) {
+        std::cout << "Injection a shipment at " << origin()->name() << std::endl;
         PathData path = origin()->route(origin()->destination()->name());
         origin()->shipmentAdd(Shipment::shipmentNew(origin(), origin()->destination(), origin()->shipmentSize(), path));
 

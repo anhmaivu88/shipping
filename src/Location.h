@@ -83,6 +83,9 @@ namespace Shipping {
         
       virtual void onShipmentAdd(Shipment::Ptr shipment) {}
       virtual void onShipmentDel(Shipment::Ptr shipment) {}
+      virtual void onTransferRate() {}
+      virtual void onShipmentSize() {}
+      virtual void onDestination() {}
 
     protected:
         Notifiee(Location *loc) : Fwk::BaseNotifiee<Location>(loc), location_(loc) {}
@@ -127,10 +130,6 @@ namespace Shipping {
     public:
       typedef Fwk::Ptr<Notifiee> Ptr;
         
-      virtual void onTransferRate() {};
-      virtual void onShipmentSize() {};
-      virtual void onDestination() {};
-
     protected:
         Notifiee(Customer *loc) : Location::Notifiee(loc), customer_(loc) {}
         Customer *customer(){ return customer_; }
@@ -141,15 +140,15 @@ namespace Shipping {
 
     void transferRateIs(TransferRate transferRate) { 
       transferRate_ = transferRate; 
-      for (auto notifiee : notifiees_) { Fwk::ptr_cast<Notifiee, Location::Notifiee>(notifiee)->onTransferRate(); }
+      for (auto notifiee : notifiees_) { notifiee->onTransferRate(); }
     }
     void shipmentSizeIs(PackageCount shipmentSize) { 
       shipmentSize_ = shipmentSize; 
-      for (auto notifiee : notifiees_) { Fwk::ptr_cast<Notifiee, Location::Notifiee>(notifiee)->onShipmentSize(); }
+      for (auto notifiee : notifiees_) { notifiee->onShipmentSize(); }
     }
     void destinationIs(Location::Ptr destination){
       destination_ = destination;
-      for (auto notifiee : notifiees_) { Fwk::ptr_cast<Notifiee, Location::Notifiee>(notifiee)->onDestination(); }
+      for (auto notifiee : notifiees_) { notifiee->onDestination(); }
     }
 
     TransferRate transferRate() { return transferRate_; }

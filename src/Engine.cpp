@@ -40,6 +40,7 @@ namespace Shipping {
 
   Location::Ptr Engine::customerLocationNew(EntityName name){
   	Customer::Ptr customer = Customer::customerNew(name);
+    std::cout << "Adding customer reactor." << std::endl;
     CustomerReactor::customerReactorNew(this, customer.ptr());
     locationIs(name, customer);
   	return customer;

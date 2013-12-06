@@ -5,6 +5,7 @@
 #include "ActivityManager.h"
 #include "ActivityManagerImpl.h"
 #include <vector>
+#include <iostream>
 
 namespace Shipping {
   class ActivityImpl : public Activity {
@@ -38,10 +39,13 @@ namespace Shipping {
   };
 
   void ActivityImpl::statusIs(Status s) { 
+    std::cout << "Changing status." << std::endl;
     if (status_ != s) { 
       status_ = s; 
       for (auto notifiee : notifiees_) { notifiee->onStatus(); } 
-      for (int i = 0; i < notifiees_.size(); i++) { notifiees_[i]->notifierIs(NULL); notifiees_[i] = NULL; }
+      if (s == Activity::Status::deleted) {
+        for (int i = 0; i < notifiees_.size(); i++) { notifiees_[i]->notifierIs(NULL); notifiees_[i] = NULL; }
+      }
     }
   }
 

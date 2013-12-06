@@ -52,7 +52,6 @@ namespace Shipping {
                 Activity::Ptr activity = notifier();
                 if(activity->status() == Activity::Status::ready){
                     manager_->activities_.push(activity);
-                    manager_->executeActivities();
                 }
             }
 

@@ -7,6 +7,7 @@
 #include "PackageCount.h"
 #include "Notifiee.h"
 #include "PathData.h"
+#include <iostream>
 
 namespace Shipping {
   class Shipment : public Fwk::PtrInterface<Shipment> {
@@ -15,6 +16,7 @@ namespace Shipping {
 
     static Shipment::Ptr shipmentNew(LocationPtr source, LocationPtr destination, PackageCount packageCount, PathData path){
       Ptr ptr = new Shipment(source, destination, packageCount, path);
+      std::cout << "Creating a shipment." << std::endl;
       return ptr;
     }
 
