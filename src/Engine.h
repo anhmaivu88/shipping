@@ -126,6 +126,31 @@ namespace Shipping {
       SegmentReactor(Engine *engine, Segment *segment) : Notifiee(segment), engine_(engine) {}
     };
 
+    class LocationReactor : public Location::Notifiee {
+    public:
+      static locationReactorNew(Engine *engine, Location *location) {
+        Ptr me = new LocationReactor(engine, location);
+        return me;
+      }
+
+      virtual void onShipmentAdd(Shipment::Ptr shipment) {
+        if (forardingActivity() == NULL) {
+          forwardingActivity_ = engine()->activityManager()->activityNew(location->name() + " forwarding activity");
+          forwardingActivity()->nextTimeIs(0);
+        }
+
+        forwardingActivity()->statusIs(Activity::Status::ready);
+      }
+
+    private:
+      Activity::Ptr forwardingActivity() { return forwardingActivity_; }
+      Engine *engine() { return engine_; }
+
+      Activity::Ptr forwardingActivity_;
+      Engine *engine_;
+      LocationReactor(Engine *engine, Location *location) : Notifiee(location), engine_(engine), forwardingActivity_(NULL);
+    }
+
     class CustomerReactor : public Customer::Notifiee {
     public:
       static CustomerReactor::Ptr customerReactorNew(Engine *engine, Customer *customer) {

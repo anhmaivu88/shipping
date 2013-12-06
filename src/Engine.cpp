@@ -116,6 +116,7 @@ namespace Shipping {
   }
 
   void Engine::locationIs(EntityName name, Location::Ptr location) {
+    LocationReactor::Ptr reactor = LocationReactor::locationReactorNew(this, location.ptr());
     locations_[name] = location;
     for (auto notifiee : notifiees_) {
       try {
