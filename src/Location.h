@@ -121,6 +121,7 @@ namespace Shipping {
 
 	class Customer : public Location {
 	public:
+    typedef Fwk::Ptr<Notifiee> Ptr;
 
     class Notifiee : public Location::Notifiee {
     public:
