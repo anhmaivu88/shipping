@@ -39,7 +39,6 @@ public:
   virtual Time nextTime() const = 0;
   virtual void nextTimeIs(Time t) = 0;
 
-  virtual Fwk::Ptr<Notifiee> notifiee(int index) const = 0;
   virtual void notifieeAdd(Notifiee *notifiee) = 0;
   virtual void notifieeDel(Notifiee *notifiee) = 0;
 
