@@ -64,6 +64,9 @@ namespace Shipping {
 
     void shipmentAdd(Shipment::Ptr shipment);
     void shipmentDel(Shipment::Ptr shipment);
+    Shipment::Ptr shipment(int i) { return shipments_[i]; }
+    ShipmentCount shipmentCount() { return shipments_.size(); }
+
 
     ShipmentCount shipmentsReceived() { return shipmentsReceived_; }
     ShipmentCount shipmentsRefused() { return shipmentsRefused_; }

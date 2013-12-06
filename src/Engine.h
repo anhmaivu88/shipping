@@ -15,6 +15,7 @@
 #include "Terminal.h"
 #include "Shipment.h"
 #include "Notifiee.h"
+#include "ForwardingActivityReactor.h"
 #include <map>
 #include <vector>
 

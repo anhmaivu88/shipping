@@ -109,8 +109,6 @@ namespace Shipping {
       return ptr;
     }
 
-#include "ForwardingActivityReactor.h"
-
     Location(EntityName name, Type type): Entity(name), type_(type), shipmentsReceived_(0), averageLatency_(0), totalCost_(0) {}
 
 	};
