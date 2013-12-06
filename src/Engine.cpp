@@ -23,8 +23,8 @@ namespace Shipping {
   void Engine::segmentDel(EntityName name) {
     Segment::Ptr targetSegment = segment(name);
     if (targetSegment != NULL) {
-      if (targetSegment->shipmentCount() > 0) {
-        throw new InvalidDeletionTarget("Attempted to delete a segment with active shipments.");
+      if (activityManager()->now() > 0) {
+        throw new InvalidDeletionTarget("Attempted to delete a segment with active shipments in syste,.");
       }
 
       if (targetSegment->returnSegment())
@@ -131,16 +131,10 @@ namespace Shipping {
   void Engine::locationDel(EntityName name) {
     Location::Ptr targetLocation = location(name);
     if (targetLocation != NULL) {
-      if (targetLocation->shipmentCount() > 0) {
+      if (activityManager()->now() > 0) {
         throw new InvalidDeletionTarget("Attempted to delete a location with active shipments.");
       }
 
-      for (auto shipment : shipments_) {
-        if (shipment->destination() == targetLocation) {
-          throw new InvalidDeletionTarget("Attempted to delete a location which is the destination of active shipments.");
-        }
-      }
-      
       for (int i = 0; i < targetLocation->segmentCount(); i++) {
         Segment::Ptr segment = targetLocation->segment(i);
         segment->sourceIs(NULL);
