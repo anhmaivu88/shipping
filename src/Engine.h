@@ -136,16 +136,19 @@ namespace Shipping {
       void onTransferRate(){
         TransferRate rate = customer_->transferRate();
         isTranferRate_ = (rate.value() != 0);
+        checkActivity();
       }
 
       void onShipmentSize(){
         PackageCount size = customer_->shipmentSize();
         isShipmentSize_ = (size.value() != 0);
+        checkActivity();
       }
 
       void onDestination(){
         Location::Ptr dest = customer_->destination();
         isDestination_ = (dest != NULL);
+        checkActivity();
       }
 
       Engine *engine_;
