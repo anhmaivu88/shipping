@@ -3,6 +3,7 @@
 #include <iostream>
 #include <time.h>
 #include <unistd.h>
+#include "Microsecond.h"
 
 Fwk::Ptr<ActivityManager> activityManagerInstance(){
     static Fwk::Ptr<ActivityManager> theManager = new Shipping::ActivityManagerImpl();
@@ -60,7 +61,7 @@ namespace Shipping {
             }
             
             Time now = min(now_ + step, t);
-            usleep((now - now_).value() * 100000);
+            usleep((now - now_).value() * (Microsecond(1000000) / speed_).value());
             now_ = now;
             executeActivities();
         }

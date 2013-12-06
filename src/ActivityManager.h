@@ -29,7 +29,8 @@ public:
     virtual void nowIs(Time) = 0;
     virtual Time step() const = 0;
     virtual void stepIs(Time) = 0;
-
+    virtual Time speed() const = 0;
+    virtual void speedIs(Time) = 0;
 
 private:
 

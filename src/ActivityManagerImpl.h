@@ -12,7 +12,7 @@ namespace Shipping {
     public:
         typedef Fwk::Ptr<ActivityManagerImpl> Ptr;
 
-        ActivityManagerImpl() : now_(Time(0)), step_(Time(0)) {}
+        ActivityManagerImpl() : now_(Time(0)), step_(Time(0)), speed_(Time(10)) {}
 
         Fwk::Ptr<Activity> activityNew();
 
@@ -21,11 +21,15 @@ namespace Shipping {
 
         virtual void stepIs(Time step){ step_ = step; }
         Time step() const { return step_; }
+
+        virtual void speedIs(Time s){ speed_ = s; }
+        Time speed() const { return speed_; }
     protected:
         friend class ActivityManagerReactor;
 
         Time now_;
         Time step_;
+        Time speed_; // hours per second of realtime
 
         struct ActivityComparator {
             bool operator()(const Activity::Ptr left, const Activity::Ptr right){
