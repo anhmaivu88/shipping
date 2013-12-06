@@ -17,9 +17,12 @@ namespace Shipping {
     }
 
     void ActivityManagerImpl::nowIs(Time t){
-        if(now_ != t){
+
+        if(now_ < t){
             now_ = t;
             executeActivities();
+        } else if(now_ > t){
+            throw new ValueOutOfBoundsException("Time moves only forward.");
         }
     }
 
