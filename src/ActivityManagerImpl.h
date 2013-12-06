@@ -12,30 +12,40 @@ namespace Shipping {
     public:
         typedef Fwk::Ptr<ActivityManagerImpl> Ptr;
 
-        ActivityManagerImpl() : now_(Time(0)) {}
+        ActivityManagerImpl() : now_(Time(0)), step_(Time(0)), speed_(Time(10)) {}
 
         Fwk::Ptr<Activity> activityNew();
 
         virtual void nowIs(Time t);
         Time now() const { return now_; }
+
+        virtual void stepIs(Time step){ step_ = step; }
+        Time step() const { return step_; }
+
+        virtual void speedIs(Time s){ speed_ = s; }
+        Time speed() const { return speed_; }
     protected:
         friend class ActivityManagerReactor;
 
         Time now_;
+        Time step_;
+        Time speed_; // hours per second of realtime
+
         struct ActivityComparator {
             bool operator()(const Activity::Ptr left, const Activity::Ptr right){
                 bool lr = left->status() == Activity::Status::ready;
                 bool rr = right->status() == Activity::Status::ready;
-                if(lr && !rr) return true;
-                if(!lr && rr) return false;
+                if(lr && !rr) return false;
+                if(!lr && rr) return true;
 
                 return left->nextTime() > right->nextTime();
             }
         };
         std::priority_queue<Activity::Ptr, std::vector<Activity::Ptr>, ActivityComparator> activities_;
 
+        void simulateVirtual(Time t);
+        void simulateRealtime(Time t);
         void executeActivities();
-
 
         class ActivityManagerReactor : public Activity::Notifiee {
         public:
@@ -62,16 +72,6 @@ namespace Shipping {
             ActivityManagerReactor(ActivityManagerImpl *manager, Activity* act) : Notifiee(act), manager_(manager) {}
 
         };
-
-    };
-
-    class RealtimeActivityManagerImpl : public ActivityManagerImpl {
-    public:
-        RealtimeActivityManagerImpl(Time step) : ActivityManagerImpl(), step_(step) {}
-        void nowIs(Time t);
-    protected:
-        friend class ActivityManagerReactor;
-        Time step_;
 
     };
 }

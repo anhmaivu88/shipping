@@ -73,6 +73,9 @@ int main(int argc, char *argv[]) {
   Ptr<Instance> activityManagerRep = manager->instanceNew("activity manager", "Activity Manager");
   activityManagerRep->attributeIs("time", "3001");
   
+  activityManagerRep->attributeIs("step", "100");
+  activityManagerRep->attributeIs("speed", "100");
+  activityManagerRep->attributeIs("time", "10001");
   
   cout << "Set all attributes." << endl;
 

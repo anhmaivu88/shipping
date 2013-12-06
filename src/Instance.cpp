@@ -415,6 +415,10 @@ namespace Shipping {
     string attribute(const string& name) {
       if (name == "time") {
         return manager_->engine()->activityManager()->now();
+      } else if(name == "step"){
+        return manager_->engine()->activityManager()->step();
+      } else if(name == "speed"){
+        return manager_->engine()->activityManager()->speed();
       }
       
       return "";
@@ -427,6 +431,10 @@ namespace Shipping {
           simulationStarted = true;
         }
         manager_->engine()->activityManager()->nowIs(atof(v.c_str()));
+      } else if(name == "step"){
+        manager_->engine()->activityManager()->stepIs(atof(v.c_str()));
+      } else if(name == "speed"){
+        manager_->engine()->activityManager()->speedIs(atof(v.c_str()));
       }
     }
 
