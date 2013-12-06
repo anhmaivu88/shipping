@@ -9,8 +9,6 @@
 #include "Instance.h"
 #include "Nominal.h"
 #include "Error.h"
-#include "Time.h"
-#include "ShipmentCount.h"
 
 namespace Shipping {
     class TransferRate : public Ordinal<TransferRate, double> {

@@ -10,7 +10,7 @@ public:
   }
 
   void onShipmentAdd(Shipment::Ptr shipment) {
-    Activity::Ptr transferActivity = engine_->activityManager()->activityNew(segment()->name() + " transfer");
+    Activity::Ptr transferActivity = engine_->activityManager()->activityNew();
     transferActivity->notifieeAdd(new TransferActivityReactor(segment(), shipment, transferActivity.ptr()));
     // FIXME: this is incorrect -- it should be how far ahead in the future.
     Fleet::Ptr fleet = engine_->fleet(segment()->type());

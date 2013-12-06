@@ -37,7 +37,7 @@ private:
     if(isNewActivity == isActivity_) return;
     if(isNewActivity){
       // Start activity
-      injectionActivity_ = engine_->activityManager()->activityNew(customer()->name() + "_INJECT");
+      injectionActivity_ = engine_->activityManager()->activityNew();
       InjectionActivityReactor::injectionActivityReactorNew(Fwk::Ptr<Customer>(customer()), injectionActivity_.ptr());
     } else {
       // Kill activity

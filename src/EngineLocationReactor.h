@@ -8,7 +8,7 @@ public:
 
   virtual void onShipmentAdd(Shipment::Ptr shipment) {
     if (forwardingActivity() == NULL) {
-      forwardingActivity_ = engine()->activityManager()->activityNew(location()->name() + " forwarding activity");
+      forwardingActivity_ = engine()->activityManager()->activityNew();
       ForwardingActivityReactor::forwardingActivityReactorNew(location(), forwardingActivity().ptr());
       forwardingActivity()->nextTimeIs(0);
     }
