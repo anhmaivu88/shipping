@@ -45,17 +45,17 @@ namespace Shipping {
     EntityCount segmentCount() { return segments_.size(); }
 
     void shipmentAdd(Shipment::Ptr shipment) { 
-        shipments_.push_back(shipment);
-        for (auto notifiee : notifiees_) {
-            notifiee->onShipmentAdd(shipment);
-        }
+      shipments_.push_back(shipment);
+      for (auto notifiee : notifiees_) {
+        notifiee->onShipmentAdd(shipment);
+      }
     }
 
     void shipmentDel(Shipment::Ptr shipment) { 
-        shipments_.erase(find(shipments_.begin(), shipments_.end(), shipment)); 
-        for (auto notifiee : notifiees_) {
-            notifiee->onShipmentDel(shipment);
-        }
+      shipments_.erase(find(shipments_.begin(), shipments_.end(), shipment)); 
+      for (auto notifiee : notifiees_) {
+        notifiee->onShipmentDel(shipment);
+      }
     }
 
     EntityCount shipmentCount() { return shipments_.size(); }
@@ -78,13 +78,13 @@ namespace Shipping {
 
     class Notifiee : public Fwk::BaseNotifiee<Location> {
     public:
-        typedef Fwk::Ptr<Notifiee> Ptr;
+      typedef Fwk::Ptr<Notifiee> Ptr;
         
-        virtual void onShipmentAdd(Shipment::Ptr shipment) = 0;
-        virtual void onShipmentDel(Shipment::Ptr shipment) = 0;
+      virtual void onShipmentAdd(Shipment::Ptr shipment) {}
+      virtual void onShipmentDel(Shipment::Ptr shipment) {}
 
     protected:
-        Notifiee(Location *loc) : Fwk::BaseNotifiee<Location>(loc) {}
+      Notifiee(Location *loc) : Fwk::BaseNotifiee<Location>(loc) {}
     };
 
     void notifieeAdd(Notifiee::Ptr notifiee) { notifiees_.push_back(notifiee); }
@@ -101,12 +101,12 @@ namespace Shipping {
     Dollar totalCost_;
     vector<Shipment::Ptr> shipments_;
 
-	static Location::Ptr locationNew(EntityName name, Type type){
-		Ptr ptr = new Location(name, type);
-        return ptr;
-	}
+    static Location::Ptr locationNew(EntityName name, Type type){
+      Ptr ptr = new Location(name, type);
+      return ptr;
+    }
 
-    #include "ForwardingActivityReactor.h"
+#include "ForwardingActivityReactor.h"
 
     Location(EntityName name, Type type): Entity(name), type_(type), shipmentsReceived_(0), averageLatency_(0), totalCost_(0) {}
 
@@ -115,46 +115,41 @@ namespace Shipping {
 	class Customer : public Location {
 	public:
 
-        class Notifiee : public Location::Notifiee {
-        public:
-            typedef Fwk::Ptr<Notifiee> Ptr;
+    class Notifiee : public Location::Notifiee {
+    public:
+      typedef Fwk::Ptr<Notifiee> Ptr;
         
-            virtual void onTransferRate() = 0;
-            virtual void onShipmentSize() = 0;
-            virtual void onDestination() = 0;
+      virtual void onTransferRate() = 0;
+      virtual void onShipmentSize() = 0;
+      virtual void onDestination() = 0;
 
-        protected:
-            Notifiee(Customer *loc) : Location::Notifiee(loc) {}
-        };
+    protected:
+      Notifiee(Customer *loc) : Location::Notifiee(loc) {}
+    };
 
-		static Location::Ptr customerNew(EntityName name){ return locationNew(name, customer()); }
-        void transferRateIs(TransferRate transferRate) { 
-            transferRate_ = transferRate; 
-            for (auto notifiee : notifiees_) {
-                Fwk::ptr_cast<Notifiee, Location::Notifiee>(notifiee)->onTransferRate();
-            }
-        }
-        void shipmentSizeIs(PackageCount shipmentSize) { 
-            shipmentSize_ = shipmentSize; 
-            for (auto notifiee : notifiees_) {
-                Fwk::ptr_cast<Notifiee, Location::Notifiee>(notifiee)->onShipmentSize();
-            }
-        }
-        void destinationIs(Location::Ptr destination){
-            destination_ = destination;
-            for (auto notifiee : notifiees_) {
-                Fwk::ptr_cast<Notifiee, Location::Notifiee>(notifiee)->onDestination();
-            }
-        }
+    static Location::Ptr customerNew(EntityName name){ return locationNew(name, customer()); }
 
-        TransferRate transferRate() { return transferRate_; }
-        PackageCount shipmentSize() { return shipmentSize_; }
-        Location::Ptr destination() { return destination_; }
+    void transferRateIs(TransferRate transferRate) { 
+      transferRate_ = transferRate; 
+      for (auto notifiee : notifiees_) { Fwk::ptr_cast<Notifiee, Location::Notifiee>(notifiee)->onTransferRate(); }
+    }
+    void shipmentSizeIs(PackageCount shipmentSize) { 
+      shipmentSize_ = shipmentSize; 
+      for (auto notifiee : notifiees_) { Fwk::ptr_cast<Notifiee, Location::Notifiee>(notifiee)->onShipmentSize(); }
+    }
+    void destinationIs(Location::Ptr destination){
+      destination_ = destination;
+      for (auto notifiee : notifiees_) { Fwk::ptr_cast<Notifiee, Location::Notifiee>(notifiee)->onDestination(); }
+    }
 
-      private:
-        TransferRate transferRate_;
-        PackageCount shipmentSize_;
-        Location::Ptr destination_;
+    TransferRate transferRate() { return transferRate_; }
+    PackageCount shipmentSize() { return shipmentSize_; }
+    Location::Ptr destination() { return destination_; }
+
+  private:
+    TransferRate transferRate_;
+    PackageCount shipmentSize_;
+    Location::Ptr destination_;
 	};
 
 

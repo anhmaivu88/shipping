@@ -2,7 +2,6 @@
 #include "Activity.h"
 
 namespace Shipping {
-  
 }
 
 
