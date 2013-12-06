@@ -19,7 +19,7 @@ namespace Shipping {
       }
     }
 
-  TransferActivityReactor(Segment::Ptr segment, Shipment::Ptr shipment, Activity *activity) : Notifiee(activity), segment_(segment), shipment_(shipment) {}
+    TransferActivityReactor(Segment::Ptr segment, Shipment::Ptr shipment, Activity *activity) : Notifiee(activity), segment_(segment), shipment_(shipment) {}
 
   private:
     Segment::Ptr segment() { return segment_; }

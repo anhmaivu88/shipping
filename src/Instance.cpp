@@ -429,6 +429,28 @@ namespace Shipping {
     void deleteSelf() { }
   };
 
+  class ActivityManagerRep : public InstanceImpl {
+    ActivityManagerRep(const string &name, ManagerImpl *manager) : InstanceImpl(name), manager_(manager) {}
+
+    string attribute(const string& name) {
+      if (name == "time") {
+        return manager_->engine()->activityManager()->now();
+      }
+      
+      return "";
+    }
+
+    void attributeIs(const string &name, const string &v) {
+      if (name == "time") {
+        manager_->engine()->activityManager()->nowIs(atof(v.c_str()));
+      }
+    }
+
+  protected:
+    Ptr<ManagerImpl> manager_;
+    void deleteSelf() { } 
+  };
+
   class FleetRep : public InstanceImpl {
   public:
     FleetRep(const string& name, ManagerImpl* manager) :

@@ -116,7 +116,7 @@ namespace Shipping {
 
       void onShipmentAdd(Shipment::Ptr shipment) {
         Activity::Ptr transferActivity = engine_->activityManager()->activityNew(segment()->name() + " transfer");
-        transferActivity->notifieeAdd(new TransferActivityReactor(segment(), shipment, transferActivity));
+        transferActivity->notifieeAdd(new TransferActivityReactor(segment(), shipment, transferActivity.ptr()));
         transferActivity->nextTimeIs(0);
         transferActivity->statusIs(Activity::Status::ready);
       }
