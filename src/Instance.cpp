@@ -238,6 +238,12 @@ namespace Shipping {
         } else {
           return "no";
         }
+      } else if (name == "Shipments Refused") {
+        return segment()->shipmentsRefused();
+      } else if (name == "Shipments Received") {
+        return segment()->shipmentsReceived();
+      } else if (name == "Capacity") {
+        return segment()->capacity();
       } else {
         cerr << "Invalid attribute " << name << " for segment." << endl;
         return "";
@@ -273,6 +279,8 @@ namespace Shipping {
           } else {
             cerr << "Expedited support must be `yes` or `no` for segment. Got " << v << endl;
           }
+        } else if (name == "Capacity") {
+          segment()->capacityIs(atof(v.c_str()));
         } else {
           cerr << "Unknown attribute " << name << " for segment." << endl;
         }
