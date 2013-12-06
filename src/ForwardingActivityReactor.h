@@ -13,7 +13,8 @@ namespace Shipping {
   class ForwardingActivityReactor : public Activity::Notifiee {
   public: 
     static ForwardingActivityReactor::Ptr forwardingActivityReactorNew(Location::Ptr location, Activity *activity) {
-      return Ptr(new ForwardingActivityReactor(location, activity));
+      Ptr reactor = new ForwardingActivityReactor(location, activity);
+      return reactor;
     }
 
     void onStatus() {
@@ -28,27 +29,27 @@ namespace Shipping {
 
           if (nextSegment->shipmentCount() < nextSegment->capacity()) {
             std::cout << "nextSegment's capacity is: " << nextSegment->capacity().value() << " and its count is " << nextSegment->shipmentCount().value() << std::endl;
+            std::cout << "Forwarding shipment onto: " << nextSegment->name() << " with destination " << nextSegment->returnSegment()->source()->name() << std::endl;
             nextSegment->shipmentAdd(shipment);
             location()->shipmentDel(shipment);
             foundForwardablePackage = true;
-          } else {
-            /* If the segment we want to route on is full, then we create a reactor
-               on the segment that will wake us up when it has free capacity. */
-            std::cout << "capacity was full so we wait a bit." << std::endl;
-          }
+          } 
         }
 
         /* If we're out of shipments, or they're all waiting on capacity to free up, we want to wait. */
         if (location()->shipmentCount() > 0 && foundForwardablePackage) {
           this->notifier()->statusIs(Activity::Status::ready);
         } else {
-          notifier()->nextTimeIs(notifier()->nextTime() + Hour(100));
-          notifier()->statusIs(Activity::Status::ready);
+          notifier()->statusIs(Activity::Status::waiting);
         }
       }
     }
 
-    ForwardingActivityReactor(Location::Ptr location, Activity *activity) : Notifiee(activity), location_(location) {}
+    ForwardingActivityReactor(Location::Ptr location, Activity *activity) : Notifiee(activity), location_(location) {
+      for (int i = 0; i < location->segmentCount(); i++) {
+        new SegmentCapacityReactor(notifier(), location->segment(i).ptr());
+      }
+    }
 
   private:
     Location::Ptr location() { return location_; }
@@ -58,7 +59,6 @@ namespace Shipping {
     public:
       void onShipmentDel(Shipment::Ptr shipment) {
         forwardingActivity()->statusIs(Activity::Status::ready);
-        notifierIs(NULL);
       }
 
       SegmentCapacityReactor(Activity::Ptr forwardingActivity, Segment *segment) : Notifiee(segment), forwardingActivity_(forwardingActivity) {
