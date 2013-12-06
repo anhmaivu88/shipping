@@ -22,7 +22,8 @@ namespace Shipping {
           Segment::Ptr nextSegment = shipment->path().nextSegment(location());
 
           if (nextSegment == NULL) {
-            throw new UnroutableShipmentException("Unable to find route for shipment.");
+            /* FIXME: we need to handle this properly. */
+            // throw new UnroutableShipmentException("Unable to find route for shipment.");
           }
 
           if (nextSegment->shipmentCount() < nextSegment->capacity()) {
