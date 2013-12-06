@@ -33,9 +33,9 @@ namespace Shipping {
 
     InjectionActivityReactor(Customer::Ptr start, Activity *activity) : Notifiee(activity), origin_(start) {}
 
-    Fwk::Ptr<Customer> origin() { return origin_; }
+    Customer::Ptr origin() { return origin_; }
       
-    Fwk::Ptr<Customer> origin_;
+    Customer::Ptr origin_;
   };
 }
 
