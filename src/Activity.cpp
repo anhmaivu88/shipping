@@ -13,14 +13,14 @@ namespace Shipping {
 
 
   private:
+    /* We hold a strong reference here because we want to allow
+       "fire and forget" callbacks. */
     std::vector<Notifiee::Ptr> notifiees_;
     Status status_;
     Time nextTime_;
   };
 
-  
+  void ActivityImpl::statusIs(Status s) { status_ = s; for (auto notifiee : notifiees_) { notifiee->onStatus(); } }
 
-  void ActivityImpl::statusIs(Status s) { }
-
-  void ActivityImpl::nextTimeIs(Time t) { nextTime_ = t; }
+  void ActivityImpl::nextTimeIs(Time t) { nextTime_ = t; for (auto notifiee : notifiees_) { notifiee->onNextTime(); } }
 }

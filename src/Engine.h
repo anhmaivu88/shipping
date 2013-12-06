@@ -16,6 +16,7 @@
 #include "Shipment.h"
 #include "Notifiee.h"
 #include "ForwardingActivityReactor.h"
+#include "TransferActivityReactor.h"
 #include <map>
 #include <vector>
 
