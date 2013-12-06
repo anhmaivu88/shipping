@@ -18,6 +18,7 @@
 #include "ActivityManager.h"
 #include "ForwardingActivityReactor.h"
 #include "TransferActivityReactor.h"
+#include "InjectionActivityReactor.h"
 #include <map>
 #include <vector>
 
@@ -110,6 +111,60 @@ namespace Shipping {
       Engine *engine_;
     private:
       SegmentReactor(Engine *engine, Segment *segment) : Notifiee(segment), engine_(engine) {}
+    };
+
+    class CustomerReactor : public Customer::Notifiee {
+    public:
+      static CustomerReactor::Ptr customerReactorNew(Engine *engine, Customer *customer) {
+        Ptr reactor = new CustomerReactor(engine, customer);
+        return reactor;
+      }
+
+      void onTransferRate(){
+        TransferRate rate = customer_->transferRate();
+        isTranferRate_ = (rate.value() != 0);
+      }
+
+      void onShipmentSize(){
+        PackageCount size = customer_->shipmentSize();
+        isShipmentSize_ = (size.value() != 0);
+      }
+
+      void onDestination(){
+        Location::Ptr dest = customer_->destination();
+        isDestination_ = (dest != NULL);
+      }
+
+      Engine *engine_;
+    private:
+      bool isTranferRate_;
+      bool isShipmentSize_;
+      bool isDestination_;
+      bool isActivity_;
+      InjectionActivityReactor::Ptr react_;
+
+      void checkActivity(){
+        bool isNewActivity = isTranferRate_ && isShipmentSize_ && isDestination_;
+        if(isNewActivity == isActivity_) return;
+        if(isNewActivity){
+          // Start activity
+          Activity::Ptr inject = engine_->activityManager()->activityNew(customer_->name() + "_INJECT");
+          react_ = InjectionActivityReactor::injectionActivityReactorNew(
+            customer_,
+            customer_->transferRate(),
+            customer_->shipmentSize(),
+            customer_->destination(),
+            inject.ptr()
+          );
+        } else {
+          // Kill activity
+          engine_->activityManager()->activityDel(customer_->name() + "_INJECT");
+          react_ = NULL;
+        }
+        isActivity_ = isNewActivity;
+      }
+
+      CustomerReactor(Engine *engine, Customer *customer) : Notifiee(customer), engine_(engine) {}
     };
 
     Engine(EntityName name): Entity<Engine>(name), activityManager_(activityManagerInstance()) {}

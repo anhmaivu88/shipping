@@ -13,6 +13,11 @@ namespace Shipping {
   public:
     typedef Fwk::Ptr<Shipment> Ptr;
 
+    static Shipment::Ptr shipmentNew(LocationPtr source, LocationPtr destination, PackageCount packageCount, PathData path){
+      Ptr ptr = new Shipment(source, destination, packageCount, path);
+      return ptr;
+    }
+
     class Notifiee : public Fwk::BaseNotifiee<Shipment> {
       typedef Fwk::Ptr<Notifiee> Ptr;
       virtual void onArrive(LocationPtr arrivalLocation) {}
@@ -32,6 +37,16 @@ namespace Shipping {
   private:
     typedef Fwk::Ptr<Location> LocationPtr;
     typedef Fwk::Ptr<Segment> SegmentPtr;
+
+    Shipment(LocationPtr source, LocationPtr destination, PackageCount packageCount, PathData path) :
+      source_(source), 
+      destination_(destination), 
+      currentSegment_(NULL), 
+      transitTime_(Hour(0)),
+      shippingCost_(Dollar(0)),
+      packageCount_(packageCount), 
+      path_(path) 
+      {}
 
     LocationPtr source_;
     LocationPtr destination_;

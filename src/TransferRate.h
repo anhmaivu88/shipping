@@ -9,6 +9,8 @@
 #include "Instance.h"
 #include "Nominal.h"
 #include "Error.h"
+#include "Time.h"
+#include "ShipmentCount.h"
 
 namespace Shipping {
     class TransferRate : public Ordinal<TransferRate, double> {
@@ -22,6 +24,7 @@ namespace Shipping {
         void operator+=(TransferRate other){
             value_ += other.value();
         }
+
     };
 }
 #endif

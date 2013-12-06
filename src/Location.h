@@ -120,9 +120,9 @@ namespace Shipping {
     public:
       typedef Fwk::Ptr<Notifiee> Ptr;
         
-      virtual void onTransferRate() = 0;
-      virtual void onShipmentSize() = 0;
-      virtual void onDestination() = 0;
+      virtual void onTransferRate() {};
+      virtual void onShipmentSize() {};
+      virtual void onDestination() {};
 
     protected:
         Notifiee(Customer *loc) : Location::Notifiee(loc), customer_(loc) {}
