@@ -41,6 +41,7 @@ private:
       // Start activity
       injectionActivity_ = engine_->activityManager()->activityNew();
       InjectionActivityReactor::injectionActivityReactorNew(Fwk::Ptr<Customer>(customer()), injectionActivity_.ptr());
+      injectionActivity_->statusIs(Activity::Status::ready);
     } else {
       // Kill activity
       injectionActivity_->statusIs(Activity::Status::deleted);

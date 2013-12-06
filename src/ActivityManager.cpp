@@ -13,7 +13,6 @@ namespace Shipping {
         Activity::Ptr activity =  ActivityImpl::activityNew("activity");
         activity->statusIs(Activity::Status::waiting);
         ActivityManagerReactor::Ptr reactor = ActivityManagerReactor::activityManagerReactorNew(this, activity.ptr());
-        activity->notifieeAdd(reactor.ptr());
         return activity;
     }
 

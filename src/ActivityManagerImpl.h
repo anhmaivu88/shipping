@@ -5,6 +5,7 @@
 #include "ActivityManager.h"
 #include "ActivityImpl.h"
 #include "ActivityTime.h"
+#include <iostream>
 
 namespace Shipping {
     class ActivityManagerImpl : public ActivityManager {
@@ -49,6 +50,7 @@ namespace Shipping {
             }
 
             void onStatus() {
+              std::cout << "Observing status change" << std::endl;
                 Activity::Ptr activity = notifier();
                 if(activity->status() == Activity::Status::ready){
                     manager_->activities_.push(activity);

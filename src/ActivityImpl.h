@@ -41,8 +41,10 @@ namespace Shipping {
   void ActivityImpl::statusIs(Status s) { 
     std::cout << "Changing status." << std::endl;
     if (status_ != s) { 
+      std::cout << "We have a new status." << std::endl;
       status_ = s; 
       for (auto notifiee : notifiees_) { notifiee->onStatus(); } 
+
       if (s == Activity::Status::deleted) {
         for (int i = 0; i < notifiees_.size(); i++) { notifiees_[i]->notifierIs(NULL); notifiees_[i] = NULL; }
       }
