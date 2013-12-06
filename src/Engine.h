@@ -102,108 +102,13 @@ namespace Shipping {
         notifiee->onSegmentPriority(segmentName, priority);
       }
     }
-
-    class SegmentReactor : public Segment::Notifiee {
-    public:
-      static SegmentReactor::Ptr segmentReactorNew(Engine *engine, Segment *segment) {
-        Ptr reactor = new SegmentReactor(engine, segment);
-        return reactor;
-      }
-
-      void onPriority(Segment::Priority priority) {
-        engine_->proxyOnPriority(segment()->name(), priority);
-      }
-
-      void onShipmentAdd(Shipment::Ptr shipment) {
-        Activity::Ptr transferActivity = engine_->activityManager()->activityNew(segment()->name() + " transfer");
-        transferActivity->notifieeAdd(new TransferActivityReactor(segment(), shipment, transferActivity.ptr()));
-        transferActivity->nextTimeIs(0);
-        transferActivity->statusIs(Activity::Status::ready);
-      }
-      
-      Engine *engine_;
-    private:
-      SegmentReactor(Engine *engine, Segment *segment) : Notifiee(segment), engine_(engine) {}
-    };
-
-    class LocationReactor : public Location::Notifiee {
-    public:
-      static locationReactorNew(Engine *engine, Location *location) {
-        Ptr me = new LocationReactor(engine, location);
-        return me;
-      }
-
-      virtual void onShipmentAdd(Shipment::Ptr shipment) {
-        if (forardingActivity() == NULL) {
-          forwardingActivity_ = engine()->activityManager()->activityNew(location->name() + " forwarding activity");
-          forwardingActivity()->nextTimeIs(0);
-        }
-
-        forwardingActivity()->statusIs(Activity::Status::ready);
-      }
-
-    private:
-      Activity::Ptr forwardingActivity() { return forwardingActivity_; }
-      Engine *engine() { return engine_; }
-
-      Activity::Ptr forwardingActivity_;
-      Engine *engine_;
-      LocationReactor(Engine *engine, Location *location) : Notifiee(location), engine_(engine), forwardingActivity_(NULL);
-    }
-
-    class CustomerReactor : public Customer::Notifiee {
-    public:
-      static CustomerReactor::Ptr customerReactorNew(Engine *engine, Customer *customer) {
-        Ptr reactor = new CustomerReactor(engine, customer);
-        return reactor;
-      }
-
-      void onTransferRate(){
-        TransferRate rate = customer_->transferRate();
-        isTranferRate_ = (rate.value() != 0);
-        checkActivity();
-      }
-
-      void onShipmentSize(){
-        PackageCount size = customer_->shipmentSize();
-        isShipmentSize_ = (size.value() != 0);
-        checkActivity();
-      }
-
-      void onDestination(){
-        Location::Ptr dest = customer_->destination();
-        isDestination_ = (dest != NULL);
-        checkActivity();
-      }
-
-      Engine *engine_;
-    private:
-      bool isTranferRate_;
-      bool isShipmentSize_;
-      bool isDestination_;
-      bool isActivity_;
-      InjectionActivityReactor::Ptr react_;
-      Activity::ptr injectionActivity_;
-
-      void checkActivity(){
-        bool isNewActivity = isTranferRate_ && isShipmentSize_ && isDestination_;
-        if(isNewActivity == isActivity_) return;
-        if(isNewActivity){
-          // Start activity
-          injectionActivity_ = engine_->activityManager()->activityNew(customer_->name() + "_INJECT");
-          InjectionActivityReactor::injectionActivityReactorNew(customer_, injectionActivity.ptr());
-        } else {
-          // Kill activity
-          injectionActivity->statusIs(Activity::Status::deleted);
-        }
-        isActivity_ = isNewActivity;
-      }
-
-      CustomerReactor(Engine *engine, Customer *customer) : Notifiee(customer), engine_(engine) {}
-    };
-
+    
+    #include "EngineSegmentReactor.h"
+    #include "EngineLocationReactor.h"
+    #include "EngineCustomerReactor.h"
     Engine(EntityName name): Entity<Engine>(name), activityManager_(activityManagerInstance()) {}
   };
+      
 } /* end namespace */
 
 #endif

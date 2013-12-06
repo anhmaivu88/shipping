@@ -40,6 +40,7 @@ namespace Shipping {
 
   Location::Ptr Engine::customerLocationNew(EntityName name){
   	Location::Ptr customer = Customer::customerNew(name);
+    CustomerReactor::customerReactorNew(this, customer.ptr());
     locationIs(name, customer);
   	return customer;
   }
@@ -117,6 +118,7 @@ namespace Shipping {
 
   void Engine::locationIs(EntityName name, Location::Ptr location) {
     LocationReactor::Ptr reactor = LocationReactor::locationReactorNew(this, location.ptr());
+
     locations_[name] = location;
     for (auto notifiee : notifiees_) {
       try {

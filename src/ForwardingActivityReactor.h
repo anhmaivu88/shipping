@@ -11,6 +11,9 @@
 namespace Shipping {
   class ForwardingActivityReactor : public Activity::Notifiee {
   public: 
+    static ForwardingActivityReactor::Ptr forwardingActivityReactorNew(Location::Ptr location, Activity *activity) {
+      return Ptr(new ForwardingActivityReactor(location, activity));
+    }
 
     void onStatus() {
       /* We attempt to forward a shipment if we are scheduled. We will forward at most 

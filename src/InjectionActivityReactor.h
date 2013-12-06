@@ -10,7 +10,7 @@ namespace Shipping {
   public: 
     typedef Fwk::Ptr<InjectionActivityReactor> Ptr;
 
-    static InjectionActivityReactor::Ptr injectionActivityReactorNew(Location::Ptr start, Activity *activity){
+    static InjectionActivityReactor::Ptr injectionActivityReactorNew(Customer::Ptr start, Activity *activity){
       Ptr ptr = new InjectionActivityReactor(start, activity);
       return ptr;
     }
@@ -31,7 +31,7 @@ namespace Shipping {
 
   private:
 
-    InjectionActivityReactor(Location::Ptr start, Activity *activity) : Notifiee(activity), origin_(start) {}
+    InjectionActivityReactor(Customer::Ptr start, Activity *activity) : Notifiee(activity), origin_(start) {}
 
     Customer::Ptr origin() { return origin_; }
       
