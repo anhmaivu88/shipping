@@ -55,6 +55,7 @@ int main(int argc, char *argv[]) {
   customer->attributeIs("Destination", "terminal2");
 
   Ptr<Instance> activityManagerRep = manager->instanceNew("activity manager", "Activity Manager");
+  activityManagerRep->attributeIs("step", "100");
   activityManagerRep->attributeIs("time", "10001");
   
   

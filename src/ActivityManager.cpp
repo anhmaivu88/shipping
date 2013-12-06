@@ -18,7 +18,13 @@ namespace Shipping {
         return activity;
     }
 
-    void ActivityManagerImpl::nowIs(Time t){
+    void ActivityManagerImpl::nowIs(Time now){
+        if(step_.value() == 0.0) simulateVirtual(now);
+        else simulateRealtime(now);
+    }
+
+    void ActivityManagerImpl::simulateVirtual(Time t){
+        std::cout << "Setting virtual time to " << t.value() << " hours." << endl;
         if(now_ > t) throw new ValueOutOfBoundsException("Time moves only forward.");
         if(now_ == t) return;
         bool ran = false;
@@ -38,7 +44,8 @@ namespace Shipping {
         }
     }
 
-    void RealtimeActivityManagerImpl::nowIs(Time t){
+    void ActivityManagerImpl::simulateRealtime(Time t){
+        std::cout << "Setting time to " << t.value() << " hours in real time." << endl;
         if(now_ > t) throw new ValueOutOfBoundsException("Time moves only forward.");
         if(now_ == t) return;
         while(now_ < t){
