@@ -1,6 +1,51 @@
 user: lmartel
 user: andymo
 
+We solved assignment 3 by using our existing assignment 2 code. 
+
+Part 1:
+
+Our assignment 2 code already used exceptions in most situations to record errors. We were
+catching them at the Rep layer and printing error messages. We moved the logging to where
+the exceptions were thrown and stopped catching the exceptions.
+
+We have defined a few general exception types that encapsulate the kinds of errors that can
+occur in the system. They are found in Error.h
+
+Part 2:
+
+We wrote an activity manager. It is based mostly on the implementation that was shown in 
+the example. We made a few changes to the flow and to the information it tracks. When 
+an activity is created, it is created in the "waiting" state. Also, we do not track
+names of activities. We do not need them in our code because wherever we need to 
+change an activity we have a reference to it.
+
+Furthermore, we made the ActivityManager a subordinate of the engine. We added an
+ActivityManagerRep to the rep layer and time is controlled with this. It is kind of strange
+but we do not think it is any stranger than having an instance for Conn.
+
+Part 3:
+
+We implemented a shipment class and several reactors. The shipment is responsible for knowing
+its route and various statistics about itself.
+
+The reactors are:
+
+InjectionActivityReactor -- responsible for adding shipments to customer nodes.
+ForwardingActivityReactor -- responsible for switching shipments onto segments from locations
+TransferActivityReactor -- responsible for transferring a single shipment along a segment.
+
+These activity reactors and their associated activities are created and controlled by reactors
+that listen to attributes of segments and locations.
+
+
+
+
+
+==============================================================================================
+
+Assignment 2 README:
+
 There is a full unit test suite provided in unit-tests.
 
 Our example program is UnitedStatesCities
