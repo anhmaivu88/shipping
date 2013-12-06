@@ -463,11 +463,7 @@ namespace Shipping {
   public:
     FleetRep(const string& name, ManagerImpl* manager) :
       InstanceImpl(name), manager_(manager)
-    {
-      manager->engine()->fleetNew(Fleet::boat());
-      manager->engine()->fleetNew(Fleet::truck());
-      manager->engine()->fleetNew(Fleet::plane());
-    }
+    {}
 
     string attribute(const string& name) {
       if (status() == Status::DELETED) { printDeletedError(); return ""; }

@@ -103,10 +103,14 @@ namespace Shipping {
       }
     }
     
-    #include "EngineSegmentReactor.h"
-    #include "EngineLocationReactor.h"
-    #include "EngineCustomerReactor.h"
-    Engine(EntityName name): Entity<Engine>(name), activityManager_(activityManagerInstance()) {}
+#include "EngineSegmentReactor.h"
+#include "EngineLocationReactor.h"
+#include "EngineCustomerReactor.h"
+    Engine(EntityName name): Entity<Engine>(name), activityManager_(activityManagerInstance()) {
+      fleetNew(Fleet::boat());
+      fleetNew(Fleet::plane());
+      fleetNew(Fleet::truck());
+    }
   };
       
 } /* end namespace */
