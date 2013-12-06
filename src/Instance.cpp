@@ -443,6 +443,7 @@ namespace Shipping {
         for(auto p2 : locations){
           Location::Ptr dest = p2.second;
           if(me != dest){
+            std::cout << "Building route from " << me->name() << " to " << dest->name() << std::endl;
             Query query(Query::connect_);
             query.startIs(me);
             query.endIs(dest);
