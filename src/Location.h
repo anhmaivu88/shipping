@@ -85,7 +85,9 @@ namespace Shipping {
       virtual void onShipmentDel(Shipment::Ptr shipment) {}
 
     protected:
-      Notifiee(Location *loc) : Fwk::BaseNotifiee<Location>(loc) {}
+        Notifiee(Location *loc) : Fwk::BaseNotifiee<Location>(loc), location_(loc) {}
+        Location *location(){ return location_; }
+        Location *location_;
     };
 
     void notifieeAdd(Notifiee::Ptr notifiee) { notifiees_.push_back(notifiee); }
@@ -125,7 +127,9 @@ namespace Shipping {
       virtual void onDestination() = 0;
 
     protected:
-      Notifiee(Customer *loc) : Location::Notifiee(loc) {}
+        Notifiee(Customer *loc) : Location::Notifiee(loc), customer_(loc) {}
+        Customer *customer(){ return customer_; }
+        Customer *customer_;
     };
 
     static Location::Ptr customerNew(EntityName name){ return locationNew(name, customer()); }
