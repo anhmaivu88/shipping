@@ -7,6 +7,8 @@
 #include "PtrInterface.h"
 #include "Instance.h"
 #include "Nominal.h"
+#include "Error.h"
+#include "float.h"
 
 namespace Shipping {
 	class Hour : public Ordinal<Hour, double> {
