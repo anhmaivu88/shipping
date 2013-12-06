@@ -4,6 +4,7 @@
 #include "Location.h"
 #include "Shipment.h"
 #include "Activity.h"
+#include <iostream>
 
 /** Need to create a reactor on segments if we can't route anything. */
 
@@ -23,7 +24,9 @@ namespace Shipping {
       }
     }
 
-    TransferActivityReactor(Segment::Ptr segment, Shipment::Ptr shipment, Activity *activity) : Notifiee(activity), segment_(segment), shipment_(shipment) {}
+    TransferActivityReactor(Segment::Ptr segment, Shipment::Ptr shipment, Activity *activity) : Notifiee(activity), segment_(segment), shipment_(shipment) {
+      std::cout << "I'm another one of them." << std::endl;
+    }
 
   private:
     Segment::Ptr segment() { return segment_; }

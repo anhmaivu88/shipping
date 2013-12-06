@@ -10,10 +10,12 @@
 namespace Shipping {
   class ActivityImpl : public Activity {
 
-    void notifieeAdd(Notifiee *notifiee) { notifiees_.push_back(notifiee); }
+    void notifieeAdd(Notifiee *notifiee) { 
+      std::cout << "Adding a notifiee to an activity: " << notifiees_.size() << std::endl;
+      notifiees_.push_back(notifiee); }
     void notifieeDel(Notifiee *notifiee) { 
       std::cout << "!!!Attempting to delete a notifier" << std::endl;
-      notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); 
+      notifiees_.erase(std::find(notifiees_.begin(), notifiees_.end(), notifiee)); 
     }
 
     Activity::Status status() const { return status_; }
@@ -25,7 +27,7 @@ namespace Shipping {
   private:
     friend class ActivityManagerImpl;
     /* We hold a strong reference here because we want to allow
-       "fire and forget" callbacks. */
+       "fire and forget" reactors. */
     std::vector<Notifiee::Ptr> notifiees_;
     Status status_;
     Time nextTime_;
@@ -36,9 +38,6 @@ namespace Shipping {
     }
 
     ActivityImpl(const string& name): Activity(name), status_(Status::waiting), nextTime_(Time(0)) {}
-    // ActivityImpl(const string& name, Time time): Activity(name), status_(Status::waiting), nextTime_(time) {}
-    // ActivityImpl(const string& name, Status status): Activity(name), status_(status), nextTime_(Time(0)) {}
-    // ActivityImpl(const string& name, Time time, Status status): Activity(name), status_(status), nextTime_(time) {}
   };
 
   void ActivityImpl::statusIs(Status s) { 
@@ -52,11 +51,10 @@ namespace Shipping {
       for (auto notifiee : notifiees_) { notifiee->onStatus(); } 
 
       if (s == Activity::Status::deleted) {
-        for (int i = 0; i < notifiees_.size(); i++) { 
+        while (notifiees_.size() > 0) {
           std::cout << "Nulling a notifier." << std::endl;
-          std::cout << "Value of i: " << i << std::endl;
           std::cout << "Size: " << notifiees_.size() << std::endl;
-          // notifiees_[i]->notifierIs(NULL); // FIXME uncomment 
+          notifiees_[0]->notifierIs(NULL); // FIXME uncomment 
         }
       }
     }
