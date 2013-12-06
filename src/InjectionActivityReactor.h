@@ -10,20 +10,20 @@ namespace Shipping {
   public: 
     typedef Fwk::Ptr<InjectionActivityReactor> Ptr;
 
-    static InjectionActivityReactor::Ptr injectionActivityReactorNew(Location::Ptr start, TransferRate rate, PackageCount size, Location::Ptr dest, Activity *activity){
-      Ptr ptr = new InjectionActivityReactor(start, rate, size, dest, activity);
+    static InjectionActivityReactor::Ptr injectionActivityReactorNew(Location::Ptr start, Activity *activity){
+      Ptr ptr = new InjectionActivityReactor(start, activity);
       return ptr;
     }
 
     void onStatus() {
       /* Inject new shipment */
       if (notifier()->status() == Activity::Status::executing) {
-        PathData path = origin_->route(destination_->name());
-        origin_->shipmentAdd(Shipment::shipmentNew(origin_, destination_, packageCount_, path));
+        PathData path = origin()->route(origin()->destination()->name());
+        origin()->shipmentAdd(Shipment::shipmentNew(origin(), origin()->destination(), origin()->packageCount(), path));
 
         Activity::Ptr activity = notifier();
-        activity->nextTimeIs(activity->nextTime() + Time(24.0 / transferRate_.value()));
-        activity->statusIs(Activity::Status::waiting);
+        activity->nextTimeIs(activity->nextTime() + Time(24.0 / origin()->transferRate().value()));
+        activity->statusIs(Activity::Status::ready);
       }
     }
 
@@ -31,13 +31,11 @@ namespace Shipping {
 
   private:
 
-    InjectionActivityReactor(Location::Ptr start, TransferRate rate, PackageCount size, Location::Ptr dest, Activity *activity) : 
-      Notifiee(activity), origin_(start), transferRate_(rate), packageCount_(size), destination_(dest) {}
+    InjectionActivityReactor(Location::Ptr start, Activity *activity) : Notifiee(activity), origin_(start) {}
 
-    Location::Ptr origin_;
-    TransferRate transferRate_;
-    PackageCount packageCount_;
-    Location::Ptr destination_;
+    Customer::Ptr origin() { return origin_; }
+      
+    Customer::Ptr origin_;
   };
 }
 
