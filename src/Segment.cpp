@@ -42,4 +42,20 @@ namespace Shipping {
       source_ = location;
     }
   }
+
+  void Segment::shipmentAdd(Shipment::Ptr shipment) {
+    shipments_.push_back(shipment);
+
+    for (auto notifiee : notifiees_) {
+      notifiee->onShipmentAdd(shipment);
+    }
+  }
+
+  void Segment::shipmentDel(Shipment::Ptr shipment) {
+    shipments_.erase(find(shipments_.begin(), shipments_.end(), shipment));
+
+    for (auto notifiee : notifiees_) {
+      notifiee->onShipmentDel(shipment);
+    }
+  }
 }

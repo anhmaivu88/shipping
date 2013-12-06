@@ -44,7 +44,7 @@ namespace Shipping {
     virtual void segmentDel(SegmentPtr segment) { segments_.erase(std::find(segments_.begin(), segments_.end(), segment)); }
     EntityCount segmentCount() { return segments_.size(); }
 
-    void shipmentAdd(Shipment::Ptr shipment) { shipments_.push_back(shipment); scheduleForwardingActivity(shipment); }
+    void shipmentAdd(Shipment::Ptr shipment) { shipments_.push_back(shipment); }
     void shipmentDel(Shipment::Ptr shipment) { shipments_.erase(find(shipments_.begin(), shipments_.end(), shipment)); }
     EntityCount shipmentCount() { return shipments_.size(); }
 
@@ -82,10 +82,6 @@ namespace Shipping {
 
     #include "ForwardingActivityReactor.h"
 
-    void scheduleForwardingActivity(Shipment::Ptr shipment);
-    ActivityManager::Ptr activityManager() { return activityManager_; }
-    ActivityManager::Ptr activityManager_;
-
     Location(EntityName name, Type type): Entity(name), type_(type), shipmentsReceived_(0), averageLatency_(0), totalCost_(0) {}
 	};
 
@@ -94,7 +90,11 @@ namespace Shipping {
 		static Location::Ptr customerNew(EntityName name){ return locationNew(name, customer()); }
     void transferRateIs(TransferRate transferRate) { transferRate_ = transferRate; }
     void shipmentSizeIs(PackageCount shipmentSize) { shipmentSize_ = shipmentSize; }
-    void destinationis(Location::Ptr);
+    void destinationIs(Location::Ptr);
+
+    TransferRate transferRate() { return transferRate_; }
+    PackageCount shipmentSize() { return shipmentSize_; }
+    Location::Ptr destination() { return destination_; }
 
   private:
     TransferRate transferRate_;

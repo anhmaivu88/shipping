@@ -12,6 +12,7 @@
 #include "Entity.h"
 #include "Location.h"
 #include "ShipmentCount.h"
+#include "Shipment.h"
 #include "Notifiee.h"
 #include <iostream>
 
@@ -61,6 +62,9 @@ namespace Shipping {
     Type type() { return type_; }
     ShipmentCount capacity() { return shipmentCapacity_; }
 
+    void shipmentAdd(Shipment::Ptr shipment);
+    void shipmentDel(Shipment::Ptr shipment);
+
     ShipmentCount shipmentsReceived() { return shipmentsReceived_; }
     ShipmentCount shipmentsRefused() { return shipmentsRefused_; }
 
@@ -73,6 +77,8 @@ namespace Shipping {
     public:
       typedef Fwk::Ptr<Notifiee> Ptr;
       virtual void onPriority(Priority priority) {}
+      virtual void onShipmentAdd(Shipment::Ptr shipment) {}
+      virtual void onShipmentDel(Shipment::Ptr shipment) {}
     protected:
       Notifiee(Segment *segment) : BaseNotifiee(segment), segment_(segment) {}
       Segment *segment() { return segment_; }
@@ -111,6 +117,7 @@ namespace Shipping {
        reactors. Furthermore, the engine will never be deleted before
        a segment. */
     std::vector<Notifiee::Ptr> notifiees_;
+    std::vector<Shipment::Ptr> shipments_;
     ShipmentCount shipmentCapacity_;
 
     ShipmentCount shipmentsReceived_;
