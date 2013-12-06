@@ -62,7 +62,7 @@ namespace Shipping {
     EntityCount shipmentCount() { return shipments_.size(); }
 
     void routeIs(EntityName dest, PathData route){
-    	std::vector<PathData> paths = routes_[dest];
+    	std::vector<PathData> & paths = routes_[dest];
     	paths.push_back(route);
     }
 

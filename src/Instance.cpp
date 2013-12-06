@@ -449,6 +449,7 @@ namespace Shipping {
             query.endIs(dest);
             manager_->connectivity()->queryIs(query);
             vector<PathData> routes = manager_->connectivity()->paths();
+            std::cout << routes.size() << " routes found." << endl;
             for(PathData route : routes){
               me->routeIs(dest->name(), route);
             }
