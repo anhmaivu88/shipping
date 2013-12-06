@@ -33,28 +33,6 @@ namespace Shipping {
       connectivity_ = Connectivity::connectivityNew("routing table generator", engine_);
     }
 
-    // Assembles the routing table.
-    // TODO: put this code somewhere sensible
-    void ON_SIMULATION_START(){
-      auto locations = engine_->locations();
-      for(auto p1 : locations){
-        Location::Ptr me = p1.second;
-        for(auto p2 : locations){
-          Location::Ptr dest = p2.second;
-          if(me != dest){
-            Query query(Query::connect_);
-            query.startIs(me);
-            query.endIs(dest);
-            connectivity_->queryIs(query);
-            vector<PathData> routes = connectivity_->paths();
-            for(PathData route : routes){
-              me->routeIs(dest->name(), route);
-            }
-          }
-        }
-      }
-    }
-
     // Manager method
     Ptr<Instance> instanceNew(const string& name, const string& type);
 
@@ -65,6 +43,7 @@ namespace Shipping {
     void instanceDel(const string& name);
 
     Engine::Ptr engine() { return engine_; }
+    Connectivity::Ptr connectivity() { return connectivity_; }
   
   private:
     map<string,Ptr<Instance> > instance_;
@@ -442,13 +421,39 @@ namespace Shipping {
 
     void attributeIs(const string &name, const string &v) {
       if (name == "time") {
+        if(!simulationStarted){
+          finalizeRoutes();
+          simulationStarted = true;
+        }
         manager_->engine()->activityManager()->nowIs(atof(v.c_str()));
       }
     }
 
   protected:
     Ptr<ManagerImpl> manager_;
+    bool simulationStarted;
     void deleteSelf() { } 
+
+    // Assembles the routing table.
+    void finalizeRoutes(){
+      auto locations = manager_->engine()->locations();
+      for(auto p1 : locations){
+        Location::Ptr me = p1.second;
+        for(auto p2 : locations){
+          Location::Ptr dest = p2.second;
+          if(me != dest){
+            Query query(Query::connect_);
+            query.startIs(me);
+            query.endIs(dest);
+            manager_->connectivity()->queryIs(query);
+            vector<PathData> routes = manager_->connectivity()->paths();
+            for(PathData route : routes){
+              me->routeIs(dest->name(), route);
+            }
+          }
+        }
+      }
+    }
   };
 
   class FleetRep : public InstanceImpl {
