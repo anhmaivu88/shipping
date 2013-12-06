@@ -81,8 +81,8 @@ namespace Shipping {
   public:
     enum class Status {
       DELETED,
-      ACTIVE
-    };
+        ACTIVE
+        };
 
     Status status() { return status_; }
     void statusIs(Status status) { 
@@ -125,6 +125,14 @@ namespace Shipping {
         }
       }
 
+      if (name == "Shipments Received") {
+        return location()->shipmentsReceived();
+      } else if (name == "Average Latency") {
+        return location()->averageLatency();
+      } else if (name == "Total Cost") {
+        return location()->totalCost();
+      }
+
       int i = segmentNumber(name);
       if (i != 0) {
         Ptr<Segment> segment = location_->segment(i - 1);
@@ -142,7 +150,34 @@ namespace Shipping {
 
 
     void attributeIs(const string& name, const string& v) {
-      // Mothing to do
+      if (location()->type() != Location::Type::CUSTOMER) {
+        std::cerr << "Non-customer locations have no writable attributes." << std::endl;
+        return;
+      }
+
+      Ptr<Customer> customer = Fwk::ptr_cast<Customer, Location>(location());
+
+      try {
+        if (name == "Transfer Rate") {
+          customer->transferRateIs(atof(v.c_str()));
+        } else if (name == "Shipment Size") {
+          customer->shipmentSizeIs(atof(v.c_str()));
+        } else if (name == "Destination") {
+          if (v == "") { customer->destinationIs(NULL); }
+
+          Ptr<Location> destinationLocation = manager_->engine()->location(v);
+          if (destinationLocation != (Ptr<Location>) NULL) {
+            customer->destinationIs(destinationLocation);
+          } else {
+            throw MissingInstanceException("Location not found.");
+          }
+        } else {
+          std::cerr << "Unknown attribute " << name << " for location." << std::endl;
+        }
+      } catch (...) {
+        std::cerr << "Invalid value [" << v << "] for attribute [" << name <<"]" << std::endl;
+      }
+      
     }
 
   protected:
@@ -203,6 +238,12 @@ namespace Shipping {
         } else {
           return "no";
         }
+      } else if (name == "Shipments Refused") {
+        return segment()->shipmentsRefused();
+      } else if (name == "Shipments Received") {
+        return segment()->shipmentsReceived();
+      } else if (name == "Capacity") {
+        return segment()->capacity();
       } else {
         cerr << "Invalid attribute " << name << " for segment." << endl;
         return "";
@@ -238,6 +279,8 @@ namespace Shipping {
           } else {
             cerr << "Expedited support must be `yes` or `no` for segment. Got " << v << endl;
           }
+        } else if (name == "Capacity") {
+          segment()->capacityIs(atof(v.c_str()));
         } else {
           cerr << "Unknown attribute " << name << " for segment." << endl;
         }
