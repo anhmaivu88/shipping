@@ -20,7 +20,7 @@ namespace Shipping {
     Time nextTime_;
   };
 
-  void ActivityImpl::statusIs(Status s) { status_ = s; for (auto notifiee : notifiees_) { notifiee->onStatus(); } }
+  void ActivityImpl::statusIs(Status s) { if (status_ != s) { status_ = s; for (auto notifiee : notifiees_) { notifiee->onStatus(); } } }
 
-  void ActivityImpl::nextTimeIs(Time t) { nextTime_ = t; for (auto notifiee : notifiees_) { notifiee->onNextTime(); } }
+  void ActivityImpl::nextTimeIs(Time t) { if (nextTime_ != t) { nextTime_ = t; for (auto notifiee : notifiees_) { notifiee->onNextTime(); } } }
 }
