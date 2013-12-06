@@ -40,6 +40,9 @@ namespace Shipping {
 
   void ActivityImpl::statusIs(Status s) { 
     std::cout << "Changing status." << std::endl;
+    if(s == Status::ready) std::cout << "^ (to ready)" << endl;
+    if(s == Status::waiting) std::cout << "^ (to waiting)" << endl;
+
     if (status_ != s) { 
       std::cout << "We have a new status." << std::endl;
       status_ = s; 
