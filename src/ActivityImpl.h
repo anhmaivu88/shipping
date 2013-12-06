@@ -37,7 +37,13 @@ namespace Shipping {
     // ActivityImpl(const string& name, Time time, Status status): Activity(name), status_(status), nextTime_(time) {}
   };
 
-  void ActivityImpl::statusIs(Status s) { if (status_ != s) { status_ = s; for (auto notifiee : notifiees_) { notifiee->onStatus(); } } }
+  void ActivityImpl::statusIs(Status s) { 
+    if (status_ != s) { 
+      status_ = s; 
+      for (auto notifiee : notifiees_) { notifiee->onStatus(); } 
+      for (int i = 0; i < notifiees_.size(); i++) { notifiees_[i]->notifierIs(NULL); notifiees_[i] = NULL; }
+    }
+  }
 
   void ActivityImpl::nextTimeIs(Time t) { if (nextTime_ != t) { nextTime_ = t; for (auto notifiee : notifiees_) { notifiee->onNextTime(); } } }
 }
