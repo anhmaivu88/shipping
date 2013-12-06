@@ -36,8 +36,6 @@ namespace Shipping {
     }
 
     void RealtimeActivityManagerImpl::nowIs(Time t){
-            // usleep(step_.value() * 100000); // sleep 100ms per hour
-            // now_ = min(now_ + step_, t);
         if(now_ > t) throw new ValueOutOfBoundsException("Time moves only forward.");
         if(now_ == t) return;
         while(now_ < t){
