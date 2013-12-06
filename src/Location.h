@@ -45,17 +45,19 @@ namespace Shipping {
     EntityCount segmentCount() { return segments_.size(); }
 
     void shipmentAdd(Shipment::Ptr shipment) { 
-        shipments_.push_back(shipment); scheduleForwardingActivity(shipment); 
+        shipments_.push_back(shipment);
         for (auto notifiee : notifiees_) {
             notifiee->onShipmentAdd(shipment);
         }
     }
+
     void shipmentDel(Shipment::Ptr shipment) { 
         shipments_.erase(find(shipments_.begin(), shipments_.end(), shipment)); 
         for (auto notifiee : notifiees_) {
             notifiee->onShipmentDel(shipment);
         }
     }
+
     EntityCount shipmentCount() { return shipments_.size(); }
 
     void routeIs(EntityName dest, PathData route){
@@ -106,10 +108,6 @@ namespace Shipping {
 
     #include "ForwardingActivityReactor.h"
 
-    void scheduleForwardingActivity(Shipment::Ptr shipment);
-    ActivityManager::Ptr activityManager() { return activityManager_; }
-    ActivityManager::Ptr activityManager_;
-
     Location(EntityName name, Type type): Entity(name), type_(type), shipmentsReceived_(0), averageLatency_(0), totalCost_(0) {}
 
 	};
@@ -149,9 +147,11 @@ namespace Shipping {
             }
         }
 
-        
+        TransferRate transferRate() { return transferRate_; }
+        PackageCount shipmentSize() { return shipmentSize_; }
+        Location::Ptr destination() { return destination_; }
 
-    private:
+      private:
         TransferRate transferRate_;
         PackageCount shipmentSize_;
         Location::Ptr destination_;

@@ -109,6 +109,22 @@ namespace Shipping {
 
     string attribute(const string& name) {
       if (status() == Status::DELETED) { printDeletedError(); return ""; }
+
+      if (location()->type() == Location::Type::CUSTOMER) {
+        Fwk::Ptr<Customer> customer = Fwk::ptr_cast<Customer, Location>(location());
+        if (name == "Transfer Rate") {
+          return customer->transferRate();
+        } else if (name == "Shipment Size") {
+          return customer->shipmentSize();
+        } else if (name == "Destination") {
+          if (customer->destination() != (Location::Ptr) NULL) {
+            return customer->destination()->name();
+          } else {
+            return "";
+          }
+        }
+      }
+
       int i = segmentNumber(name);
       if (i != 0) {
         Ptr<Segment> segment = location_->segment(i - 1);
@@ -118,6 +134,8 @@ namespace Shipping {
           std::cerr << "Segment [" << i << "] was not found for location [" << location()->name() << "]" << std::endl;
           return "";
         }
+      } else {
+        std::cerr << "Invalid attribute [" << name << "] for location [" << location()->name() << "]" << std::endl;
       }
       return "";
     }
