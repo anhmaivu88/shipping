@@ -4,6 +4,7 @@
 #include "Location.h"
 #include "Shipment.h"
 #include "Activity.h"
+#include "Error.h"
 
 /** Need to create a reactor on segments if we can't route anything. */
 
@@ -19,6 +20,11 @@ namespace Shipping {
         for (int i = 0; i < location()->shipmentCount(); i++) {
           Shipment::Ptr shipment = location()->shipment(i);
           Segment::Ptr nextSegment = shipment->path().nextSegment(location());
+
+          if (nextSegment == NULL) {
+            throw new UnroutableShipmentException("Unable to find route for shipment.");
+          }
+
           if (nextSegment->shipmentCount() < nextSegment->capacity()) {
             nextSegment->shipmentAdd(shipment);
             location()->shipmentDel(shipment);

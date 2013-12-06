@@ -19,6 +19,16 @@ namespace Shipping {
   public:
     InvalidAttributeException(const string &message): std::runtime_error(message) {};
   };
+
+  class InvalidDeletionTarget : public std::runtime_error {
+  public:
+    InvalidDeletionTarget(const string &message): std::runtime_error(message) {};
+  };
+
+  class UnroutableShipmentException : public std::runtime_error {
+  public:
+    UnroutableShipmentException(const string &message): std::runtime_error(message) {};
+  };
 }
 
 #endif

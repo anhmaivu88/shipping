@@ -80,6 +80,9 @@ namespace Shipping {
     std::map<EntityName, Segment::Ptr> segments_;
     std::map<EntityName, Location::Ptr> locations_;
     std::map<EntityName, Fleet::Ptr> fleets_;
+
+    /* FIXME: maintain this somewhere */
+    std::vector<Shipment::Ptr> shipments_;
     
     std::vector<Notifiee *> notifiees_;
 
