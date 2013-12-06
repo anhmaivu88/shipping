@@ -54,7 +54,7 @@ namespace Shipping {
         while (notifiees_.size() > 0) {
           std::cout << "Nulling a notifier." << std::endl;
           std::cout << "Size: " << notifiees_.size() << std::endl;
-          notifiees_[0]->notifierIs(NULL); // FIXME uncomment 
+          notifiees_[0]->notifierIs(NULL);
         }
       }
     }

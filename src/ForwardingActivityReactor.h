@@ -26,11 +26,6 @@ namespace Shipping {
           Shipment::Ptr shipment = location()->shipment(i);
           Segment::Ptr nextSegment = shipment->path().nextSegment(location());
 
-          if (nextSegment == NULL) {
-            /* FIXME: we need to handle this properly. */
-            // throw new UnroutableShipmentException("Unable to find route for shipment.");
-          }
-
           if (nextSegment->shipmentCount() < nextSegment->capacity()) {
             std::cout << "nextSegment's capacity is: " << nextSegment->capacity().value() << " and its count is " << nextSegment->shipmentCount().value() << std::endl;
             nextSegment->shipmentAdd(shipment);
