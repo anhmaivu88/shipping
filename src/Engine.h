@@ -155,23 +155,24 @@ namespace Shipping {
       bool isDestination_;
       bool isActivity_;
       InjectionActivityReactor::Ptr react_;
+      Activity::ptr injectionActivity_;
 
       void checkActivity(){
         bool isNewActivity = isTranferRate_ && isShipmentSize_ && isDestination_;
         if(isNewActivity == isActivity_) return;
         if(isNewActivity){
           // Start activity
-          Activity::Ptr inject = engine_->activityManager()->activityNew(customer_->name() + "_INJECT");
+          injectionActivity_ = engine_->activityManager()->activityNew(customer_->name() + "_INJECT");
           react_ = InjectionActivityReactor::injectionActivityReactorNew(
             customer_,
             customer_->transferRate(),
             customer_->shipmentSize(),
             customer_->destination(),
-            inject.ptr()
+            injectionActivity.ptr()
           );
         } else {
           // Kill activity
-          engine_->activityManager()->activityDel(customer_->name() + "_INJECT");
+          injectionActivity->statusIs(Activity::Status::deleted);
           react_ = NULL;
         }
         isActivity_ = isNewActivity;
