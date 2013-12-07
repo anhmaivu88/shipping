@@ -51,7 +51,6 @@ namespace Shipping {
         public:
             typedef Fwk::Ptr<ActivityManagerReactor> Ptr;
             static ActivityManagerReactor::Ptr activityManagerReactorNew(ActivityManagerImpl *manager, Activity* act){
-              std::cout << "I'm one of them." << std::endl;
                 Ptr ptr = new ActivityManagerReactor(manager, act);
                 return ptr;
             }
@@ -60,7 +59,6 @@ namespace Shipping {
             }
 
             void onStatus() {
-              std::cout << "Observing status change" << std::endl;
                 Activity::Ptr activity = notifier();
                 if(activity->status() == Activity::Status::ready){
                     manager_->activities_.push(activity);

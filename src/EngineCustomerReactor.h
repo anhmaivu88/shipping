@@ -33,12 +33,10 @@ private:
   Activity::Ptr injectionActivity_;
 
   void checkActivity(){
-    std::cout << "Attempting to add injector" << std::endl;
     bool isNewActivity = isTranferRate_ && isShipmentSize_ && isDestination_;
     if(isNewActivity == isActivity_) return;
 
     if(isNewActivity){
-      std::cout << "Adding injector." << std::endl;
       // Start activity
       injectionActivity_ = engine_->activityManager()->activityNew();
       InjectionActivityReactor::injectionActivityReactorNew(Fwk::Ptr<Customer>(customer()), injectionActivity_.ptr());

@@ -21,15 +21,12 @@ namespace Shipping {
       /* We attempt to forward a shipment if we are scheduled. We will forward at most 
          one per execution, although we will potentially check all of the shipments. */
       if (notifier()->status() == Activity::Status::executing) {
-        std::cout << "Attempting to route packages on " << location()->name() << std::endl;
         bool foundForwardablePackage = false;
         for (int i = 0; i < location()->shipmentCount(); i++) {
           Shipment::Ptr shipment = location()->shipment(i);
           Segment::Ptr nextSegment = shipment->path().nextSegment(location());
 
           if (nextSegment->shipmentCount() < nextSegment->capacity()) {
-            std::cout << "nextSegment's capacity is: " << nextSegment->capacity().value() << " and its count is " << nextSegment->shipmentCount().value() << std::endl;
-            std::cout << "Forwarding shipment onto: " << nextSegment->name() << " with destination " << nextSegment->returnSegment()->source()->name() << std::endl;
             nextSegment->shipmentsReceivedInc();
             nextSegment->shipmentAdd(shipment);
             location()->shipmentDel(shipment);

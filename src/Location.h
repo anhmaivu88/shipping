@@ -157,14 +157,12 @@ namespace Shipping {
     };
 
     void shipmentsReceivedInc() { 
-      std::cout << "Incrementing shipments received to " << shipmentsReceived_.value() + 1 << " on location " << name() << std::endl;
       shipmentsReceived_ += 1; 
     }
     void costInc(Dollar cost) { totalCost_ += cost; }
     void latencyAdd(Hour latency) { latency_.push_back(latency); }
 
     void recordDelivery(Shipment::Ptr shipment) {
-      std::cout << "RECORDING DELIVERY" << std::endl;
       shipmentsReceivedInc();
       latencyAdd(shipment->transitTime());
       costInc(shipment->shippingCost());

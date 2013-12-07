@@ -478,13 +478,11 @@ namespace Shipping {
         for(auto p2 : locations){
           Location::Ptr dest = p2.second;
           if(me != dest){
-            cout << "Building route from " << me->name() << " to " << dest->name() << endl;
             Query query(Query::connect_);
             query.startIs(me);
             query.endIs(dest);
             manager_->connectivity()->queryIs(query);
             vector<PathData> routes = manager_->connectivity()->paths();
-            cout << routes.size() << " routes found." << endl;
             for(PathData route : routes){
               me->routeIs(dest->name(), route);
             }

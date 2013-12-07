@@ -12,10 +12,8 @@ namespace Shipping {
   class ActivityImpl : public Activity {
 
     void notifieeAdd(Notifiee *notifiee) { 
-      std::cout << "Adding a notifiee to an activity: " << notifiees_.size() << std::endl;
       notifiees_.push_back(notifiee); }
     void notifieeDel(Notifiee *notifiee) { 
-      std::cout << "!!!Attempting to delete a notifier" << std::endl;
       notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); 
     }
 
@@ -42,19 +40,12 @@ namespace Shipping {
   };
 
   void ActivityImpl::statusIs(Status s) { 
-    std::cout << "Changing status." << std::endl;
-    if(s == Status::ready) std::cout << "^ (to ready)" << endl;
-    if(s == Status::waiting) std::cout << "^ (to waiting)" << endl;
-
     if (status_ != s) { 
-      std::cout << "We have a new status." << std::endl;
       status_ = s; 
       for (auto notifiee : notifiees_) { notifiee->onStatus(); } 
 
       if (s == Activity::Status::deleted) {
         while (notifiees_.size() > 0) {
-          std::cout << "Nulling a notifier." << std::endl;
-          std::cout << "Size: " << notifiees_.size() << std::endl;
           notifiees_[0]->notifierIs(NULL);
         }
       }

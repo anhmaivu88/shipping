@@ -17,7 +17,6 @@ namespace Shipping {
         segment()->shipmentDel(shipment());
         if (segment()->returnSegment()->source() == shipment()->destination()) {
           shipment()->lastTimeIs(Hour(notifier()->nextTime().value()));
-          std::cout << "YAY IT ARRIVED!!!!" << std::endl;
         } 
         
         segment()->returnSegment()->source()->shipmentAdd(shipment());
@@ -25,9 +24,7 @@ namespace Shipping {
       }
     }
 
-    TransferActivityReactor(Segment::Ptr segment, Shipment::Ptr shipment, Activity *activity) : Notifiee(activity), segment_(segment), shipment_(shipment) {
-      std::cout << "I'm another one of them." << std::endl;
-    }
+    TransferActivityReactor(Segment::Ptr segment, Shipment::Ptr shipment, Activity *activity) : Notifiee(activity), segment_(segment), shipment_(shipment) {}
 
   private:
     Segment::Ptr segment() { return segment_; }

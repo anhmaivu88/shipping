@@ -16,7 +16,6 @@ namespace Shipping {
 
     static Shipment::Ptr shipmentNew(LocationPtr source, LocationPtr destination, PackageCount packageCount, PathData path, Hour startTime){
       Ptr ptr = new Shipment(source, destination, packageCount, path, startTime);
-      std::cout << "Creating a shipment." << std::endl;
       return ptr;
     }
 

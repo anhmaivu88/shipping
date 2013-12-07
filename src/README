@@ -200,8 +200,36 @@ B-A's capacity at 2.
 These experiments were the things that we used to verify to ourselves that our code was working.
 
 
+Experiment
+--------------
+Results from "all shipments size 100":
+- Refused shipments (delivery segment) : 0.00
+- Refused shipments (all segments) : 9.60072e+07
+- Delivered shipments: 9900.00
+- Average latency: 3924.00
+- Total cost: 19800.00
+
+These numbers make sense. The customers put out a shipment of 100 packages each hour. Given the configuration
+each segment can handle 10 shipments at once and a shipment takes 100 hours to be delivered, so the customers
+can force 1000 shipments each through to the first-level depots in the allotted 10000 hours. Each first-level
+depot receives 10000 shipments, and it similarly can force only 1000 through to the root node. The root node
+processes as fast as it can, pushing through 
+
+
+
+Results from "each shipment random size in [1, 1000]"
+- Refused shipments (delivery segment) : 0.00
+- Refused shipments (all segments) : 3.65314e+07
+- Delivered shipments: 3025.00
+- Average latency: 4241.29
+- Total cost: 6050.00
+
+These numbers make sense.
+Since the segment capacity is 10 and there are 10 aggregation terminals feeding into the root terminal,
+we get a lot of bottlenecking in the aggregation
+
 OTHER NOTES:
-=======
+============
 
 We decided to change BaseNotifiee so that Notifier classes maintain a list of Notifiees rather than
 a single one. This proved useful in our code as we have several notifiees on single objects frequently.

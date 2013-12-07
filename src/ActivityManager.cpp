@@ -25,14 +25,12 @@ namespace Shipping {
     }
 
     void ActivityManagerImpl::simulateVirtual(Time t){
-        std::cout << "Setting virtual time to " << t.value() << " hours." << endl;
         if(now_ > t) std::cerr << "Attempted to move time backwards." << std::endl;
         if(now_ >= t) return;
         bool ran = false;
         while(now_ < t && !activities_.empty()){
             Activity::Ptr next = activities_.top();
             if(next->status() != Activity::Status::ready) {
-              std::cout << "WTF THIS SHOULD NEVER HAPPEN" << std::endl;
               break;
             }
             now_ = min(max(now_, next->nextTime()), t);
@@ -46,7 +44,6 @@ namespace Shipping {
     }
 
     void ActivityManagerImpl::simulateRealtime(Time t){
-        std::cout << "Setting time to " << t.value() << " hours in real time." << endl;
         if(now_ > t) std::cerr << "Attempted to move time backwards." << std::endl;
         if(now_ >= t) return;
         while(now_ < t){
@@ -68,29 +65,21 @@ namespace Shipping {
     }
 
     void ActivityManagerImpl::executeActivities() {
-      std::cout << "-----" << std::endl;
-      std::cout << "It's currently: " << now_.value() << " hours." << std::endl;
+      std::cout << "The time is " << now_ << std::endl;
       std::priority_queue<Activity::Ptr, std::vector<Activity::Ptr>, ActivityComparator> queueCopy = activities_;
       while (!queueCopy.empty()) {
         Activity::Ptr activity = queueCopy.top();
         queueCopy.pop();
-        std::cout << "Item in queue scheduled @: " << activity->nextTime().value() << std::endl;
       }
     
-      std::cout << "-----" << std::endl;
-
-      std::cout << "Attempting to execute activites." << std::endl;
         while(!activities_.empty()){
-          std::cout << "Found an activity." << std::endl;
             Activity::Ptr next = activities_.top();
             if(next->status() != Activity::Status::ready) {
-              std::cout << "THIS IS NEVER SUPPOSED TO HAPPEN WTF" << std::endl;
               break;
             }
             if(next->nextTime() > now_) break;
             activities_.pop();
             next->statusIs(Activity::Status::executing);
-            std::cout << "Executing activity." << std::endl;
         }
     }
 

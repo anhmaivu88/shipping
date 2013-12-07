@@ -13,15 +13,12 @@ namespace Shipping {
 
     static InjectionActivityReactor::Ptr injectionActivityReactorNew(Customer::Ptr start, Activity *activity){
       Ptr ptr = new InjectionActivityReactor(start, activity);
-      std::cout << "Injector created." << std::endl;
       return ptr;
     }
 
     void onStatus() {
       /* Inject new shipment */
       if (notifier()->status() == Activity::Status::executing) {
-        std::cout << "Injection a shipment at " << origin()->name() << std::endl;
-        std::cout << "Attempting to route to: " << origin()->destination()->name() << std::endl;
         PathData path = origin()->route(origin()->destination()->name());
         origin()->shipmentAdd(Shipment::shipmentNew(origin(),
                                                     origin()->destination(), 
@@ -30,7 +27,6 @@ namespace Shipping {
                                                     Hour(notifier()->nextTime().value())));
 
         Activity::Ptr activity = notifier();
-        std::cout << "Rescheduling injection activity for time: " << (activity->nextTime() + Time(24.0 / origin()->transferRate().value())).value() << std::endl;
         activity->nextTimeIs(activity->nextTime() + Time(24.0 / origin()->transferRate().value()));
         activity->statusIs(Activity::Status::ready);
       }

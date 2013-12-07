@@ -10,7 +10,6 @@ namespace Shipping {
 	using namespace std;
 
 	void Connectivity::queryIs(Query query){
-		cout << "Running connectivity query" << endl;
 		paths_.clear();
 		query_ = query;
 		vector<Path> paths;
@@ -29,9 +28,7 @@ namespace Shipping {
 
 		stringstream output;
 		for(Path & p : paths){
-			cout << "Found path!" << endl;
 			paths_.push_back(p.data());
-			cout << p.summary(query.type()) << endl;
 			output << p.summary(query.type()) << endl;
 		}
 		result_ = output.str();
