@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 
   Ptr<Instance> customer = manager->instanceNew("customer1", "Customer");
   Ptr<Instance> a = manager->instanceNew("terminal1", "Truck terminal");
-  Ptr<Instance> secondterminal = manager->instanceNew("terminal2", "Truck terminal");
+  Ptr<Instance> secondterminal = manager->instanceNew("terminal2", "Customer");
   Ptr<Instance> anotherFirstTerminal = manager->instanceNew("terminal3", "Customer");
 
   if (a == NULL) {

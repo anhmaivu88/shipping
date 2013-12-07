@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
       } else {
         source->attributeIs("Shipment Size", "100");
       }
-      source->attributeIs("Destination", terminal->name());
+      source->attributeIs("Destination", destination->name());
       source->attributeIs("Transfer Rate", "1");
     }
   }

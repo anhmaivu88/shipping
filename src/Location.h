@@ -154,7 +154,10 @@ namespace Shipping {
       LocationShipmentMonitor(Location *location) : Notifiee(location) { }
     };
 
-    void shipmentsReceivedInc() { shipmentsReceived_ += 1; }
+    void shipmentsReceivedInc() { 
+      std::cout << "Incrementing shipments received to " << shipmentsReceived_.value() + 1 << " on location " << name() << std::endl;
+      shipmentsReceived_ += 1; 
+    }
     void costInc(Dollar cost) { totalCost_ += cost; }
     void latencyAdd(Hour latency) { latency_.push_back(latency); }
 
