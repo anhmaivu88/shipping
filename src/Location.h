@@ -16,6 +16,7 @@
 #include "PathData.h"
 #include "Shipment.h"
 #include <numeric>
+#include <math.h>
 
 namespace Shipping {
 	class Connectivity;
@@ -78,7 +79,8 @@ namespace Shipping {
         std::cerr << "No routes found" << std::endl;
         throw new InvalidAttributeException("No routes found");
       }
-    	return paths[0]; // TODO: choose best path?
+      int choice = floor(rand() % paths.size()); // choose random path for load distribution
+    	return paths[choice];
     }
 
     ShipmentCount shipmentsReceived() { return shipmentsReceived_; }

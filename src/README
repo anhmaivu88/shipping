@@ -49,6 +49,11 @@ every pair A,B of nodes and record all possible routes from node A to node B. Th
 startup time but speeds up building the network and running the simulation, which we thought was a
 reasonable tradeoff.
 
+Optimization
+------------
+Calculating every possible route from A to B allows us to pick a random route for each package, which
+helps evenly distribute packages over the network to reduce congestion.
+
 Part 4
 ======
 
