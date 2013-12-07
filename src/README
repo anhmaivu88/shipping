@@ -203,30 +203,33 @@ These experiments were the things that we used to verify to ourselves that our c
 Experiment
 --------------
 Results from "all shipments size 100":
-- Refused shipments (delivery segment) : 0.00
-- Refused shipments (all segments) : 9.60072e+07
-- Delivered shipments: 9900.00
-- Average latency: 3924.00
-- Total cost: 19800.00
+Received shipments: 990.00
+Refused shipments (delivery segment) : 52923624.00
+Refused shipments (all segments) : 1.48927e+08
+Delivered shipments: 980.00
+Average latency: 5044.20
+Total cost: 2940.00
 
 These numbers make sense. The customers put out a shipment of 100 packages each hour. Given the configuration
 each segment can handle 10 shipments at once and a shipment takes 100 hours to be delivered, so the customers
 can force 1000 shipments each through to the first-level depots in the allotted 10000 hours. Each first-level
-depot receives 10000 shipments, and it similarly can force only 1000 through to the root node. The root node
-processes as fast as it can, pushing through 
-
+depot receives 10000 shipments, and it similarly can force only just under 1000 through to the root node. The root node
+processes as fast as it can, pushing through (again) just under 1000 shipments (down from 1000 because of the delay in reaching
+the root node with the first packages), giving us 980 delivered shipments and a whole lot of rejected ones.
 
 
 Results from "each shipment random size in [1, 1000]"
-- Refused shipments (delivery segment) : 0.00
-- Refused shipments (all segments) : 3.65314e+07
-- Delivered shipments: 3025.00
-- Average latency: 4241.29
-- Total cost: 6050.00
+Received shipments: 618.00
+Refused shipments (delivery segment) : 4687099.00
+Refused shipments (all segments) : 4.12208e+07
+Delivered shipments: 608.00
+Average latency: 3791.12
+Total cost: 1824.00
 
-These numbers make sense.
-Since the segment capacity is 10 and there are 10 aggregation terminals feeding into the root terminal,
-we get a lot of bottlenecking in the aggregation
+These new numbers make sense. The previous shipment sizes filled up the network with packages and bottlenecked
+and the root. Introducing random shipment sizes won't make it go faster--we're going as fast as we can--but it
+can potentially make things slower if an unfortunate series of random sizes leaves some segment under capacity.
+It does, however, considerably reduce the average latency for the same reason.
 
 OTHER NOTES:
 ============
