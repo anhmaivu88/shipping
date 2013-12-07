@@ -3,7 +3,8 @@ user: andymo
 
 We solved assignment 3 by using our existing assignment 2 code. 
 
-Part 1:
+Part 1
+======
 
 Our assignment 2 code already used exceptions in most situations to record errors. We were
 catching them at the Rep layer and printing error messages. We moved the logging to where
@@ -12,7 +13,8 @@ the exceptions were thrown and stopped catching the exceptions.
 We have defined a few general exception types that encapsulate the kinds of errors that can
 occur in the system. They are found in Error.h
 
-Part 2:
+Part 2
+======
 
 We wrote an activity manager. It is based mostly on the implementation that was shown in 
 the example. We made a few changes to the flow and to the information it tracks. When 
@@ -24,7 +26,8 @@ Furthermore, we made the ActivityManager a subordinate of the engine. We added a
 ActivityManagerRep to the rep layer and time is controlled with this. It is kind of strange
 but we do not think it is any stranger than having an instance for Conn.
 
-Part 3:
+Part 3
+======
 
 We implemented a shipment class and several reactors. The shipment is responsible for knowing
 its route and various statistics about itself.
@@ -38,7 +41,25 @@ TransferActivityReactor -- responsible for transferring a single shipment along 
 These activity reactors and their associated activities are created and controlled by reactors
 that listen to attributes of segments and locations.
 
+Routing
+-------
+We preprocess the network at the start of the simulation (the first time the client sets the `now`
+attribute through the activityManagerRep) to generate routing tables. We run a Connect query between
+every pair A,B of nodes and record all possible routes from node A to node B. This increases simulation
+startup time but speeds up building the network and running the simulation, which we thought was a
+reasonable tradeoff.
 
+Part 4
+======
+
+We implemented the realtime activity manager by adding optional `step` and `speed` attributes
+to the activity manager. `step` is the maximum number of hours forward through time the manager
+is allowed to move before logging its progress (though it will stop earlier if an activity needs
+to execute). `step` = 0 signifies virtual time, and `step` > 0 turns on realtime simulation.
+The `speed` attribute sets the number of virtual hours that should pass per wall-clock second.
+
+Part 5
+======
 
 
 
