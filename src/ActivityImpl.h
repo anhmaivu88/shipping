@@ -6,6 +6,7 @@
 #include "ActivityManagerImpl.h"
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 namespace Shipping {
   class ActivityImpl : public Activity {
@@ -15,7 +16,7 @@ namespace Shipping {
       notifiees_.push_back(notifiee); }
     void notifieeDel(Notifiee *notifiee) { 
       std::cout << "!!!Attempting to delete a notifier" << std::endl;
-      notifiees_.erase(std::find(notifiees_.begin(), notifiees_.end(), notifiee)); 
+      notifiees_.erase(find(notifiees_.begin(), notifiees_.end(), notifiee)); 
     }
 
     Activity::Status status() const { return status_; }
