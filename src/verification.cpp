@@ -45,6 +45,7 @@ int main(int argc, char *argv[]) {
   d->attributeIs("return segment", "seg4");
   f->attributeIs("return segment", "seg6");
 
+  // segment b corresponds to C-B in the readme, and f is D-B. d is B-A
   b->attributeIs("Capacity", "1");
   f->attributeIs("Capacity", "1");
   d->attributeIs("Capacity", "10");
