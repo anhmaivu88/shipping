@@ -74,7 +74,7 @@ namespace Shipping {
     InstanceImpl(const string &name) : Instance(name), status_(Status::ACTIVE) {}
     Status status_;
 
-    static void printDeletedError() { 
+    static void printDeletedError() {
       cerr << "Attempted to access attribute of deleted instance." << endl; 
       throw new MissingInstanceException("Cannot access attribute of deleted instance");
     }
@@ -168,7 +168,9 @@ namespace Shipping {
     int segmentNumber(const string& name);
 
     virtual void deleteSelf() { 
-      manager_->engine()->locationDel(location_->name());
+      try {
+        manager_->engine()->locationDel(location_->name());
+      } catch(InvalidDeletionTarget &e) { statusIs(Status::ACTIVE); throw; }
       location_ = NULL;
     }
   };
@@ -279,7 +281,9 @@ namespace Shipping {
     Segment::Ptr segment_;
 
     void deleteSelf() { 
-      manager_->engine()->segmentDel(segment_->name());
+      try {
+        manager_->engine()->segmentDel(segment_->name());
+      } catch(InvalidDeletionTarget &e) { statusIs(Status::ACTIVE); throw; }
       segment_ = NULL;
     }
   };
