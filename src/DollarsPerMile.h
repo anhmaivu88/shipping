@@ -13,11 +13,17 @@ namespace Shipping {
     public:
 
         DollarsPerMile(double num) : Ordinal<DollarsPerMile, double>(num) {
-          if (num < 0) { throw new ValueOutOfBoundsException("Capacity must be a positive integer."); }
+            if (num < 0) { 
+                std::cerr << "Capacity must be a positive integer" << std::endl;
+                throw new ValueOutOfBoundsException("Capacity must be a positive integer."); 
+            }
         }
 
         void operator*=(double scalar){
-            if (scalar < 0) { throw new ValueOutOfBoundsException("Dollars per mile must be positive."); }
+            if (scalar < 0) { 
+                std::cerr << "DollarsPerMile must be a positive integer" << std::endl;
+                throw new ValueOutOfBoundsException("Dollars per mile must be positive."); 
+            }
             value_ *= scalar;
         }
     };

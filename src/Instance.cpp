@@ -74,7 +74,10 @@ namespace Shipping {
     InstanceImpl(const string &name) : Instance(name), status_(Status::ACTIVE) {}
     Status status_;
 
-    static void printDeletedError() { std::cerr << "Attempted to access attribute of deleted instance." << std::endl; }
+    static void printDeletedError() { 
+      cerr << "Attempted to access attribute of deleted instance." << endl; 
+      throw new MissingInstanceException("Cannot access attribute of deleted instance");
+    }
   };
 
   class LocationRep : public InstanceImpl {
@@ -118,11 +121,12 @@ namespace Shipping {
         if (segment) {
           return segment->name();
         } else {
-          std::cerr << "Segment [" << i << "] was not found for location [" << location()->name() << "]" << std::endl;
-          return "";
+          cerr << "Segment [" << i << "] was not found for location [" << location()->name() << "]" << endl;
+          throw new MissingInstanceException("Segment not found");
         }
       } else {
-        std::cerr << "Invalid attribute [" << name << "] for location [" << location()->name() << "]" << std::endl;
+        cerr << "Invalid attribute [" << name << "] for location [" << location()->name() << "]" << endl;
+        throw new InvalidAttributeException("Invalid attribute for Location");
       }
       return "";
     }
@@ -130,33 +134,30 @@ namespace Shipping {
 
     void attributeIs(const string& name, const string& v) {
       if (location()->type() != Location::Type::CUSTOMER) {
-        std::cerr << "Non-customer locations have no writable attributes." << std::endl;
-        return;
+        cerr << "Non-customer locations have no writable attributes." << endl;
+        throw new InvalidAttributeException("Invalid attribute for Location");
       }
 
       Ptr<Customer> customer = Fwk::ptr_cast<Customer, Location>(location());
 
-      try {
-        if (name == "Transfer Rate") {
-          customer->transferRateIs(atof(v.c_str()));
-        } else if (name == "Shipment Size") {
-          customer->shipmentSizeIs(atof(v.c_str()));
-        } else if (name == "Destination") {
-          if (v == "") { customer->destinationIs(NULL); }
+      if (name == "Transfer Rate") {
+        customer->transferRateIs(atof(v.c_str()));
+      } else if (name == "Shipment Size") {
+        customer->shipmentSizeIs(atof(v.c_str()));
+      } else if (name == "Destination") {
+        if (v == "") { customer->destinationIs(NULL); }
 
-          Ptr<Location> destinationLocation = manager_->engine()->location(v);
-          if (destinationLocation != (Ptr<Location>) NULL) {
-            customer->destinationIs(destinationLocation);
-          } else {
-            throw MissingInstanceException("Location not found.");
-          }
+        Ptr<Location> destinationLocation = manager_->engine()->location(v);
+        if (destinationLocation != (Ptr<Location>) NULL) {
+          customer->destinationIs(destinationLocation);
         } else {
-          std::cerr << "Unknown attribute " << name << " for location." << std::endl;
+          cerr << "Location not found." << endl;
+          throw MissingInstanceException("Location not found.");
         }
-      } catch (...) {
-        std::cerr << "Invalid value [" << v << "] for attribute [" << name <<"]" << std::endl;
+      } else {
+        cerr << "Unknown attribute " << name << " for location." << endl;
+        throw InvalidAttributeException("Attribute not found for Location.");
       }
-      
     }
 
   protected:
@@ -225,46 +226,50 @@ namespace Shipping {
         return segment()->capacity();
       } else {
         cerr << "Invalid attribute " << name << " for segment." << endl;
-        return "";
+        throw InvalidAttributeException("Attribute not found for Segment.");
       }
     }
 
     void attributeIs(const string& name, const string& v){
       if (status() == Status::DELETED) { printDeletedError(); return; }
 
-      try {
-        if (name == "source") {
-          if (v == "") { return segment()->sourceIs(NULL); }
-          Ptr<Location> sourceLocation = manager_->engine()->location(v);
-          if (sourceLocation == NULL) throw new MissingInstanceException("Location not found.");
-          return segment()->sourceIs(sourceLocation);
-        } else if (name == "length") {
-          return segment()->lengthIs(atof(v.c_str()));
-        } else if (name == "return segment") {
-          if(v == ""){
-            segment()->returnSegmentIs(NULL);
-          } else {
-            Ptr<Segment> returnSegment = manager_->engine()->segment(v);
-            if (returnSegment == NULL) throw new MissingInstanceException("Segment not found.");
-            return segment()->returnSegmentIs(returnSegment);
-          }
-        } else if (name == "difficulty") {
-          return segment()->difficultyIs(atof(v.c_str()));
-        } else if (name == "expedite support") {
-          if (v == "yes") {
-            segment()->priorityIs(Segment::Priority::EXPEDITED);
-          } else if (v == "no") {
-            segment()->priorityIs(Segment::Priority::NORMAL);
-          } else {
-            cerr << "Expedited support must be `yes` or `no` for segment. Got " << v << endl;
-          }
-        } else if (name == "Capacity") {
-          segment()->capacityIs(atof(v.c_str()));
-        } else {
-          cerr << "Unknown attribute " << name << " for segment." << endl;
+      if (name == "source") {
+        if (v == "") { return segment()->sourceIs(NULL); }
+        Ptr<Location> sourceLocation = manager_->engine()->location(v);
+        if (sourceLocation == NULL){
+          cerr << "Location not found." << endl;
+          throw new MissingInstanceException("Location not found.");
         }
-      } catch (...) {
-        cerr << "Invalid value [" << v << "] for attribute: [" << name << "]" << endl;
+        return segment()->sourceIs(sourceLocation);
+      } else if (name == "length") {
+        return segment()->lengthIs(atof(v.c_str()));
+      } else if (name == "return segment") {
+        if(v == ""){
+          segment()->returnSegmentIs(NULL);
+        } else {
+          Ptr<Segment> returnSegment = manager_->engine()->segment(v);
+          if (returnSegment == NULL){
+            cerr << "Segment not found." << endl;
+            throw new MissingInstanceException("Segment not found.");
+          }
+          return segment()->returnSegmentIs(returnSegment);
+        }
+      } else if (name == "difficulty") {
+        return segment()->difficultyIs(atof(v.c_str()));
+      } else if (name == "expedite support") {
+        if (v == "yes") {
+          segment()->priorityIs(Segment::Priority::EXPEDITED);
+        } else if (v == "no") {
+          segment()->priorityIs(Segment::Priority::NORMAL);
+        } else {
+          cerr << "Expedited support must be `yes` or `no` for segment. Got " << v << endl;
+          throw new InvalidAttributeException("Expedited attribute must be `yes` or `no`.");
+        }
+      } else if (name == "Capacity") {
+        segment()->capacityIs(atof(v.c_str()));
+      } else {
+        cerr << "Unknown attribute " << name << " for segment." << endl;
+        throw new InvalidAttributeException("Unknown attribute for Segment.");
       }
     }
 
@@ -309,12 +314,14 @@ namespace Shipping {
         return statistics()->expeditedShippingPercentage();
       } else {
         cerr << "Invalid attribute name " << name << " for statistics." << endl;
+        throw new InvalidAttributeException("Unknown attribute for Statistics.");
       }
       return "";
     }
 
     void attributeIs(const string& name, const string& v){
-      cerr << "Statistics is write only." << endl;
+      cerr << "Statistics is read only." << endl;
+      throw new InvalidAttributeException("Cannot write to Statistics.");
     }
 
   protected:
@@ -341,56 +348,72 @@ namespace Shipping {
       string token;
       ss >> token;
       Query q;
-      try {
-        if(token == "connect"){
-          q = Query(Query::Type::connect_);
+      if(token == "connect"){
+        q = Query(Query::Type::connect_);
 
-          string rest = ss.str().substr(string("connect ").length());
-          int delimiterIndex = rest.find(" : ");
-          if(delimiterIndex == string::npos) throw new InvalidAttributeException("Query syntax not valid.");
-          Location::Ptr loc1 = eng->location(rest.substr(0, delimiterIndex));
-          Location::Ptr loc2 = eng->location(rest.substr(delimiterIndex + 3));
-          if(loc1 == NULL || loc2 == NULL) throw new MissingInstanceException("Location not found.");
+        string rest = ss.str().substr(string("connect ").length());
+        int delimiterIndex = rest.find(" : ");
+        if(delimiterIndex == string::npos){
+          cerr << "Connectivity query must include delimiter ' : '." << endl;
+          throw new InvalidAttributeException("Query syntax not valid.");
+        }
+        Location::Ptr loc1 = eng->location(rest.substr(0, delimiterIndex));
+        Location::Ptr loc2 = eng->location(rest.substr(delimiterIndex + 3));
+        if(loc1 == NULL || loc2 == NULL){
+          cerr << "Connectivity: requested location does not exist." << endl;
+          throw new MissingInstanceException("Location not found.");
+        }
+        q.startIs(loc1);
+        q.endIs(loc2);
+      } else if(token == "explore"){
+        q = Query(Query::Type::explore_);
 
-          q.startIs(loc1);
-          q.endIs(loc2);
-        } else if(token == "explore"){
-          q = Query(Query::Type::explore_);
+        string rest = ss.str().substr(string("explore ").length());
+        int delimiterIndex = rest.find(" : ");
+        if(delimiterIndex == string::npos){
+          cerr << "Connectivity query must include delimiter ' : '." << endl;
+          throw new InvalidAttributeException("Query syntax not valid.");
+        }
+        Location::Ptr loc = eng->location(rest.substr(0, delimiterIndex));
+        if(loc == NULL){
+          cerr << "Connectivity: requested location does not exist." << endl;
+          throw new MissingInstanceException("Location not found.");
+        }
 
-          string rest = ss.str().substr(string("explore ").length());
-          int delimiterIndex = rest.find(" : ");
-          if(delimiterIndex == string::npos) throw new InvalidAttributeException("Query syntax not valid.");
-          Location::Ptr loc = eng->location(rest.substr(0, delimiterIndex));
-          if(loc == NULL) throw new MissingInstanceException("Location not found.");
+        q.startIs(loc);
 
-          q.startIs(loc);
-
-          rest = rest.substr(delimiterIndex + 3);
-          stringstream ssRest(rest);
-          while(true){
-            string attr;
-            double val;
-            ssRest >> attr;
-            if(ssRest.fail()) break;
-            if(attr == "expedited"){
-              q.expeditedIs(Segment::Priority::EXPEDITED);
-              continue;
-            }
-
-            ssRest >> val;
-            if(ssRest.fail()) throw new InvalidAttributeException("Explore attribute has no value.");
-            
-            if(attr == "distance"){
-              q.distanceIs(Mile(val));
-            } else if(attr == "cost"){
-              q.costIs(Dollar(val));
-            } else if(attr == "time"){
-              q.timeIs(Hour(val));
-            } else throw new InvalidAttributeException("Invalid explore attribute.");    
+        rest = rest.substr(delimiterIndex + 3);
+        stringstream ssRest(rest);
+        while(true){
+          string attr;
+          double val;
+          ssRest >> attr;
+          if(ssRest.fail()) break;
+          if(attr == "expedited"){
+            q.expeditedIs(Segment::Priority::EXPEDITED);
+            continue;
           }
-        } else throw new InvalidAttributeException("Invalid query type."); 
-      } catch(...){
-        cerr << "Invalid connectivity query " << name << endl;
+
+          ssRest >> val;
+          if(ssRest.fail()){
+            cerr << "Connectivity: explore attribute " << attr << " needs value." << endl;
+            throw new InvalidAttributeException("Explore attribute has no value.");
+          }
+          
+          if(attr == "distance"){
+            q.distanceIs(Mile(val));
+          } else if(attr == "cost"){
+            q.costIs(Dollar(val));
+          } else if(attr == "time"){
+            q.timeIs(Hour(val));
+          } else {
+            cerr << "Connectivity: explore attribute " << attr << " is not valid." << endl;
+            throw new InvalidAttributeException("Invalid explore attribute.");    
+          }
+        }
+      } else {
+        cerr << "Connectivity query must have be `connect` or `explore` type." << endl;
+        throw new InvalidAttributeException("Invalid query type."); 
       }
 
       connectivity_->queryIs(q);
@@ -451,13 +474,13 @@ namespace Shipping {
         for(auto p2 : locations){
           Location::Ptr dest = p2.second;
           if(me != dest){
-            std::cout << "Building route from " << me->name() << " to " << dest->name() << std::endl;
+            cout << "Building route from " << me->name() << " to " << dest->name() << endl;
             Query query(Query::connect_);
             query.startIs(me);
             query.endIs(dest);
             manager_->connectivity()->queryIs(query);
             vector<PathData> routes = manager_->connectivity()->paths();
-            std::cout << routes.size() << " routes found." << endl;
+            cout << routes.size() << " routes found." << endl;
             for(PathData route : routes){
               me->routeIs(dest->name(), route);
             }
@@ -483,7 +506,7 @@ namespace Shipping {
 
       if (fleet == NULL) {
         cerr << "Invalid fleet name " << fleetName << "." << endl;
-        return "";
+        throw new InvalidAttributeException("Invalid fleet name");
       }
 
       if (attrName == "speed") {
@@ -494,7 +517,7 @@ namespace Shipping {
         return fleet->capacity();
       } else { 
         cerr << "Invalid attribute name " << attrName << endl;
-        return "";
+        throw new InvalidAttributeException("Invalid attribute name");
       }
     }
 
@@ -508,7 +531,7 @@ namespace Shipping {
 
       if (fleet == NULL) {
         cerr << "Invalid fleet name " << fleetName << "." << endl;
-        return;
+        throw new InvalidAttributeException("Invalid fleet name");
       }
 
       if (attrName == "speed") {
@@ -519,6 +542,7 @@ namespace Shipping {
         fleet->capacityIs(atof(v.c_str()));
       } else { 
         cerr << "Invalid attribute name " << attrName << endl;
+        throw new InvalidAttributeException("Invalid attribute name");
       }
     }
 
@@ -532,7 +556,7 @@ namespace Shipping {
   Ptr<Instance> ManagerImpl::instanceNew(const string& name, const string& type) {
     if(instance(name) != NULL){
       cerr << "Instance name already in use." << endl;
-      return NULL;
+      throw new MissingInstanceException("Instance cannot be created; name in use");
     }
 
     Ptr<Instance> t;
@@ -577,7 +601,7 @@ namespace Shipping {
       t = connectivityRep_;
     } else {
       cerr << "Invalid instance type." << endl;
-      return NULL;
+      throw new MissingInstanceException("Instance type does not exist");
     }
 
     instance_[name] = t;
@@ -593,8 +617,8 @@ namespace Shipping {
   void ManagerImpl::instanceDel(const string& name) {
     Ptr<Instance> targetInstance = instance(name);
     if (targetInstance == NULL) {
-      std::cerr << "Attempted to delete non-existent instance [" << name << "]." << std::endl;
-      return;
+      cerr << "Attempted to delete non-existent instance [" << name << "]." << endl;
+      throw new InvalidDeletionTarget("Cannot delete non-existent instance");
     }
 
     /* This is safe. The only way that we can be deleting a named instance in this method

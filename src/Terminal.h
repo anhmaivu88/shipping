@@ -10,12 +10,18 @@ namespace Shipping {
 
     
     void segmentIs(int index, SegmentPtr segment){ 
-      if (segment->type() != segmentType()) throw new ValueOutOfBoundsException("Attempted to connect segment to incompatible terminal.");
+      if (segment->type() != segmentType()){
+        std::cerr << "Segment not compatible with terminal." << std::endl;
+        throw new ValueOutOfBoundsException("Attempted to connect segment to incompatible terminal.");
+      }
       segments_[index] = segment;
     }
 
     void segmentAdd(SegmentPtr segment) {
-      if (segment->type() != segmentType()) throw new ValueOutOfBoundsException("Attempted to connect segment to incompatible terminal.");
+      if (segment->type() != segmentType()){
+        std::cerr << "Segment not compatible with terminal." << std::endl;
+        throw new ValueOutOfBoundsException("Attempted to connect segment to incompatible terminal.");
+      }
       segments_.push_back(segment);
     }
 

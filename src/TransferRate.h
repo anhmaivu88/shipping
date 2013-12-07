@@ -16,7 +16,10 @@ namespace Shipping {
         static double max(){ return DBL_MAX; }
 
         TransferRate(double num) : Ordinal<TransferRate, double>(num) {
-            if (num < 0) { throw new ValueOutOfBoundsException("TransferRates must be positive."); }
+            if (num < 0) { 
+                std::cerr << "TransferRates must be positive." << std::endl;
+                throw new ValueOutOfBoundsException("TransferRates must be positive."); 
+            }
         }
 
         void operator+=(TransferRate other){

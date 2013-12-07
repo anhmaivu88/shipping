@@ -24,6 +24,7 @@ namespace Shipping {
     Segment::Ptr targetSegment = segment(name);
     if (targetSegment != NULL) {
       if (activityManager()->now() > 0) {
+        std::cerr << "Attempted to delete a location with active shipments" << std::endl;
         throw new InvalidDeletionTarget("Attempted to delete a segment with active shipments in syste,.");
       }
 
@@ -132,6 +133,7 @@ namespace Shipping {
     Location::Ptr targetLocation = location(name);
     if (targetLocation != NULL) {
       if (activityManager()->now() > 0) {
+        std::cerr << "Attempted to delete a location with active shipments" << std::endl;
         throw new InvalidDeletionTarget("Attempted to delete a location with active shipments.");
       }
 

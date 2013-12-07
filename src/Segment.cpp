@@ -18,6 +18,7 @@ namespace Shipping {
       }
 
       if (returnSegment->type() != type())
+        std::cerr << "Attempted to set type-mismatched return segment." << std::endl;
         throw new ValueOutOfBoundsException("Attempted to set mismatched return segment.");
       
       if (returnSegment_)

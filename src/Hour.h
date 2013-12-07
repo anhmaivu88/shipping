@@ -16,12 +16,13 @@ namespace Shipping {
 		static double max(){ return DBL_MAX; }
 
     Hour(double num) : Ordinal<Hour, double>(num) {
-      if (num < 0) { throw new ValueOutOfBoundsException("Hour must be a positive number."); }
+        std::cerr << "Hour must be a positive number" << std::endl;
+        if (num < 0) { throw new ValueOutOfBoundsException("Hour must be a positive number."); }
     }
 
 		void operator+=(Hour other){
-      value_ += other.value();
-    }
+          value_ += other.value();
+        }
 	};
 }
 #endif

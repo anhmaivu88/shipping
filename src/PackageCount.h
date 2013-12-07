@@ -16,7 +16,10 @@ namespace Shipping {
         static double max(){ return DBL_MAX; }
 
         PackageCount(double num) : Ordinal<PackageCount, double>(num) {
-            if (num < 0) { throw new ValueOutOfBoundsException("PackageCounts must be positive."); }
+            if (num < 0) { 
+                std::cerr << "PackageCount must be positive." << std::endl;
+                throw new ValueOutOfBoundsException("PackageCounts must be positive."); 
+            }
         }
 
         void operator+=(PackageCount other){
