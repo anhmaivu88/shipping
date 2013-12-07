@@ -25,10 +25,10 @@ public:
 
   Engine *engine_;
 private:
-  bool isTranferRate_;
-  bool isShipmentSize_;
-  bool isDestination_;
-  bool isActivity_;
+  bool isTranferRate_ = false;
+  bool isShipmentSize_ = false;
+  bool isDestination_ = false;
+  bool isActivity_ = false;
   InjectionActivityReactor::Ptr react_;
   Activity::Ptr injectionActivity_;
 
@@ -36,6 +36,7 @@ private:
     std::cout << "Attempting to add injector" << std::endl;
     bool isNewActivity = isTranferRate_ && isShipmentSize_ && isDestination_;
     if(isNewActivity == isActivity_) return;
+
     if(isNewActivity){
       std::cout << "Adding injector." << std::endl;
       // Start activity
