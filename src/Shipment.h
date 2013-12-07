@@ -49,8 +49,9 @@ namespace Shipping {
     }
 
   private:
-    typedef Fwk::Ptr<Location> LocationPtr;
-    typedef Fwk::Ptr<Segment> SegmentPtr;
+    // It seems to know about Typedef.h somehow
+    // typedef Fwk::Ptr<Location> LocationPtr;
+    // typedef Fwk::Ptr<Segment> SegmentPtr;
 
     Shipment(LocationPtr source, LocationPtr destination, PackageCount packageCount, PathData path, Hour startTime) :
       source_(source), 
