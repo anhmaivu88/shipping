@@ -23,7 +23,11 @@ namespace Shipping {
         std::cout << "Injection a shipment at " << origin()->name() << std::endl;
         std::cout << "Attempting to route to: " << origin()->destination()->name() << std::endl;
         PathData path = origin()->route(origin()->destination()->name());
-        origin()->shipmentAdd(Shipment::shipmentNew(origin(), origin()->destination(), origin()->shipmentSize(), path));
+        origin()->shipmentAdd(Shipment::shipmentNew(origin(),
+                                                    origin()->destination(), 
+                                                    origin()->shipmentSize(), 
+                                                    path, 
+                                                    Hour(notifier()->nextTime().value())));
 
         Activity::Ptr activity = notifier();
         std::cout << "Rescheduling injection activity for time: " << (activity->nextTime() + Time(24.0 / origin()->transferRate().value())).value() << std::endl;

@@ -18,9 +18,9 @@ namespace Shipping {
         segment()->shipmentDel(shipment());
         if (segment()->returnSegment()->source() == shipment()->destination()) {
           std::cout << "YAY IT ARRIVED!!!!" << std::endl;
-        } else {
-          segment()->returnSegment()->source()->shipmentAdd(shipment());
-        }
+        } 
+        
+        segment()->returnSegment()->source()->shipmentAdd(shipment());
       }
     }
 

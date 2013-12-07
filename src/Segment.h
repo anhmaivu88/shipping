@@ -67,9 +67,11 @@ namespace Shipping {
     Shipment::Ptr shipment(int i) { return shipments_[i]; }
     ShipmentCount shipmentCount() { return shipments_.size(); }
 
-
     ShipmentCount shipmentsReceived() { return shipmentsReceived_; }
     ShipmentCount shipmentsRefused() { return shipmentsRefused_; }
+
+    void shipmentsReceivedInc() { shipmentsReceived_ += 1; }
+    void shipmentsRefusedInc() { shipmentsRefused_ += 1; }
 
     static Segment::Ptr segmentNew(EntityName name, Type type) {
       Ptr ptr = new Segment(name, 0, 1.0, normal(), type);

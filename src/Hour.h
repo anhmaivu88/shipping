@@ -22,6 +22,14 @@ namespace Shipping {
 		void operator+=(Hour other){
       value_ += other.value();
     }
+
+    Hour operator-(const Hour &other) {
+      return Hour(value() - other.value());
+    }
+
+    void operator/=(int other) {
+      value_ /= other;
+    }
 	};
 }
 #endif

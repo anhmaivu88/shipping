@@ -72,13 +72,19 @@ int main(int argc, char *argv[]) {
 
   Ptr<Instance> activityManagerRep = manager->instanceNew("activity manager", "Activity Manager");
 
-  activityManagerRep->attributeIs("step", "100");
-  activityManagerRep->attributeIs("speed", "100");
+  activityManagerRep->attributeIs("step", "0");
+  activityManagerRep->attributeIs("speed", "0");
   activityManagerRep->attributeIs("time", "10001");
   
   cout << "Set all attributes." << endl;
 
   cout << "Done!" << endl;
+  
+  cout << "Received shipments: " << d->attribute("Shipments Received") << endl;
+  cout << "Refused shipments: " << d->attribute("Shipments Refused") << endl;
+  cout << "Delivered shipments: " << secondterminal->attribute("Shipments Received") << endl;
+  cout << "Average latency: " << secondterminal->attribute("Average Latency") << endl;
+  cout << "Total cost: " << secondterminal->attribute("Total Cost") << endl;
 
   return 0;
 }

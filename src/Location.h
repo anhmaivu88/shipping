@@ -15,6 +15,7 @@
 #include "PackageCount.h"
 #include "PathData.h"
 #include "Shipment.h"
+#include <numeric>
 
 namespace Shipping {
 	class Connectivity;
@@ -77,7 +78,12 @@ namespace Shipping {
     }
 
     ShipmentCount shipmentsReceived() { return shipmentsReceived_; }
-    Hour averageLatency() { return averageLatency_; }
+    Hour averageLatency() { 
+      Hour average(0);
+      for (Hour latency : latency_) { average += latency; }
+      if (latency_.size() > 0) { average /= latency_.size(); }
+      return average;
+    } 
     Dollar totalCost() { return totalCost_; }
 
     class Notifiee : public Fwk::BaseNotifiee<Location> {
@@ -94,6 +100,7 @@ namespace Shipping {
         Notifiee(Location *loc) : Fwk::BaseNotifiee<Location>(loc), location_(loc) {}
         Location *location(){ return location_; }
         Location *location_;
+
     };
 
     void notifieeAdd(Notifiee::Ptr notifiee) { notifiees_.push_back(notifiee); }
@@ -112,7 +119,6 @@ namespace Shipping {
     Type type_;
 
     ShipmentCount shipmentsReceived_;
-    Hour averageLatency_;
     Dollar totalCost_;
     vector<Shipment::Ptr> shipments_;
 
@@ -121,8 +127,39 @@ namespace Shipping {
       return ptr;
     }
 
-    Location(EntityName name, Type type): Entity(name), type_(type), shipmentsReceived_(0), averageLatency_(0), totalCost_(0) {}
+    Location(EntityName name, Type type): Entity(name), type_(type), shipmentsReceived_(0), totalCost_(0) { LocationShipmentMonitor::locationShipmentMonitorNew(Ptr(this)); }
 
+  private:
+    std::vector<Hour> latency_;
+    class LocationShipmentMonitor : public Notifiee {
+    public:
+      typedef Fwk::Ptr<Notifiee> Ptr;
+      static LocationShipmentMonitor::Ptr locationShipmentMonitorNew(Location::Ptr location) {
+        return Ptr(new LocationShipmentMonitor(location.ptr()));
+      }
+
+      void onShipmentAdd(Shipment::Ptr shipment) {
+        shipment->lastLocationIs(notifier());
+        if (shipment->destination() == notifier()) {
+          notifier()->shipmentDel(shipment);
+          notifier()->recordDelivery(shipment);
+        }
+      }
+            
+    protected:
+      LocationShipmentMonitor(Location *location) : Notifiee(location) { }
+    };
+
+    void shipmentsReceivedInc() { shipmentsReceived_ += 1; }
+    void costInc(Dollar cost) { totalCost_ += cost; }
+    void latencyAdd(Hour latency) { latency_.push_back(latency); }
+
+    void recordDelivery(Shipment::Ptr shipment) {
+      std::cout << "RECORDING DELIVERY" << std::endl;
+      shipmentsReceivedInc();
+      latencyAdd(shipment->transitTime());
+      costInc(shipment->shippingCost());
+    }
 	};
 
 	class Customer : public Location {
