@@ -5,9 +5,9 @@
 #include <stdexcept>
 
 namespace Shipping {
-  class ValueOutOfBoundsException : public std::runtime_error {
+  class ValueOutOfBoundsException : public std::range_error {
   public:
-    ValueOutOfBoundsException(const string &message): std::runtime_error(message) {};
+    ValueOutOfBoundsException(const string &message): std::range_error(message) {};
   };
 
   class MissingInstanceException : public std::runtime_error {
@@ -15,9 +15,9 @@ namespace Shipping {
     MissingInstanceException(const string &message): std::runtime_error(message) {};
   };
 
-  class InvalidAttributeException : public std::runtime_error {
+  class InvalidAttributeException : public std::range_error {
   public:
-    InvalidAttributeException(const string &message): std::runtime_error(message) {};
+    InvalidAttributeException(const string &message): std::range_error(message) {};
   };
 
   class InvalidDeletionTarget : public std::runtime_error {

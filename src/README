@@ -11,7 +11,12 @@ catching them at the Rep layer and printing error messages. We moved the logging
 the exceptions were thrown and stopped catching the exceptions.
 
 We have defined a few general exception types that encapsulate the kinds of errors that can
-occur in the system. They are found in Error.h
+occur in the system. They are found in Error.h. We attempt to use range_error for 
+exceptions that correspond to invalid values, and runtime_error for other classes of exception.
+
+In general we do not need to clean up after exceptions to ensure consistent state because most 
+exceptions are thrown in convenient places, but for invalid deletions we do. The cleanup is
+handled in instance.cpp in the deleteSelf methods for locations and segments. 
 
 Part 2
 ======
@@ -21,6 +26,17 @@ the example. We made a few changes to the flow and to the information it tracks.
 an activity is created, it is created in the "waiting" state. Also, we do not track
 names of activities. We do not need them in our code because wherever we need to 
 change an activity we have a reference to it.
+
+We only use "ready", "waiting" and "executing" states for activities.
+
+   Waiting: the activity cannot execute yet because it is blocked on something external. 
+            for example, the forwarding activity "waits" when all segments are full.
+   Ready: can be executed if now() > nextTime()
+   Executing: The activity's reactor is responsible for executing its code at this point.
+              When the code is done it must transition to waiting or ready.
+
+We track the "ready" activities in a priority queue in our activity manager. When an activity
+becomes ready we store it in the queue with its priority set to its nextTime().
 
 Furthermore, we made the ActivityManager a subordinate of the engine. We added an
 ActivityManagerRep to the rep layer and time is controlled with this. It is kind of strange
@@ -32,14 +48,32 @@ Part 3
 We implemented a shipment class and several reactors. The shipment is responsible for knowing
 its route and various statistics about itself.
 
-The reactors are:
+The activity reactors are:
 
 InjectionActivityReactor -- responsible for adding shipments to customer nodes.
 ForwardingActivityReactor -- responsible for switching shipments onto segments from locations
 TransferActivityReactor -- responsible for transferring a single shipment along a segment.
 
 These activity reactors and their associated activities are created and controlled by reactors
-that listen to attributes of segments and locations.
+that listen to attributes of segments and locations. These are:
+
+CustomerEngineReactor -- watches Customer locations and when they have the appropriate attributes set
+                         schedules an injection activity.
+LocationEngineReactor -- watches locations and is responsible for scheduling the forwarding activity
+SegmentEngineReactor -- watches segments and schedules the TransferActivity and its reactor.
+
+There are also several other reactors used for other tasks.
+
+ActivityReactor -- the activity manager listens to each activity. When an activity's nextTime or 
+                   status changes this potentially triggers an update in the priority queue.
+
+LocationShipmentMonitor -- locations listen to themselves. When shipments are added they track
+                           various statistics.
+
+Note: Once the simulation has been started (nowIs > 0) we no longer allow the deletion of segments
+or locations. This is because we couldn't come up with a reasonable way to interpret the deletion
+of a segment or location that has shipments on it.
+
 
 Routing
 -------
@@ -65,6 +99,12 @@ The `speed` attribute sets the number of virtual hours that should pass per wall
 
 Part 5
 ======
+
+OTHER NOTES:
+=======
+
+We decided to change BaseNotifiee so that Notifier classes maintain a list of Notifiees rather than
+a single one. This proved useful in our code as we have several notifiees on single objects frequently.
 
 
 
