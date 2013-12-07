@@ -14,13 +14,14 @@ namespace Shipping {
     void onStatus() {
       /* If we're executing then it means our shipment has arrived. */
       if (notifier()->status() == Activity::Status::executing) {
-        notifier()->statusIs(Activity::Status::deleted);
         segment()->shipmentDel(shipment());
         if (segment()->returnSegment()->source() == shipment()->destination()) {
+          shipment()->lastTimeIs(Hour(notifier()->nextTime().value()));
           std::cout << "YAY IT ARRIVED!!!!" << std::endl;
         } 
         
         segment()->returnSegment()->source()->shipmentAdd(shipment());
+        notifier()->statusIs(Activity::Status::deleted);
       }
     }
 

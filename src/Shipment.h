@@ -32,6 +32,8 @@ namespace Shipping {
     void lastLocationIs(LocationPtr location) { lastLocation_ = location; for (auto notifiee : notifiees_) { notifiee->onArrive(location); } }
     LocationPtr lastLocation() { return lastLocation_; }
 
+    void lastTimeIs(Hour time) { endTime_ = time; }
+
     LocationPtr source() { return source_; }
     LocationPtr destination() { return destination_; }
     PathData path() { return path_; }
