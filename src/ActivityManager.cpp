@@ -65,7 +65,7 @@ namespace Shipping {
     }
 
     void ActivityManagerImpl::executeActivities() {
-      std::cout << "The time is " << now_ << std::endl;
+      std::cout << "The time is " << now_.value() << std::endl;
       std::priority_queue<Activity::Ptr, std::vector<Activity::Ptr>, ActivityComparator> queueCopy = activities_;
       while (!queueCopy.empty()) {
         Activity::Ptr activity = queueCopy.top();
