@@ -1,4 +1,4 @@
-CXXFLAGS = -Wall -g -std=c++0x
+CXXFLAGS = -Wall -Wno-sign-compare -g -std=c++0x
 
 OBJECTS = Segment.o Instance.o Engine.o Statistics.o Path.o Connectivity.o Location.o ActivityManager.o PathData.o
 
