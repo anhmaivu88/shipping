@@ -29,9 +29,11 @@ int main(int argc, char *argv[]) {
 
   Ptr<Instance> deliverySegment = manager->instanceNew("deliverySeg", "Truck segment");
   deliverySegment->attributeIs("source", root->name());
+  deliverySegment->attributeIs("length", "1");
 
   Ptr<Instance> deliveryBak = manager->instanceNew("deliveryBak", "Truck segment");
   deliveryBak->attributeIs("source", destination->name());
+  deliveryBak->attributeIs("length", "1");
 
   deliverySegment->attributeIs("return segment", deliveryBak->name());
 
