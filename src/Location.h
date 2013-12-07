@@ -69,10 +69,14 @@ namespace Shipping {
 
     PathData route(EntityName dest){
     	auto it = routes_.find(dest);
-    	if(it == routes_.end()) throw new InvalidAttributeException("No routes found");
+    	if(it == routes_.end()){
+        std::cerr << "No routes found" << std::endl;
+        throw new InvalidAttributeException("No routes found");
+      }
     	std::vector<PathData> paths = (*it).second;
       if (paths.size() == 0) {
-        throw new UnroutableShipmentException(name() + " was unable to route to " + dest);
+        std::cerr << "No routes found" << std::endl;
+        throw new InvalidAttributeException("No routes found");
       }
     	return paths[0]; // TODO: choose best path?
     }

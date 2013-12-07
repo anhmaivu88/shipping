@@ -24,6 +24,7 @@ namespace Shipping {
     public:
       Difficulty(double num) : Ordinal<Difficulty, double>(num) {
         if(num < 1.0 || num > 5.0) {
+          std::cerr << "Difficulty must be between 1.0 and 5.0" << std::endl;
           throw new ValueOutOfBoundsException("difficulty is not in 1-5 range");
         }
       }

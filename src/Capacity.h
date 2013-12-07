@@ -9,12 +9,15 @@
 #include "Nominal.h"
 
 namespace Shipping {
-  class Capacity : public Ordinal<Capacity, int> {
-  public:
+    class Capacity : public Ordinal<Capacity, int> {
+    public:
 
-  Capacity(int num) : Ordinal<Capacity, int>(num) {
-    if (num < 0) { throw new ValueOutOfBoundsException("Capacity must be a positive integer."); }
-  }
-  };
+        Capacity(int num) : Ordinal<Capacity, int>(num) {
+            if (num < 0) { 
+                std::cerr << "Capacity must be a positive integer" << std::endl;
+                throw new ValueOutOfBoundsException("Capacity must be a positive integer."); 
+            }
+        }
+    };
 }
 #endif

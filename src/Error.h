@@ -25,9 +25,9 @@ namespace Shipping {
     InvalidDeletionTarget(const string &message): std::runtime_error(message) {};
   };
 
-  class UnroutableShipmentException : public std::runtime_error {
+  class InternalException : public std::runtime_error {
   public:
-    UnroutableShipmentException(const string &message): std::runtime_error(message) {};
+    InternalException(const string &message): std::runtime_error(message) {};
   };
 }
 

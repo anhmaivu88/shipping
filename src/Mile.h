@@ -20,7 +20,10 @@ namespace Shipping {
         static double max(){ return DBL_MAX; }
 
         Mile(double num) : Ordinal<Mile, double>(num) {
-            if (num < 0) { throw new ValueOutOfBoundsException("Miles must be positive."); }
+            if (num < 0) { 
+                std::cerr << "Miles must be positive" << std::endl;
+                throw new ValueOutOfBoundsException("Miles must be positive."); 
+            }
         }
 
         Dollar operator*(DollarsPerMile dpm){
